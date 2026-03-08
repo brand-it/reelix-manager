@@ -1,0 +1,29 @@
+upload_session_one:
+  id: "00000000-0000-0000-0000-000000000001"
+  filename: "movie.mkv"
+  file_size: 1048576
+  mime_type: "video/x-matroska"
+  status: "pending"
+  total_chunks: 3
+  received_chunks: 0
+  destination_path: "/tmp/test_uploads"
+
+upload_session_uploading:
+  id: "00000000-0000-0000-0000-000000000002"
+  filename: "series.mkv"
+  file_size: 2097152
+  mime_type: "video/x-matroska"
+  status: "uploading"
+  total_chunks: 2
+  received_chunks: 1
+  destination_path: "/tmp/test_uploads"
+
+upload_session_complete:
+  id: "00000000-0000-0000-0000-000000000003"
+  filename: "done.mkv"
+  file_size: 512000
+  mime_type: "video/x-matroska"
+  status: "complete"
+  total_chunks: 1
+  received_chunks: 1
+  destination_path: "/tmp/test_uploads"

@@ -1,0 +1,14 @@
+// Bootstrap
+@import "bootstrap/scss/bootstrap";
+
+// Custom styles
+html, body {
+  height: 100%;
+}
+
+body {
+  main {
+    padding: 1em;
+    padding-bottom: 4em;
+  }
+}

@@ -46,7 +46,7 @@ module Mutations
       destination_dir = File.expand_path(destination_dir)
       dest_path = File.expand_path(File.join(destination_dir, resolved_filename))
 
-      FileUtils.mkdir_p(destination_dir)
+      safe_mkdir_p(destination_dir)
       FileUtils.mv(File.join(storage.directory, upload_id), dest_path)
       storage.delete_file(upload_id, info)
 
@@ -56,6 +56,11 @@ module Mutations
     end
 
     private
+
+    def safe_mkdir_p(path)
+      expanded_path = File.expand_path(path)
+      FileUtils.mkdir_p(expanded_path)
+    end
 
     def decode_tus_metadata(header)
       return {} if header.blank?

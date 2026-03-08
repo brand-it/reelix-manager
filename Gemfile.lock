@@ -429,7 +429,7 @@ DEPENDENCIES
   debug
   graphiql-rails
   graphql
-  image_processing (~> 1.2)
+  image_processing (>= 1.2)
   importmap-rails
   jbuilder
   kamal
@@ -446,7 +446,7 @@ DEPENDENCIES
   stimulus-rails
   thruster
   turbo-rails
-  tus-server (~> 2.0)
+  tus-server (>= 2.0)
   tzinfo-data
   web-console
 

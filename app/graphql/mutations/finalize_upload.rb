@@ -39,10 +39,14 @@ module Mutations
         return { destination_path: nil, filename: nil, errors: [ "No destination path configured. Set the upload path in Config::Video settings." ] }
       end
 
-      FileUtils.mkdir_p(destination_dir)
-      dest_path = File.join(destination_dir, resolved_filename)
+      # Sanitize filename to prevent directory traversal
+      resolved_filename = File.basename(resolved_filename)
 
-      # Move the assembled tus file to the final destination and clean up.
+      # Expand paths to resolve symlinks and .. references safely
+      destination_dir = File.expand_path(destination_dir)
+      dest_path = File.expand_path(File.join(destination_dir, resolved_filename))
+
+      safe_mkdir_p(destination_dir)
       FileUtils.mv(File.join(storage.directory, upload_id), dest_path)
       storage.delete_file(upload_id, info)
 
@@ -52,6 +56,11 @@ module Mutations
     end
 
     private
+
+    def safe_mkdir_p(path)
+      expanded_path = File.expand_path(path)
+      FileUtils.mkdir_p(expanded_path)
+    end
 
     def decode_tus_metadata(header)
       return {} if header.blank?

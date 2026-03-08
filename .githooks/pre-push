@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Pre-push hook: runs linter and tests before allowing a push.
+# Pre-push hook: runs all CI checks before allowing a push.
 # Installed automatically by bin/setup.
 #
 # To skip in an emergency: git push --no-verify
@@ -8,10 +8,22 @@ set -e
 
 cd "$(git rev-parse --show-toplevel)"
 
-echo "==> Linting (RuboCop)..."
-bin/rubocop --format quiet
+echo "==> Linting code with RuboCop..."
+bin/rubocop -f github
+
+echo "==> Scanning for common Rails security vulnerabilities with Brakeman..."
+bin/brakeman --no-pager
+
+echo "==> Scanning for known security vulnerabilities in gems..."
+bin/bundler-audit
+
+echo "==> Scanning for security vulnerabilities in JavaScript dependencies..."
+bin/importmap audit
 
 echo "==> Running tests..."
 bin/rails db:test:prepare test
+
+echo "==> Running system tests..."
+bin/rails db:test:prepare test:system
 
 echo "==> All checks passed."

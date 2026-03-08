@@ -116,7 +116,7 @@ class TusUploadMutationsTest < ActionDispatch::IntegrationTest
     # Verify file is in the configured upload directory, not outside it
     destination_path = result["destinationPath"]
     config = Config::Video.newest
-    upload_dir = File.expand_path(config.settings_upload_path)
+    upload_dir = File.expand_path(config.settings_movie_path)
     assert destination_path.start_with?(upload_dir), "File should be in upload directory, not outside it"
     assert File.exist?(destination_path), "Sanitized file should exist at the safe location"
   end

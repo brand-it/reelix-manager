@@ -33,6 +33,6 @@ class Config::VideosController < ApplicationController
   private
 
   def video_params
-    params.require(:config_video).permit(:settings_upload_path, :settings_tmdb_api_key, :settings_processed_path)
+    params.require(:config_video).permit(:settings_movie_path, :settings_tv_path, :settings_tmdb_api_key, :settings_processed_path)
   end
 end

@@ -7,12 +7,14 @@ module Mutations
       description: "The tus upload UID returned in the Location header from POST /files"
     argument :filename, String, required: false,
       description: "Override the filename (defaults to the filename from tus Upload-Metadata)"
+    argument :media_type, String, required: false, default_value: "movie",
+      description: "Target media library: 'movie' or 'tv' (defaults to 'movie')"
 
     field :destination_path, String, null: true
     field :filename, String, null: true
     field :errors, [ String ], null: false
 
-    def resolve(upload_id:, filename: nil)
+    def resolve(upload_id:, filename: nil, media_type: "movie")
       storage = Tus::Server.opts[:storage]
 
       begin
@@ -33,10 +35,10 @@ module Mutations
       resolved_filename = filename || metadata["filename"] || upload_id
 
       config = Config::Video.newest
-      destination_dir = config&.settings_upload_path
+      destination_dir = media_type.to_s == "tv" ? config&.settings_tv_path : config&.settings_movie_path
 
       if destination_dir.blank?
-        return { destination_path: nil, filename: nil, errors: [ "No destination path configured. Set the upload path in Config::Video settings." ] }
+        return { destination_path: nil, filename: nil, errors: [ "No destination path configured. Set the #{media_type} path in Config::Video settings." ] }
       end
 
       # Sanitize filename to prevent directory traversal

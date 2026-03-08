@@ -16,9 +16,9 @@ class ConfigTest < ActiveSupport::TestCase
 
   test "settings= merges new values with existing settings" do
     config = Config::Video.new
-    config.settings = { upload_path: "/uploads" }
+    config.settings = { movie_path: "/movies" }
     config.settings = { tmdb_api_key: "key123" }
-    assert_equal "/uploads", config.settings_upload_path
+    assert_equal "/movies", config.settings_movie_path
     assert_equal "key123", config.settings_tmdb_api_key
   end
 end

@@ -9,9 +9,14 @@
           <h5 class="card-title mb-0">Video Settings</h5>
         </div>
         <div class="card-body">
-          <%= f.input :settings_upload_path,
-                      label: "Upload Path",
-                      hint: "Directory where uploaded MKV files will be stored" %>
+          <%= f.input :settings_movie_path,
+                      label: "Movie Path",
+                      hint: "Directory where uploaded Movies files will be stored" %>
+                    
+          <%= f.input :settings_tv_path,
+                      label: "TV Path",
+                      hint: "Directory where uploaded TV shows will be stored"
+          %>
 
           <%= f.input :settings_tmdb_api_key,
                       label: "TMDB API Key",

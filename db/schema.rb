@@ -10,11 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_08_202402) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_08_223049) do
   create_table "configs", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "settings"
     t.string "type", default: "Config", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "upload_sessions", id: :string, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "destination_path"
+    t.text "error_message"
+    t.bigint "file_size"
+    t.string "filename", null: false
+    t.string "mime_type"
+    t.integer "received_chunks", default: 0, null: false
+    t.string "status", default: "pending", null: false
+    t.integer "total_chunks", null: false
     t.datetime "updated_at", null: false
   end
 end

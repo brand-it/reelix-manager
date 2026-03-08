@@ -46,7 +46,7 @@ module Mutations
       destination_dir = File.expand_path(destination_dir)
       dest_path = File.expand_path(File.join(destination_dir, resolved_filename))
 
-      # Move the assembled tus file to the final destination and clean up.
+      FileUtils.mkdir_p(destination_dir)
       FileUtils.mv(File.join(storage.directory, upload_id), dest_path)
       storage.delete_file(upload_id, info)
 

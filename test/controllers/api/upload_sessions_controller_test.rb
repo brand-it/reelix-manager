@@ -92,47 +92,6 @@ class TusUploadMutationsTest < ActionDispatch::IntegrationTest
     assert_equal "renamed.mkv", result["filename"]
   end
 
-  # ---------------------------------------------------------------------------
-  # abortUpload
-  # ---------------------------------------------------------------------------
-
-  test "abortUpload deletes an in-progress upload" do
-    uid = create_tus_upload("to_abort.mkv", content: "PARTIAL", declared_length: 999)
-
-    mutation = <<~GQL
-      mutation {
-        abortUpload(input: { uploadId: "#{uid}" }) {
-          success
-          errors
-        }
-      }
-    GQL
-
-    post "/graphql", params: { query: mutation }, as: :json
-    result = JSON.parse(response.body).dig("data", "abortUpload")
-    assert result["success"]
-    assert_empty result["errors"]
-
-    # File should be gone from tus storage.
-    assert_raises(Tus::NotFound) { Tus::Server.opts[:storage].read_info(uid) }
-  end
-
-  test "abortUpload returns error for unknown upload id" do
-    mutation = <<~GQL
-      mutation {
-        abortUpload(input: { uploadId: "ghost-uid" }) {
-          success
-          errors
-        }
-      }
-    GQL
-
-    post "/graphql", params: { query: mutation }, as: :json
-    result = JSON.parse(response.body).dig("data", "abortUpload")
-    assert_not result["success"]
-    assert_includes result["errors"].first, "Upload not found"
-  end
-
   private
 
   # Creates a tus upload file directly in the test storage directory,

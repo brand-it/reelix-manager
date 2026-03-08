@@ -46,6 +46,15 @@ module Mutations
       destination_dir = File.expand_path(destination_dir)
       dest_path = File.expand_path(File.join(destination_dir, resolved_filename))
 
+      # Defense-in-depth: ensure the resolved destination path stays within the configured directory
+      unless dest_path.start_with?(destination_dir + File::SEPARATOR)
+        return {
+          destination_path: nil,
+          filename: nil,
+          errors: [ "Resolved path is outside the allowed upload directory." ]
+        }
+      end
+
       safe_mkdir_p(destination_dir)
       FileUtils.mv(File.join(storage.directory, upload_id), dest_path)
       storage.delete_file(upload_id, info)

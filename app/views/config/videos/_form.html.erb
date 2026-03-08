@@ -1,0 +1,30 @@
+<div class="row">
+  <div class="col-md-8 col-lg-6">
+    <%= simple_form_for config_video, url: url, method: config_video.persisted? ? :patch : :post do |f| %>
+      <%= f.error_notification %>
+      <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Video Settings</h5>
+        </div>
+        <div class="card-body">
+          <%= f.input :settings_upload_path,
+                      label: "Upload Path",
+                      hint: "Directory where uploaded MKV files will be stored" %>
+
+          <%= f.input :settings_tmdb_api_key,
+                      label: "TMDB API Key",
+                      hint: "TheMovieDB API key for movie/TV metadata lookups" %>
+
+          <%= f.input :settings_processed_path,
+                      label: "Processed Path",
+                      hint: "Output directory for post-processed and organized files" %>
+        </div>
+        <div class="card-footer">
+          <%= f.button :submit, class: "btn btn-primary" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

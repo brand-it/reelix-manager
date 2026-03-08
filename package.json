@@ -1,0 +1,12 @@
+{
+  "name": "app",
+  "private": "true",
+  "scripts": {
+    "build:css": "sass ./app/assets/stylesheets/application.sass.scss:./app/assets/builds/application.css --no-source-map --load-path=node_modules"
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.11.8",
+    "bootstrap": "^5.3.8",
+    "sass": "^1.97.3"
+  }
+}

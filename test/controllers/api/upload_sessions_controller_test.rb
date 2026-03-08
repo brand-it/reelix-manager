@@ -92,6 +92,35 @@ class TusUploadMutationsTest < ActionDispatch::IntegrationTest
     assert_equal "renamed.mkv", result["filename"]
   end
 
+  test "finalizeUpload sanitizes directory traversal attempts in filename" do
+    uid = create_tus_upload("movie.mkv", content: "FAKE VIDEO DATA")
+
+    # Attempt directory traversal with ../../etc/passwd style filename
+    mutation = <<~GQL
+      mutation {
+        finalizeUpload(input: { uploadId: "#{uid}", filename: "../../etc/passwd" }) {
+          destinationPath
+          filename
+          errors
+        }
+      }
+    GQL
+
+    post "/graphql", params: { query: mutation }, as: :json
+    result = JSON.parse(response.body).dig("data", "finalizeUpload")
+
+    # Should sanitize to just "passwd" via File.basename
+    assert_empty result["errors"]
+    assert_equal "passwd", result["filename"]
+
+    # Verify file is in the configured upload directory, not outside it
+    destination_path = result["destinationPath"]
+    config = Config::Video.newest
+    upload_dir = File.expand_path(config.settings_upload_path)
+    assert destination_path.start_with?(upload_dir), "File should be in upload directory, not outside it"
+    assert File.exist?(destination_path), "Sanitized file should exist at the safe location"
+  end
+
   private
 
   # Creates a tus upload file directly in the test storage directory,

@@ -6,8 +6,7 @@ Tus::Server.opts[:storage] = Tus::Storage::Filesystem.new(
   Rails.root.join("tmp", "tus_uploads")
 )
 
-# Maximum upload size (10 GB — adjust to match your use case).
-Tus::Server.opts[:max_size] = 10 * 1024 * 1024 * 1024
-
+# Maximum upload size (100 GB — adjust to match your use case).
+Tus::Server.opts[:max_size] = 100.gigabytes
 # Incomplete uploads expire after 48 hours of inactivity.
-Tus::Server.opts[:expiration_time] = 48 * 60 * 60
+Tus::Server.opts[:expiration_time] = 48.hours

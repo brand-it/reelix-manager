@@ -43,17 +43,33 @@ module Resolvers
         total_results: movie_response["total_results"].to_i + tv_response["total_results"].to_i
       }
     rescue TheMovieDb::InvalidConfig => e
-      raise GraphQL::ExecutionError, "TMDB authentication error: #{e.message}"
+      Rails.logger.error("[TMDB InvalidConfig] #{sanitize_error_message(e.message)}")
+      raise GraphQL::ExecutionError, "TMDB authentication error. Please contact support."
     rescue TheMovieDb::Error => e
-      raise GraphQL::ExecutionError, "TMDB error: #{e.message}"
+      Rails.logger.error("[TMDB Error] #{sanitize_error_message(e.message)}")
+      raise GraphQL::ExecutionError, "TMDB service error. Please try again later."
     end
 
     private
 
     # Run both API calls concurrently. Thread#value re-raises any exception from the thread.
+    # Threads are wrapped with Rails.application.executor and connection_pool.with_connection
+    # to prevent AR connection leaks when Config::Video is accessed inside the thread.
     def fetch_both(query, page, language)
-      movie_thread = Thread.new { TheMovieDb::Search::Movie.new(query:, page:, language:).results(use_cache: false) }
-      tv_thread    = Thread.new { TheMovieDb::Search::Tv.new(query:,    page:, language:).results(use_cache: false) }
+      movie_thread = Thread.new do
+        Rails.application.executor.wrap do
+          ActiveRecord::Base.connection_pool.with_connection do
+            TheMovieDb::Search::Movie.new(query:, page:, language:).results(use_cache: false)
+          end
+        end
+      end
+      tv_thread = Thread.new do
+        Rails.application.executor.wrap do
+          ActiveRecord::Base.connection_pool.with_connection do
+            TheMovieDb::Search::Tv.new(query:, page:, language:).results(use_cache: false)
+          end
+        end
+      end
       [ movie_thread.value, tv_thread.value ]
     end
 
@@ -115,6 +131,14 @@ module Resolvers
 
     def result_title(result)
       result["title"] || result["name"] || ""
+    end
+
+    def sanitize_error_message(message)
+      return "" if message.nil?
+
+      message.dup
+             .gsub(/api_key=[^&\s]*/i, "api_key=[REDACTED]")
+             .gsub(/(Bearer\s+)[A-Za-z0-9\-._]+/i, '\1[REDACTED]')
     end
   end
 end

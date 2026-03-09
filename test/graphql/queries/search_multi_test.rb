@@ -216,10 +216,15 @@ class SearchMultiQueryTest < ActiveSupport::TestCase
   end
 
   test "returns GraphQL error on TMDB API error" do
+    # Build a minimal fake Faraday response to exercise the TheMovieDb::Error rescue path.
+    fake_env      = Struct.new(:url).new(URI("https://api.themoviedb.org/3/search/movie"))
+    fake_response = Struct.new(:body, :status, :env).new(
+      '{"status_message":"service unavailable"}', 503, fake_env
+    )
     Thread.report_on_exception = false
-    with_fake_error_searches(TheMovieDb::InvalidConfig.new("service unavailable")) do
+    with_fake_error_searches(TheMovieDb::Error.new(fake_response)) do
       result = ReelixManagerSchema.execute(SEARCH_MULTI_QUERY, variables: { query: "test" })
-      assert result["errors"].any?
+      assert result["errors"].any? { |e| e["message"].include?("TMDB service error") }
     end
   ensure
     Thread.report_on_exception = true

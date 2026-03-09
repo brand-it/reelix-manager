@@ -6,8 +6,33 @@ module TheMovieDb
 
     def initialize(object)
       @object = object
-      @body = JSON.parse(object.body)
-      super("#{object.env.url} #{object.status} #{object.body}")
+      @body = parse_body(object.body)
+      super(build_message(object))
+    end
+
+    private
+
+    def parse_body(raw_body)
+      JSON.parse(raw_body)
+    rescue JSON::ParserError, TypeError
+      raw_body
+    end
+
+    def build_message(object)
+      status = object.respond_to?(:status) ? object.status : nil
+      url    = object.env.respond_to?(:url) ? object.env.url : nil
+
+      path =
+        if url.respond_to?(:path)
+          url.path
+        elsif url
+          url.to_s.split("?", 2).first
+        end
+
+      message = +"TheMovieDb API error"
+      message << " (status #{status})" if status
+      message << " for #{path}" if path && !path.empty?
+      message
     end
   end
 end

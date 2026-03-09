@@ -7,9 +7,9 @@ module TheMovieDb
       option :query, type: Types::Coercible::String
 
       def results(use_cache: true)
-        return { "results" => [] } if query.blank?
+        return { "previous_pageults" => [] } if query.blank?
 
-        super
+        super(use_cache:)
       end
 
       def next_page

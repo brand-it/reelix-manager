@@ -7,7 +7,6 @@ Tus::Server.opts[:storage] = Tus::Storage::Filesystem.new(
 )
 
 # Maximum upload size (10 GB — adjust to match your use case).
-Tus::Server.opts[:max_size] = 10 * 1024 * 1024 * 1024
-
+Tus::Server.opts[:max_size] = 10.megabytes
 # Incomplete uploads expire after 48 hours of inactivity.
-Tus::Server.opts[:expiration_time] = 48 * 60 * 60
+Tus::Server.opts[:expiration_time] = 48.hours

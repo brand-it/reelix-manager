@@ -25,14 +25,18 @@ module TheMovieDb
     end
 
     def results(use_cache: true, object_class: Hash)
-      @results ||= use_cache ? cache_get(object_class:) : get(object_class:)
+      @results ||= {}
+      key = [ use_cache, object_class ]
+      @results[key] ||= use_cache ? cache_get(object_class:) : get(object_class:)
     end
 
     private
 
     def cache_get(object_class: Hash)
+      # Exclude the api_key from the cache key to avoid leaking secrets via cache key inspection.
+      safe_params = query_params.except(:api_key, "api_key")
       Rails.cache.fetch(
-        [ uri, query_params, object_class ],
+        [ uri, safe_params, object_class ],
         namespace: CACHE_NAMESPACE,
         expires_in: CACHE_TTL,
         force: Rails.env.test?
@@ -49,10 +53,10 @@ module TheMovieDb
     end
 
     def connection
+      # Only enable Faraday logging in local environments to avoid leaking the api_key
+      # in query parameters into production logs.
       @connection ||= Faraday.new do |f|
-        faraday_logging = Rails.application.config.respond_to?(:faraday_logging) &&
-                          Rails.application.config.faraday_logging
-        f.response :logger if faraday_logging
+        f.response :logger if Rails.env.local?
       end
     end
 
@@ -79,8 +83,8 @@ module TheMovieDb
     # Reads the API key from Config::Video; may be overridden by passing api_key: at instantiation.
     # Visit https://www.themoviedb.org/settings/api to obtain a key.
     def api_key
-      @api_key = super || Config::Video.newest&.settings_tmdb_api_key.tap do |key|
-        raise InvalidConfig, "TMDB API key is not configured" if key.blank?
+      @api_key = super.presence || Config::Video.newest&.settings_tmdb_api_key.tap do |key|
+        raise InvalidConfig, "TMDB API key is blank and is required" if key.blank?
       end
     end
 

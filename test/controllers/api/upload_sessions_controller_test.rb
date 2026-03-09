@@ -3,16 +3,19 @@ require "tus/storage/filesystem"
 require "json"
 
 class TusUploadMutationsTest < ActionDispatch::IntegrationTest
-  TUS_STORAGE_DIR = Rails.root.join("tmp", "tus_test_uploads")
+  # Use a per-process directory so parallel workers don't stomp on each other's uploads.
+  def tus_storage_dir
+    Rails.root.join("tmp", "tus_test_uploads_#{Process.pid}")
+  end
 
   setup do
     @original_storage = Tus::Server.opts[:storage]
-    Tus::Server.opts[:storage] = Tus::Storage::Filesystem.new(TUS_STORAGE_DIR)
+    Tus::Server.opts[:storage] = Tus::Storage::Filesystem.new(tus_storage_dir)
   end
 
   teardown do
     Tus::Server.opts[:storage] = @original_storage
-    FileUtils.rm_rf(TUS_STORAGE_DIR)
+    FileUtils.rm_rf(tus_storage_dir)
     FileUtils.rm_rf(Rails.root.join("tmp", "finalized_test_uploads"))
   end
 

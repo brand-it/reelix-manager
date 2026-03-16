@@ -18,6 +18,7 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
+          token: ${{ secrets.GH_PAT }}
 
       - name: Read version
         id: version
@@ -39,3 +40,4 @@ jobs:
           tag_name: ${{ steps.version.outputs.value }}
           name: ${{ steps.version.outputs.value }}
           generate_release_notes: true
+          token: ${{ secrets.GH_PAT }}

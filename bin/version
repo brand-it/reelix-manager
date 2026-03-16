@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+# Usage: bin/version --major | --minor | --patch | --bug
+
+VALID_SEGMENTS = %w[--major --minor --patch --bug].freeze
+
+segment = ARGV[0]
+
+unless VALID_SEGMENTS.include?(segment)
+  puts "Usage: bin/version --major | --minor | --patch | --bug"
+  exit 1
+end
+
+main_version = `git fetch origin main --quiet 2>&1 && git show origin/main:VERSION 2>/dev/null`.strip
+if main_version.empty?
+  abort "Could not read VERSION from origin/main. Run `git fetch` and try again."
+end
+
+current = Gem::Version.new(main_version)
+major, minor, patch = current.segments
+
+bumped = case segment
+         when "--major" then Gem::Version.new("#{major + 1}.0.0")
+         when "--minor" then Gem::Version.new("#{major}.#{minor + 1}.0")
+         when "--patch", "--bug" then Gem::Version.new("#{major}.#{minor}.#{patch + 1}")
+         end
+
+version_file = File.expand_path("../../VERSION", __FILE__)
+File.write(version_file, "#{bumped}\n")
+puts "#{current} → #{bumped}"

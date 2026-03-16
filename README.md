@@ -73,7 +73,22 @@ docker pull brandiit/reelix-manager:latest
 
 ---
 
-# README
+## Versioning
+
+This project uses [semantic versioning](https://semver.org/). The current version is stored in the `VERSION` file at the root of the repo.
+
+Use the `bin/version` script to bump it:
+
+```bash
+bin/version --major   # 1.0.0 → 2.0.0  (breaking changes)
+bin/version --minor   # 1.0.0 → 1.1.0  (new features)
+bin/version --patch   # 1.0.0 → 1.0.1  (bug fixes)
+bin/version --bug     # alias for --patch
+```
+
+Committing the updated `VERSION` file to `main` will automatically trigger a new GitHub Release and Docker image push.
+
+---
 
 This README would normally document whatever steps are necessary to get the
 application up and running.

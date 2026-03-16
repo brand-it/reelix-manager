@@ -9,7 +9,6 @@ docker pull brandiit/reelix-manager:latest
 
 docker run -d \
   -p 80:80 \
-  -e RAILS_MASTER_KEY=<value from config/master.key> \
   -v reelix_storage:/rails/storage \
   --name reelix-manager \
   brandiit/reelix-manager:latest
@@ -17,9 +16,7 @@ docker run -d \
 
 ### Environment variables
 
-| Variable | Required | Description |
-|---|---|---|
-| `RAILS_MASTER_KEY` | ✅ Yes | Contents of `config/master.key` — decrypts credentials |
+None required for a standard setup.
 
 ### Persistent storage
 
@@ -30,12 +27,49 @@ SQLite databases are stored in `/rails/storage` inside the container. Mount a Do
 -v reelix_storage:/rails/storage
 ```
 
-### Image tags
+### Docker Compose
+
+Create a `docker-compose.yml` file:
+
+```yaml
+services:
+  reelix-manager:
+    image: brandiit/reelix-manager:latest
+    ports:
+      - "80:80"
+    volumes:
+      - reelix_storage:/rails/storage
+    restart: unless-stopped
+
+volumes:
+  reelix_storage:
+```
+
+Then start it with:
+
+```bash
+docker compose up -d
+```
+
+To update to the latest image:
+
+```bash
+docker compose pull && docker compose up -d
+```
+
+
+
+The recommended tag for most users is **`latest`** — it always points to the most recent release.
 
 | Tag | Published when |
 |---|---|
-| `latest` | Every push to the `main` branch |
-| `v1.2.3` | When a `v*.*.*` git tag is pushed |
+| `latest` | Every push to `main` (tracks the most recent release) |
+| `v1.2.3` | When the `VERSION` file is updated on `main` |
+| `1.2` | Floating tag for the latest patch of a minor version |
+
+```bash
+docker pull brandiit/reelix-manager:latest
+```
 
 ---
 

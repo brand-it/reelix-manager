@@ -5,7 +5,7 @@ module SimplyEncrypt
   KEY = Digest::SHA1.hexdigest(Rails.application.credentials.secret_key_base)[..31]
 
   def encrypt(data)
-    return [nil, nil] if data.blank?
+    return [ nil, nil ] if data.blank?
 
     cipher = OpenSSL::Cipher.new(MODE)
     cipher.encrypt
@@ -13,7 +13,7 @@ module SimplyEncrypt
     vi = cipher.random_iv
 
     encrypted = cipher.update(data.to_s) + cipher.final
-    [encode(encrypted), encode(vi)]
+    [ encode(encrypted), encode(vi) ]
   end
 
   def decrypt(data, iv) # rubocop:disable Naming/MethodParameterName

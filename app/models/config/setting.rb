@@ -18,7 +18,7 @@ class Config
       JSON.dump dump_attributes(item, object).to_h
     end
 
-    def attribute(name, default: -> {}, encrypted: false)
+    def attribute(name, default: -> { }, encrypted: false)
       attributes[name.to_sym] = Option.new(default, encrypted)
     end
 

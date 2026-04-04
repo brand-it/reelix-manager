@@ -19,6 +19,14 @@ module ActiveSupport
 
     include FactoryBot::Syntax::Methods
 
-    # Add more helper methods to be used by all tests here...
+    # Stub TheMovieDb::Base.ping so model validations don't make real network
+    # calls in tests. Any key is treated as valid; test a real key separately.
+    setup do
+      TheMovieDb::Base.define_singleton_method(:ping) { |**| true }
+    end
+
+    teardown do
+      TheMovieDb::Base.singleton_class.remove_method(:ping)
+    end
   end
 end

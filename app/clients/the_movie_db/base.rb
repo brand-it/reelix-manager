@@ -22,6 +22,14 @@ module TheMovieDb
       end
 
       delegate :results, to: :new
+
+      # Validates that the given API key can reach the TMDB API.
+      # Returns true/false — safe to call from model validations.
+      def ping(api_key:)
+        new(api_key: api_key).ping
+      rescue InvalidConfig
+        false
+      end
     end
 
     def results(use_cache: true, object_class: Hash)
@@ -30,7 +38,18 @@ module TheMovieDb
       @results[key] ||= use_cache ? cache_get(object_class:) : get(object_class:)
     end
 
+    def ping
+      response = connection.get(ping_uri, { api_key: api_key })
+      response.success?
+    rescue StandardError
+      false
+    end
+
     private
+
+    def ping_uri
+      URI::HTTPS.build(host: HOST, path: "/#{VERSION}/authentication")
+    end
 
     def cache_get(object_class: Hash)
       # Exclude the api_key from the cache key to avoid leaking secrets via cache key inspection.

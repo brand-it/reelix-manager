@@ -1,6 +1,11 @@
 class Config::VideosController < ApplicationController
   def new
-    @config_video = Config::Video.new
+    existing = Config::Video.newest
+    if existing.persisted?
+      redirect_to edit_config_video_path
+    else
+      @config_video = existing
+    end
   end
 
   def create

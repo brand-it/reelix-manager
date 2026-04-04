@@ -2,7 +2,7 @@ class Config::Video < Config
   setting do |s|
     s.attribute :movie_path
     s.attribute :tv_path
-    s.attribute :tmdb_api_key
+    s.attribute :tmdb_api_key, encrypted: true
     s.attribute :processed_path
   end
 
@@ -13,6 +13,7 @@ class Config::Video < Config
 
   validate :movie_path_must_exist, if: -> { settings_movie_path.present? }
   validate :tv_path_must_exist, if: -> { settings_tv_path.present? }
+  validate :tmdb_api_key_must_be_valid, if: -> { settings_tmdb_api_key.present? }
 
   private
 
@@ -25,6 +26,12 @@ class Config::Video < Config
   def tv_path_must_exist
     unless Dir.exist?(settings_tv_path)
       errors.add(:settings_tv_path, "does not exist on the filesystem")
+    end
+  end
+
+  def tmdb_api_key_must_be_valid
+    unless TheMovieDb::Base.ping(api_key: settings_tmdb_api_key)
+      errors.add(:settings_tmdb_api_key, "is invalid or the TMDB API could not be reached")
     end
   end
 end

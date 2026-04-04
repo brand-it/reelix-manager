@@ -1,3 +1,47 @@
+## Local Development
+
+### Prerequisites
+
+- Ruby **3.3.1** (use [rbenv](https://github.com/rbenv/rbenv) or [asdf](https://asdf-vm.com/))
+- Node.js + npm (for Bootstrap/Sass compilation)
+- SQLite 3
+
+### Setup
+
+```bash
+# Install Ruby dependencies
+bundle install
+
+# Install Node dependencies (Bootstrap + Sass)
+npm install
+
+# Create and migrate the database
+bin/rails db:prepare
+```
+
+### Boot the server
+
+```bash
+bin/dev
+```
+
+This uses foreman to run `Procfile.dev`, which starts two processes in parallel:
+
+| Process | Command | Purpose |
+|---------|---------|---------|
+| `web` | `bin/rails server` | Rails app on http://localhost:3000 |
+| `css` | `yarn build:css --watch` | Sass → CSS watcher |
+
+The app will be available at **http://localhost:3000**.
+
+### Running tests
+
+```bash
+bin/rails test
+```
+
+---
+
 ## Docker / Production
 
 The app is published as a Docker image to [Docker Hub](https://hub.docker.com/r/brandiit/reelix-manager).
@@ -87,28 +131,3 @@ bin/version --bug     # alias for --patch
 ```
 
 Committing the updated `VERSION` file to `main` will automatically trigger a new GitHub Release and Docker image push.
-
----
-
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...

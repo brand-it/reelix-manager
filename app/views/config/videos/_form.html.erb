@@ -18,9 +18,25 @@
                       hint: "Directory where uploaded TV shows will be stored"
           %>
 
-          <%= f.input :settings_tmdb_api_key,
-                      label: "TMDB API Key",
-                      hint: "TheMovieDB API key for movie/TV metadata lookups" %>
+          <div class="mb-3" data-controller="reveal">
+            <%= f.label :settings_tmdb_api_key, "TMDB API Key", class: "form-label" %>
+            <div class="input-group">
+              <%= f.input_field :settings_tmdb_api_key,
+                                as: :password,
+                                value: f.object.settings_tmdb_api_key,
+                                data: { reveal_target: "field" },
+                                class: "form-control",
+                                autocomplete: "off" %>
+              <button class="btn btn-outline-secondary"
+                      type="button"
+                      data-reveal-target="toggle"
+                      data-action="reveal#toggle"
+                      data-reveal-show-label="Show"
+                      data-reveal-hide-label="Hide">Show</button>
+            </div>
+            <%= f.full_error :settings_tmdb_api_key, class: "invalid-feedback d-block" %>
+            <%= f.hint "TheMovieDB API key for movie/TV metadata lookups — <a href='https://www.themoviedb.org/settings/api' target='_blank' rel='noopener noreferrer'>Get your API key here</a>.".html_safe %>
+          </div>
 
           <%= f.input :settings_processed_path,
                       label: "Processed Path",

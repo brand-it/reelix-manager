@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 class GraphqlController < ApplicationController
-  # If accessing from outside this domain, nullify the session
-  # This allows for outside API access while preventing CSRF attacks,
-  # but you'll have to authenticate your user separately
-  # protect_from_forgery with: :null_session
+  # Nullify the session instead of raising an InvalidAuthenticityToken exception.
+  # This allows API clients (e.g. GraphiQL, mobile apps) to POST without a CSRF
+  # token while still preventing cross-site request forgery — any forged request
+  # just runs without a session (i.e. as an unauthenticated user).
+  protect_from_forgery with: :null_session
 
   def execute
     variables = prepare_variables(params[:variables])

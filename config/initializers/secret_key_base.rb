@@ -12,7 +12,9 @@ unless File.exist?(key_file)
   random_key = SecureRandom.hex(64)
   Rails.logger.warn "Secret key base not found, generating one at #{key_file}"
   FileUtils.mkdir_p(key_file.dirname)
-  File.binwrite(key_file, random_key)
+  File.open(key_file, File::WRONLY | File::CREAT | File::TRUNC, 0o600) do |file|
+    file.write(random_key)
+  end
 end
 
-Rails.application.config.secret_key_base = ENV.fetch("SECRET_KEY_BASE", File.binread(key_file))
+Rails.application.config.secret_key_base = ENV.fetch("SECRET_KEY_BASE") { File.binread(key_file) }

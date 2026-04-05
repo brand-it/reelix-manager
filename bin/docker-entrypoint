@@ -16,6 +16,7 @@ if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
   echo "Environment : ${RAILS_ENV:-production}"
   echo "Ruby        : $(ruby --version)"
   echo "Hostname    : $(hostname)"
+  echo "Port        : ${HTTP_PORT:-80} (Thruster) → ${PORT:-3000} (Puma)"
   echo "============================================================"
   ./bin/rails db:prepare
 fi

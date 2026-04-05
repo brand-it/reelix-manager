@@ -18,12 +18,15 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
+          <ul class="navbar-nav ms-auto align-items-center">
             <li class="nav-item">
               <%= link_to "GraphiQL", "/graphiql", class: "nav-link" %>
             </li>
             <li class="nav-item">
               <%= link_to "Settings", new_config_video_path, class: "nav-link" %>
+            </li>
+            <li class="nav-item">
+              <span class="navbar-text text-secondary small ms-2">v<%= APP_VERSION %></span>
             </li>
           </ul>
         </div>

@@ -1,5 +1,13 @@
 #!/bin/bash -e
 
+# When started as root (normal Docker behaviour), fix storage volume ownership
+# then re-exec this same entrypoint as the rails user. This ensures the mounted
+# volume is always writable regardless of how Docker initialised it.
+if [ "$(id -u)" = "0" ]; then
+  chown -R rails:rails /rails/storage
+  exec gosu rails "$0" "$@"
+fi
+
 # If running the rails server then create or migrate existing database
 if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
   echo "============================================================"
@@ -8,6 +16,7 @@ if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
   echo "Environment : ${RAILS_ENV:-production}"
   echo "Ruby        : $(ruby --version)"
   echo "Hostname    : $(hostname)"
+  echo "Port        : ${HTTP_PORT:-80} (Thruster) → ${PORT:-3000} (Puma)"
   echo "============================================================"
   ./bin/rails db:prepare
 fi

@@ -1,4 +1,7 @@
 class DocsController < ApplicationController
+  # @rbs @applications: untyped
+  # @rbs @default_app: untyped
+
   skip_before_action :authenticate_or_setup!
 
   #: () -> void

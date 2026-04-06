@@ -1,0 +1,6 @@
+# Generated from app/graphql/types/base_enum.rb with RBS::Inline
+
+module Types
+  class BaseEnum < GraphQL::Schema::Enum
+  end
+end

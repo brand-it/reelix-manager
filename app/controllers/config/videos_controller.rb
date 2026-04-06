@@ -1,4 +1,6 @@
 class Config::VideosController < ApplicationController
+  # @rbs @config_video: Config::Video
+
   #: () -> void
   def new
     existing = Config::Video.newest

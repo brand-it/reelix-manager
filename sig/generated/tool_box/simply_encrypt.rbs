@@ -1,0 +1,23 @@
+# Generated from app/tool_box/simply_encrypt.rb with RBS::Inline
+
+module SimplyEncrypt
+  MODE: ::String
+
+  # `credentials.secret_key_base` is String|nil per RBS, but always present in production.
+  # `.to_s` coerces nil to "" safely, `|| ""` satisfies the String constant type.
+  KEY: untyped
+
+  # : (String? data) -> [String?, String?]
+  def encrypt: (String? data) -> [ String?, String? ]
+
+  # : (String? data, String? iv) -> String?
+  def decrypt: (String? data, String? iv) -> String?
+
+  private
+
+  # : (String string) -> String
+  def encode: (String string) -> String
+
+  # : (String string) -> String
+  def decode: (String string) -> String
+end

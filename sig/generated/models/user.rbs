@@ -1,0 +1,6 @@
+# Generated from app/models/user.rb with RBS::Inline
+
+class User < ApplicationRecord
+  # : () -> bool
+  def admin?: () -> bool
+end

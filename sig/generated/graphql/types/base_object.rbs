@@ -1,0 +1,6 @@
+# Generated from app/graphql/types/base_object.rb with RBS::Inline
+
+module Types
+  class BaseObject < GraphQL::Schema::Object
+  end
+end

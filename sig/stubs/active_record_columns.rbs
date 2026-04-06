@@ -1,0 +1,38 @@
+# Stubs for ActiveRecord column methods that are generated dynamically.
+# AR creates attribute readers/writers for each database column at runtime.
+
+class User < ApplicationRecord
+  # Column: admin (boolean)
+  def admin: () -> bool
+  def admin=: (bool value) -> bool
+
+  # Scope methods provided by ApplicationRecord
+  def self.any?: () -> bool
+  def self.none?: () -> bool
+
+  # Association: has_many :access_tokens, class_name: "Doorkeeper::AccessToken"
+  def access_tokens: () -> untyped
+end
+
+class UploadSession < ApplicationRecord
+  # Column: filename (string)
+  def filename: () -> String
+  def filename=: (String value) -> String
+
+  # Column: total_chunks (integer)
+  def total_chunks: () -> Integer
+  def total_chunks=: (Integer value) -> Integer
+
+  # Column: destination_path (string, nullable)
+  def destination_path: () -> String?
+  def destination_path=: (String? value) -> String?
+
+  # Column: status (string)
+  def status: () -> String
+  def status=: (String value) -> String
+
+  # Column: id (string / UUID)
+  def id: () -> String
+  def id=: (String value) -> String
+end
+

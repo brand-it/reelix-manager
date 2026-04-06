@@ -3,10 +3,10 @@ class Config < ApplicationRecord
     #: () -> Config::Setting
     #: () { (Config::Setting) -> void } -> Config::Setting
     def setting(&block)
-      return @setting unless block_given? # steep:ignore UnknownInstanceVariable, ReturnTypeMismatch
+      return @setting unless block_given? # steep:ignore UnknownInstanceVariable, ReturnTypeMismatch, FallbackAny
 
       @setting = Setting.call(block) # steep:ignore UnknownInstanceVariable, ArgumentTypeMismatch
-      @setting.attributes.each_key do |name| # steep:ignore UnknownInstanceVariable, NoMethod
+      @setting.attributes.each_key do |name| # steep:ignore UnknownInstanceVariable, NoMethod, FallbackAny
         define_method(:"settings_#{name}") { settings[name] } # steep:ignore NoMethod
         define_method(:"settings_#{name}=") { |val| self.settings = { name => val } } # steep:ignore NoMethod, UnannotatedEmptyCollection
       end

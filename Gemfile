@@ -75,8 +75,9 @@ group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
 
-  # RBS type signatures + Steep type checker
+  # RBS type signatures + Steep type checker + inline annotations
   gem "rbs"
+  gem "rbs-inline"
   gem "steep"
 end
 

@@ -1,0 +1,6 @@
+# Generated from app/graphql/types/base_input_object.rb with RBS::Inline
+
+module Types
+  class BaseInputObject < GraphQL::Schema::InputObject
+  end
+end

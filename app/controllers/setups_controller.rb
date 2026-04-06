@@ -1,4 +1,6 @@
 class SetupsController < ApplicationController
+  # @rbs @user: User?
+
   # Skip all auth checks — this is the unauthenticated first-run bootstrap page.
   skip_before_action :authenticate_or_setup!
 
@@ -21,9 +23,10 @@ class SetupsController < ApplicationController
     end
 
     @user = User.new(setup_params.merge(admin: true)) #: User
+    user = @user #: User
 
-    if @user.save
-      sign_in(:user, @user)
+    if user.save
+      sign_in(:user, user)
       redirect_to root_path, notice: "Admin account created. Welcome to Reelix Manager!"
     else
       render :new, status: :unprocessable_entity

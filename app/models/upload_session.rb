@@ -1,5 +1,5 @@
 class UploadSession < ApplicationRecord
-  STATUSES = %w[pending uploading assembling complete aborted failed].freeze
+  STATUSES = %w[pending uploading assembling complete aborted failed].freeze #: Array[String]
 
   before_create :set_id
 
@@ -29,8 +29,9 @@ class UploadSession < ApplicationRecord
 
   #: () -> String?
   def assembled_file_path
-    return nil if destination_path.blank?
-    File.join(destination_path, filename)
+    path = destination_path
+    return nil if path.blank?
+    File.join(path, filename)
   end
 
   private

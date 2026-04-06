@@ -2,6 +2,8 @@ class Config
   class Setting
     include SimplyEncrypt
 
+    # @rbs @attributes: untyped
+
     Option = Struct.new(:default, :encrypted?)
 
     class << self

@@ -1,0 +1,13 @@
+# Generated from app/graphql/types/query_type.rb with RBS::Inline
+
+module Types
+  class QueryType < Types::BaseObject
+    include ScopeEnforceable
+
+    # : (id: String) -> untyped
+    def node: (id: String) -> untyped
+
+    # : (ids: ::Array[String]) -> ::Array[untyped]
+    def nodes: (ids: ::Array[String]) -> ::Array[untyped]
+  end
+end

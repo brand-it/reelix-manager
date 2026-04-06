@@ -1,0 +1,30 @@
+# Generated from app/graphql/types/search_result_type.rb with RBS::Inline
+
+module Types
+  class SearchResultType < Types::BaseObject
+    # Provide defaults for fields that TMDB omits on TV show results
+    # : () -> bool
+    def video: () -> bool
+
+    # : () -> bool
+    def adult: () -> bool
+
+    # : () -> String
+    def overview: () -> String
+
+    # : () -> Float
+    def vote_average: () -> Float
+
+    # : () -> Integer
+    def vote_count: () -> Integer
+
+    # : () -> String
+    def original_language: () -> String
+
+    # : () -> ::Array[Integer]
+    def genre_ids: () -> ::Array[Integer]
+
+    # : () -> String
+    def display_title: () -> String
+  end
+end

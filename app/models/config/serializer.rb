@@ -1,5 +1,7 @@
 class Config
   class Serializer
+    # @rbs @data: ::Hash[untyped, untyped]
+
     #: (String? json) -> Config::Serializer
     def self.load(json)
       data = json.present? ? JSON.parse(json) : {} #: ::Hash[untyped, untyped]

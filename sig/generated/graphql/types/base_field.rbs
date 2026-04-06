@@ -1,0 +1,6 @@
+# Generated from app/graphql/types/base_field.rb with RBS::Inline
+
+module Types
+  class BaseField < GraphQL::Schema::Field
+  end
+end

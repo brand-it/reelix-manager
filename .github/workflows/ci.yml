@@ -146,6 +146,9 @@ jobs:
       - name: Install RBS gem signatures
         run: bundle exec rbs collection install
 
+      - name: Generate RBS from inline annotations
+        run: find app lib -name '*.rb' -print0 | xargs -0 bundle exec rbs-inline --opt-out --output=sig/generated
+
       - name: Check types (Steep)
         run: bundle exec steep check --log-level=fatal
 

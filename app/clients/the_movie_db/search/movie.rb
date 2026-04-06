@@ -5,6 +5,9 @@ module TheMovieDb
     class Movie < Base
       attr_reader :year, :primary_release_year
 
+      # @rbs @year: Integer?
+      # @rbs @primary_release_year: Integer?
+
       #: (query: String, ?page: Integer, ?api_key: String?, ?language: String?, ?year: Integer?, ?primary_release_year: Integer?) -> void
       def initialize(query:, page: 1, api_key: nil, language: nil, year: nil, primary_release_year: nil)
         super(query: query, page: page, api_key: api_key, language: language)

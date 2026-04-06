@@ -5,6 +5,11 @@ module TheMovieDb
     class Base < TheMovieDb::Base
       attr_reader :query, :page
 
+      # @rbs @query: String
+      # @rbs @page: Integer
+      # @rbs @next_page: TheMovieDb::Search::Base?
+      # @rbs @previous_page: TheMovieDb::Search::Base?
+
       #: (query: String, ?page: Integer, ?api_key: String?, ?language: String?) -> void
       def initialize(query:, page: 1, api_key: nil, language: nil)
         super(api_key: api_key, language: language)

@@ -1,0 +1,15 @@
+# Stubs for Devise helpers included into ActionController::Base.
+# Devise injects these via its ControllerHelpers module at runtime.
+class ActionController::Base
+  # Returns the currently signed-in user (nil if not authenticated).
+  def current_user: () -> (User | nil)
+
+  # Redirects to the sign-in page unless the user is authenticated.
+  def authenticate_user!: () -> void
+
+  # Signs a user into the given scope.
+  def sign_in: (Symbol scope, User resource) -> void
+
+  # True when the request was made with a Doorkeeper Bearer token.
+  def doorkeeper_token_request?: () -> bool
+end

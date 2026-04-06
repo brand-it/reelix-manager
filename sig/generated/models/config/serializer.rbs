@@ -1,0 +1,29 @@
+# Generated from app/models/config/serializer.rb with RBS::Inline
+
+class Config
+  class Serializer
+    @data: ::Hash[untyped, untyped]
+
+    # : (String? json) -> Config::Serializer
+    def self.load: (String? json) -> Config::Serializer
+
+    # : (?::Hash[untyped, untyped] data) -> void
+    def initialize: (?::Hash[untyped, untyped] data) -> void
+
+    # : (untyped key) -> untyped
+    def []: (untyped key) -> untyped
+
+    # : (untyped key, untyped value) -> untyped
+    def []=: (untyped key, untyped value) -> untyped
+
+    # : (untyped key) -> bool
+    def key?: (untyped key) -> bool
+
+    # Used by Setting#contains_key? to introspect the underlying hash.
+    # : () -> ::Hash[untyped, untyped]
+    def marshal_dump: () -> ::Hash[untyped, untyped]
+
+    # : () -> ::Hash[untyped, untyped]
+    def to_h: () -> ::Hash[untyped, untyped]
+  end
+end

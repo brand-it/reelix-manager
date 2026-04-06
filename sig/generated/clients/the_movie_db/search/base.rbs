@@ -1,0 +1,36 @@
+# Generated from app/clients/the_movie_db/search/base.rb with RBS::Inline
+
+module TheMovieDb
+  module Search
+    class Base < TheMovieDb::Base
+      attr_reader query: untyped
+
+      attr_reader page: untyped
+
+      @query: String
+
+      @page: Integer
+
+      @next_page: TheMovieDb::Search::Base?
+
+      @previous_page: TheMovieDb::Search::Base?
+
+      # : (query: String, ?page: Integer, ?api_key: String?, ?language: String?) -> void
+      def initialize: (query: String, ?page: Integer, ?api_key: String?, ?language: String?) -> void
+
+      # : (?use_cache: bool) -> untyped
+      def results: (?use_cache: bool) -> untyped
+
+      # : () -> TheMovieDb::Search::Base
+      def next_page: () -> TheMovieDb::Search::Base
+
+      # : () -> TheMovieDb::Search::Base
+      def previous_page: () -> TheMovieDb::Search::Base
+
+      private
+
+      # : () -> ::Hash[untyped, untyped]
+      def query_params: () -> ::Hash[untyped, untyped]
+    end
+  end
+end

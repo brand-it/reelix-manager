@@ -1,6 +1,0 @@
-module TheMovieDb
-  module Search
-    class Tv < Base
-    end
-  end
-end

@@ -1,0 +1,18 @@
+# Generated from app/controllers/setups_controller.rb with RBS::Inline
+
+class SetupsController < ApplicationController
+  @user: User?
+
+  # GET /setup
+  # : () -> void
+  def new: () -> void
+
+  # POST /setup
+  # : () -> void
+  def create: () -> void
+
+  private
+
+  # : () -> ActionController::Parameters
+  def setup_params: () -> ActionController::Parameters
+end

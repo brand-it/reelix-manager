@@ -1,0 +1,8 @@
+# Generated from app/clients/the_movie_db/search/tv.rb with RBS::Inline
+
+module TheMovieDb
+  module Search
+    class Tv < Base
+    end
+  end
+end

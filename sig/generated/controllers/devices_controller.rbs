@@ -1,0 +1,16 @@
+# Generated from app/controllers/devices_controller.rb with RBS::Inline
+
+class DevicesController < ApplicationController
+  @tokens: untyped
+
+  # : () -> void
+  def index: () -> void
+
+  # : () -> void
+  def destroy: () -> void
+
+  private
+
+  # : () -> untyped
+  def find_token: () -> untyped
+end

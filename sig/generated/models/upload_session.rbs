@@ -1,0 +1,25 @@
+# Generated from app/models/upload_session.rb with RBS::Inline
+
+class UploadSession < ApplicationRecord
+  STATUSES: Array[String]
+
+  # : () -> Pathname
+  def chunks_dir: () -> Pathname
+
+  # : (Integer chunk_number) -> Pathname
+  def chunk_path: (Integer chunk_number) -> Pathname
+
+  # : () -> Array[Integer]
+  def missing_chunks: () -> Array[Integer]
+
+  # : () -> bool
+  def upload_complete?: () -> bool
+
+  # : () -> String?
+  def assembled_file_path: () -> String?
+
+  private
+
+  # : () -> void
+  def set_id: () -> void
+end

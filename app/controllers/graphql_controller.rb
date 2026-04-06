@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 class GraphqlController < ApplicationController
+  # @rbs @current_user: User?
+  # @rbs @doorkeeper_token: untyped
+  # @rbs @doorkeeper_access_token: untyped
+
   # Doorkeeper token requests are stateless — CSRF doesn't apply.
   # Covers all configured access_token_methods (Authorization header, access_token
   # param, bearer_token param). Session-based requests (GraphiQL in the browser)

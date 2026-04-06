@@ -19,5 +19,26 @@ module GraphQL
 
     # Caps the number of query string tokens accepted.
     def self.max_query_string_tokens: (Integer limit) -> void
+
+    module Interface
+      def self.edge_type_class: (untyped klass) -> void
+      def self.connection_type_class: (untyped klass) -> void
+      def self.field_class: (untyped klass) -> void
+    end
   end
+end
+
+# GraphQL DSL methods are added as singleton methods on modules that include
+# GraphQL::Schema::Interface via graphql-ruby's `included` hook (which calls extend).
+module Types
+  module BaseInterface
+    def self.edge_type_class: (untyped klass) -> void
+    def self.connection_type_class: (untyped klass) -> void
+    def self.field_class: (untyped klass) -> void
+  end
+end
+
+# ScopeEnforceable requires its includers to provide a GraphQL context method.
+module ScopeEnforceable
+  def context: () -> GraphQL::Query::Context
 end

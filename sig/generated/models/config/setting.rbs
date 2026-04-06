@@ -1,0 +1,47 @@
+# Generated from app/models/config/setting.rb with RBS::Inline
+
+class Config
+  class Setting
+    include SimplyEncrypt
+
+    @attributes: untyped
+
+    class Option < Struct[untyped]
+      attr_accessor default(): untyped
+
+      attr_accessor encrypted?(): untyped
+
+      def self.new: (?untyped default, ?untyped `encrypted?`) -> instance
+                  | (?default: untyped, ?encrypted?: untyped) -> instance
+    end
+
+    # : (Proc block) -> Config::Setting
+    def self.call: (Proc block) -> Config::Setting
+
+    # : (Config item, String? json) -> Config::Serializer
+    def load: (Config item, String? json) -> Config::Serializer
+
+    # : (Config item, ::Hash[untyped, untyped] object) -> String
+    def dump: (Config item, ::Hash[untyped, untyped] object) -> String
+
+    # : (Symbol | String name, ?default: Proc, ?encrypted: bool) -> void
+    def attribute: (Symbol | String name, ?default: Proc, ?encrypted: bool) -> void
+
+    # : () -> ::Hash[Symbol, Config::Setting::Option]
+    def attributes: () -> ::Hash[Symbol, Config::Setting::Option]
+
+    private
+
+    # : (Config item, Config::Serializer object) -> Config::Serializer
+    def load_attributes: (Config item, Config::Serializer object) -> Config::Serializer
+
+    # : (Config item, ::Hash[untyped, untyped] object) -> ::Hash[untyped, untyped]
+    def dump_attributes: (Config item, ::Hash[untyped, untyped] object) -> ::Hash[untyped, untyped]
+
+    # : (Config item, Config::Setting::Option option) -> untyped
+    def instance_exec_default: (Config item, Config::Setting::Option option) -> untyped
+
+    # : (untyped object, Symbol key) -> bool
+    def contains_key?: (untyped object, Symbol key) -> bool
+  end
+end

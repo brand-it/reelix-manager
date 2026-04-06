@@ -1,9 +1,0 @@
-module Types
-  class UploadSessionType < Types::BaseObject
-    #  () -> ::Array[Integer]
-    def missing_chunks: () -> untyped
-
-    #  () -> bool
-    def upload_complete: () -> untyped
-  end
-end

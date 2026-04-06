@@ -7,6 +7,11 @@ module TheMovieDb
     CACHE_TTL = 7.days
     CACHE_NAMESPACE = "the_movie_db"
 
+    # @rbs @api_key: String?
+    # @rbs @language: String?
+    # @rbs @results: ::Hash[[bool, Class], ::Hash[String, untyped]]
+    # @rbs @connection: Faraday::Connection?
+
     #: (?api_key: String?, ?language: String?) -> void
     def initialize(api_key: nil, language: nil)
       @api_key = api_key #: String?

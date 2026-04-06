@@ -1,0 +1,17 @@
+# Rails-level method stubs not covered by the rbs_collection.
+# Add entries here for methods injected by Rails middleware / railtie hooks.
+class ActionController::Base
+  # Provided by Importmap::ImportmapTagsHelper.
+  def self.stale_when_importmap_changes: () -> void
+
+  # Standard Rails logger — already in ActionController::Base but missing from collection.
+  def logger: () -> ::Logger
+
+  # Route helpers are generated dynamically; add specific helpers as needed.
+  def root_path: () -> String
+  def setup_path: () -> String
+  def devices_path: () -> String
+  def new_config_video_path: () -> String
+  def edit_config_video_path: () -> String
+  def graphiql_path: () -> String
+end

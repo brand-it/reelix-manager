@@ -1,4 +1,6 @@
 class DevicesController < ApplicationController
+  # @rbs @tokens: untyped
+
   #: () -> void
   def index
     user = current_user

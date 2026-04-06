@@ -1,5 +1,0 @@
-module Mutations
-  class BaseMutation < GraphQL::Schema::RelayClassicMutation
-    include ScopeEnforceable
-  end
-end

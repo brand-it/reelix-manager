@@ -1,4 +1,0 @@
-module Types
-  class SearchResponseType < Types::BaseObject
-  end
-end

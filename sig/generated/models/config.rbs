@@ -1,0 +1,17 @@
+# Generated from app/models/config.rb with RBS::Inline
+
+class Config < ApplicationRecord
+  # : () -> Config::Setting
+  # : () { (Config::Setting) -> void } -> Config::Setting
+  def self.setting: () -> Config::Setting
+                  | () { (Config::Setting) -> void } -> Config::Setting
+
+  # : () -> Config
+  def self.newest: () -> Config
+
+  # : () -> Config::Serializer
+  def settings: () -> Config::Serializer
+
+  # : (::Hash[untyped, untyped] hash) -> void
+  def settings=: (::Hash[untyped, untyped] hash) -> void
+end

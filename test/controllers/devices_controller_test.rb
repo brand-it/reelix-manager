@@ -57,7 +57,8 @@ class DevicesControllerTest < ActionDispatch::IntegrationTest
       application: @oauth_app,
       resource_owner_id: @user.id,
       expires_in: 900,
-      scopes: ""
+      scopes: "",
+      device_code: "device-code-#{SecureRandom.hex(16)}"
     )
     sign_in @user
     get devices_path
@@ -141,7 +142,8 @@ class DevicesControllerTest < ActionDispatch::IntegrationTest
       application: @oauth_app,
       resource_owner_id: @user.id,
       expires_in: 900,
-      scopes: ""
+      scopes: "",
+      device_code: "device-code-#{SecureRandom.hex(16)}"
     )
     sign_in @user
     assert_difference("Doorkeeper::DeviceAuthorizationGrant::DeviceGrant.count", -1) do
@@ -157,7 +159,8 @@ class DevicesControllerTest < ActionDispatch::IntegrationTest
       application: @oauth_app,
       resource_owner_id: other.id,
       expires_in: 900,
-      scopes: ""
+      scopes: "",
+      device_code: "device-code-#{SecureRandom.hex(16)}"
     )
     sign_in @user
     assert_no_difference("Doorkeeper::DeviceAuthorizationGrant::DeviceGrant.count") do
@@ -172,7 +175,8 @@ class DevicesControllerTest < ActionDispatch::IntegrationTest
       application: @oauth_app,
       resource_owner_id: @user.id,
       expires_in: 900,
-      scopes: ""
+      scopes: "",
+      device_code: "device-code-#{SecureRandom.hex(16)}"
     )
     sign_in @admin
     assert_difference("Doorkeeper::DeviceAuthorizationGrant::DeviceGrant.count", -1) do

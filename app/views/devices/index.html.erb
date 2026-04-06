@@ -21,21 +21,30 @@
       </thead>
       <tbody>
         <% @device_grants.each do |grant| %>
+          <% grant_expired = grant.created_at + grant.expires_in.seconds < Time.current %>
           <tr>
             <% if current_user.admin? %>
-              <td><%= User.find_by(id: grant.resource_owner_id)&.email || "Unknown" %></td>
+              <td><%= @grant_users[grant.resource_owner_id]&.email || "Unknown" %></td>
             <% end %>
             <td><%= grant.application&.name || "—" %></td>
             <td><%= grant.created_at.strftime("%b %-d, %Y") %></td>
             <td>
               <%= grant.created_at.advance(seconds: grant.expires_in).strftime("%b %-d, %Y") %>
             </td>
-            <td><span class="badge bg-warning text-dark">Pending</span></td>
             <td>
-              <%= button_to "Cancel", grant_devices_path(id: grant.id),
-                            method: :delete,
-                            class: "btn btn-sm btn-outline-danger",
-                            data: { turbo_confirm: "Cancel this pending device authorization?" } %>
+              <% if grant_expired %>
+                <span class="badge bg-secondary">Expired</span>
+              <% else %>
+                <span class="badge bg-warning text-dark">Pending</span>
+              <% end %>
+            </td>
+            <td>
+              <% unless grant_expired %>
+                <%= button_to "Cancel", grant_devices_path(id: grant.id),
+                              method: :delete,
+                              class: "btn btn-sm btn-outline-danger",
+                              data: { turbo_confirm: "Cancel this pending device authorization?" } %>
+              <% end %>
             </td>
           </tr>
         <% end %>

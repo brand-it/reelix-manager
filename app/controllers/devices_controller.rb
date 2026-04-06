@@ -1,6 +1,7 @@
 class DevicesController < ApplicationController
   # @rbs @tokens: untyped
   # @rbs @device_grants: untyped
+  # @rbs @grant_users: untyped
 
   #: () -> void
   def index
@@ -24,6 +25,8 @@ class DevicesController < ApplicationController
         .order(created_at: :desc)
         .includes(:application)
     end #: untyped
+
+    @grant_users = User.where(id: @device_grants.map(&:resource_owner_id)).index_by(&:id) if user.admin?
   end
 
   #: () -> void

@@ -1,0 +1,46 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <%= link_to "Reelix Manager", root_path, class: "navbar-brand" %>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto align-items-center">
+        <% if user_signed_in? %>
+          <li class="nav-item">
+            <%= link_to "GraphiQL", "/graphiql", class: "nav-link" %>
+          </li>
+          <li class="nav-item">
+            <%= link_to "Settings", new_config_video_path, class: "nav-link" %>
+          </li>
+          <li class="nav-item">
+            <%= link_to "Devices", devices_path, class: "nav-link" %>
+          </li>
+          <% if current_user.admin? %>
+            <li class="nav-item">
+              <%= link_to "Applications", oauth_applications_path, class: "nav-link" %>
+            </li>
+          <% end %>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+              <%= current_user.email %>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li>
+                <%= button_to "Sign out", destroy_user_session_path,
+                              method: :delete,
+                              class: "dropdown-item" %>
+              </li>
+            </ul>
+          </li>
+        <% end %>
+        <li class="nav-item">
+          <%= link_to "API Docs", "/docs/api", class: "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <span class="navbar-text text-secondary small ms-2">v<%= APP_VERSION %></span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

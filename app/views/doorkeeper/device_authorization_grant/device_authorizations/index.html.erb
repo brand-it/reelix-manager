@@ -1,0 +1,26 @@
+<div class="row justify-content-center mt-5">
+  <div class="col-md-5">
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <h4 class="card-title mb-1">Authorize a Device</h4>
+        <p class="text-muted mb-4">Enter the code shown on your Reelix client to grant it access.</p>
+
+        <%= form_with(url: oauth_device_authorizations_authorize_url) do %>
+          <div class="mb-3">
+            <%= label_tag :user_code, "Device code", class: "form-label fw-semibold" %>
+            <%= text_field_tag :user_code, params[:user_code],
+                               class: "form-control form-control-lg text-center text-uppercase",
+                               placeholder: "XXXX-XXXX",
+                               autocomplete: "off",
+                               autofocus: true %>
+          </div>
+
+          <div class="d-flex gap-2">
+            <%= button_tag "Authorize", type: "submit", class: "btn btn-primary flex-grow-1" %>
+            <%= link_to "Cancel", oauth_device_authorizations_index_path, class: "btn btn-outline-secondary" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

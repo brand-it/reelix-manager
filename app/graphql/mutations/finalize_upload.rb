@@ -14,6 +14,11 @@ module Mutations
     field :filename, String, null: true
     field :errors, [ String ], null: false
 
+    def ready?(**_args)
+      require_upload!
+      true
+    end
+
     def resolve(upload_id:, filename: nil, media_type: "movie")
       storage = Tus::Server.opts[:storage]
 

@@ -11,6 +11,22 @@ class TusUploadMutationsTest < ActionDispatch::IntegrationTest
   setup do
     @original_storage = Tus::Server.opts[:storage]
     Tus::Server.opts[:storage] = Tus::Storage::Filesystem.new(tus_storage_dir)
+
+    # Create a Doorkeeper access token for GraphQL auth (all scopes for mutation tests).
+    user = create(:user)
+    app  = Doorkeeper::Application.find_or_create_by!(name: "TusTest") do |a|
+      a.uid          = "tus-test-app"
+      a.redirect_uri = ""
+      a.scopes       = "all"
+      a.confidential = false
+    end
+    token = Doorkeeper::AccessToken.create!(
+      resource_owner_id: user.id,
+      application: app,
+      expires_in: 1.hour,
+      scopes: "all"
+    )
+    @auth_headers = { "Authorization" => "Bearer #{token.token}" }
   end
 
   teardown do
@@ -36,7 +52,7 @@ class TusUploadMutationsTest < ActionDispatch::IntegrationTest
       }
     GQL
 
-    post "/graphql", params: { query: mutation }, as: :json
+    post "/graphql", params: { query: mutation }, headers: @auth_headers, as: :json
     assert_response :ok
 
     result = JSON.parse(response.body).dig("data", "finalizeUpload")
@@ -55,7 +71,7 @@ class TusUploadMutationsTest < ActionDispatch::IntegrationTest
       }
     GQL
 
-    post "/graphql", params: { query: mutation }, as: :json
+    post "/graphql", params: { query: mutation }, headers: @auth_headers, as: :json
     result = JSON.parse(response.body).dig("data", "finalizeUpload")
     assert_includes result["errors"].first, "Upload not found"
   end
@@ -72,7 +88,7 @@ class TusUploadMutationsTest < ActionDispatch::IntegrationTest
       }
     GQL
 
-    post "/graphql", params: { query: mutation }, as: :json
+    post "/graphql", params: { query: mutation }, headers: @auth_headers, as: :json
     result = JSON.parse(response.body).dig("data", "finalizeUpload")
     assert_includes result["errors"].first, "incomplete"
   end
@@ -89,7 +105,7 @@ class TusUploadMutationsTest < ActionDispatch::IntegrationTest
       }
     GQL
 
-    post "/graphql", params: { query: mutation }, as: :json
+    post "/graphql", params: { query: mutation }, headers: @auth_headers, as: :json
     result = JSON.parse(response.body).dig("data", "finalizeUpload")
     assert_empty result["errors"]
     assert_equal "renamed.mkv", result["filename"]
@@ -109,7 +125,7 @@ class TusUploadMutationsTest < ActionDispatch::IntegrationTest
       }
     GQL
 
-    post "/graphql", params: { query: mutation }, as: :json
+    post "/graphql", params: { query: mutation }, headers: @auth_headers, as: :json
     result = JSON.parse(response.body).dig("data", "finalizeUpload")
 
     # Should sanitize to just "passwd" via File.basename

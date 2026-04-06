@@ -43,6 +43,11 @@ gem "image_processing", ">= 1.2"
 gem "cssbundling-rails"
 gem "simple_form"
 
+# Authentication
+gem "devise"
+gem "doorkeeper"
+gem "doorkeeper-device_authorization_grant"
+
 # GraphQL API
 gem "graphql"
 

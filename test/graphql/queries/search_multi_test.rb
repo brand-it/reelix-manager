@@ -127,11 +127,25 @@ class SearchMultiQueryTest < ActiveSupport::TestCase
     { "page" => 1, "results" => tv_results, "total_pages" => 2, "total_results" => 30 }
   end
 
+  # -- Helpers ---------------------------------------------------------------
+
+  # Returns a GraphQL context hash with a fake Doorkeeper token holding the given scopes.
+  # Used when calling ReelixManagerSchema.execute directly (unit-style tests that bypass
+  # the HTTP layer and therefore skip controller-level auth).
+  def graphql_context(scopes: "search")
+    fake_token = Object.new.tap do |t|
+      scope_list = scopes.split
+      t.define_singleton_method(:includes_scope?) { |s| scope_list.include?(s.to_s) }
+    end
+    { doorkeeper_token: fake_token }
+  end
+
   # -- Tests -----------------------------------------------------------------
 
   test "returns merged results with correct pagination metadata" do
     with_fake_searches(movie_response: default_movie_response, tv_response: default_tv_response) do
-      result = ReelixManagerSchema.execute(SEARCH_MULTI_QUERY, variables: { query: "inception" })
+      result = ReelixManagerSchema.execute(SEARCH_MULTI_QUERY, variables: { query: "inception" },
+                                                               context: graphql_context)
 
       assert_nil result["errors"], result["errors"].inspect
       data = result.dig("data", "searchMulti")
@@ -144,7 +158,8 @@ class SearchMultiQueryTest < ActiveSupport::TestCase
 
   test "results include correct mediaType tags for movies and tv" do
     with_fake_searches(movie_response: default_movie_response, tv_response: default_tv_response) do
-      result  = ReelixManagerSchema.execute(SEARCH_MULTI_QUERY, variables: { query: "inception" })
+      result  = ReelixManagerSchema.execute(SEARCH_MULTI_QUERY, variables: { query: "inception" },
+                                                                context: graphql_context)
       results = result.dig("data", "searchMulti", "results")
 
       assert_includes results.map { |r| r["mediaType"] }, "movie"
@@ -154,7 +169,8 @@ class SearchMultiQueryTest < ActiveSupport::TestCase
 
   test "exact-match title ranks first" do
     with_fake_searches(movie_response: default_movie_response, tv_response: default_tv_response) do
-      result  = ReelixManagerSchema.execute(SEARCH_MULTI_QUERY, variables: { query: "Inception" })
+      result  = ReelixManagerSchema.execute(SEARCH_MULTI_QUERY, variables: { query: "Inception" },
+                                                                context: graphql_context)
       results = result.dig("data", "searchMulti", "results")
 
       assert_equal "Inception", results.first["displayTitle"]
@@ -163,7 +179,8 @@ class SearchMultiQueryTest < ActiveSupport::TestCase
 
   test "displayTitle uses name for TV shows" do
     with_fake_searches(movie_response: default_movie_response, tv_response: default_tv_response) do
-      result  = ReelixManagerSchema.execute(SEARCH_MULTI_QUERY, variables: { query: "breaking bad" })
+      result  = ReelixManagerSchema.execute(SEARCH_MULTI_QUERY, variables: { query: "breaking bad" },
+                                                                context: graphql_context)
       results = result.dig("data", "searchMulti", "results")
       tv      = results.find { |r| r["mediaType"] == "tv" }
 
@@ -180,7 +197,8 @@ class SearchMultiQueryTest < ActiveSupport::TestCase
       movie_recorder: ->(kwargs) { movie_kwargs = kwargs },
       tv_recorder:    ->(kwargs) { tv_kwargs = kwargs }
     ) do
-      result = ReelixManagerSchema.execute(SEARCH_MULTI_QUERY, variables: { query: "test", page: 2 })
+      result = ReelixManagerSchema.execute(SEARCH_MULTI_QUERY, variables: { query: "test", page: 2 },
+                                                               context: graphql_context)
 
       assert_nil result["errors"]
       assert_equal 2, result.dig("data", "searchMulti", "page")
@@ -198,7 +216,8 @@ class SearchMultiQueryTest < ActiveSupport::TestCase
       movie_recorder: ->(kwargs) { movie_kwargs = kwargs },
       tv_recorder:    ->(kwargs) { tv_kwargs = kwargs }
     ) do
-      ReelixManagerSchema.execute(SEARCH_MULTI_QUERY, variables: { query: "test", language: "fr-FR" })
+      ReelixManagerSchema.execute(SEARCH_MULTI_QUERY, variables: { query: "test", language: "fr-FR" },
+                                                      context: graphql_context)
 
       assert_equal "fr-FR", movie_kwargs[:language]
       assert_equal "fr-FR", tv_kwargs[:language]
@@ -208,7 +227,8 @@ class SearchMultiQueryTest < ActiveSupport::TestCase
   test "returns GraphQL error on TMDB authentication failure" do
     Thread.report_on_exception = false
     with_fake_error_searches(TheMovieDb::InvalidConfig.new("bad key")) do
-      result = ReelixManagerSchema.execute(SEARCH_MULTI_QUERY, variables: { query: "test" })
+      result = ReelixManagerSchema.execute(SEARCH_MULTI_QUERY, variables: { query: "test" },
+                                                               context: graphql_context)
       assert result["errors"].any? { |e| e["message"].include?("authentication") }
     end
   ensure
@@ -223,7 +243,8 @@ class SearchMultiQueryTest < ActiveSupport::TestCase
     )
     Thread.report_on_exception = false
     with_fake_error_searches(TheMovieDb::Error.new(fake_response)) do
-      result = ReelixManagerSchema.execute(SEARCH_MULTI_QUERY, variables: { query: "test" })
+      result = ReelixManagerSchema.execute(SEARCH_MULTI_QUERY, variables: { query: "test" },
+                                                               context: graphql_context)
       assert result["errors"].any? { |e| e["message"].include?("TMDB service error") }
     end
   ensure
@@ -235,7 +256,8 @@ class SearchMultiQueryTest < ActiveSupport::TestCase
       movie_response: { "page" => 1, "results" => [], "total_pages" => 0, "total_results" => 0 },
       tv_response:    { "page" => 1, "results" => [], "total_pages" => 0, "total_results" => 0 }
     ) do
-      result = ReelixManagerSchema.execute(SEARCH_MULTI_QUERY, variables: { query: "xyzzy" })
+      result = ReelixManagerSchema.execute(SEARCH_MULTI_QUERY, variables: { query: "xyzzy" },
+                                                               context: graphql_context)
 
       assert_nil result["errors"]
       data = result.dig("data", "searchMulti")

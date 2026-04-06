@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Reelix Manager</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <%= link_to "Reelix Manager", "/", class: "navbar-brand" %>
+      </div>
+    </nav>
+
+    <div class="container mt-4">
+      <% if flash[:notice].present? %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <%= flash[:notice] %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      <% end %>
+      <% if flash[:alert].present? %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <%= flash[:alert] %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      <% end %>
+
+      <main>
+        <%= yield %>
+      </main>
+    </div>
+  </body>
+</html>

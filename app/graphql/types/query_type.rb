@@ -2,11 +2,14 @@
 
 module Types
   class QueryType < Types::BaseObject
+    include ScopeEnforceable
+
     field :node, Types::NodeType, null: true, description: "Fetches an object given its ID." do
       argument :id, ID, required: true, description: "ID of the object."
     end
 
     def node(id:)
+      require_search!
       context.schema.object_from_id(id, context)
     end
 
@@ -15,6 +18,7 @@ module Types
     end
 
     def nodes(ids:)
+      require_search!
       ids.map { |id| context.schema.object_from_id(id, context) }
     end
 

@@ -3,6 +3,7 @@ require "test_helper"
 class Config::VideosControllerTest < ActionDispatch::IntegrationTest
   setup do
     Config::Video.delete_all
+    sign_in create(:user)
   end
 
   # ---------------------------------------------------------------------------

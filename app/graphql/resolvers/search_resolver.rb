@@ -27,6 +27,7 @@ module Resolvers
     MAX_PAGE = 500
 
     def resolve(query:, page:, language:)
+      require_search!
       page = page.clamp(1, MAX_PAGE)
 
       movie_response, tv_response = fetch_both(query, page, language)

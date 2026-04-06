@@ -2,7 +2,7 @@
   <h4 class="mb-0">Authorized Devices</h4>
 </div>
 
-<% if @tokens.empty? %>
+<% if @tokens.empty? && @device_grants.empty? %>
   <div class="alert alert-info">No authorized devices yet.</div>
 <% else %>
   <div class="table-responsive">
@@ -20,6 +20,26 @@
         </tr>
       </thead>
       <tbody>
+        <% @device_grants.each do |grant| %>
+          <tr>
+            <% if current_user.admin? %>
+              <td><%= User.find_by(id: grant.resource_owner_id)&.email || "Unknown" %></td>
+            <% end %>
+            <td><%= grant.application&.name || "—" %></td>
+            <td><%= grant.created_at.strftime("%b %-d, %Y") %></td>
+            <td>
+              <%= grant.created_at.advance(seconds: grant.expires_in).strftime("%b %-d, %Y") %>
+            </td>
+            <td><span class="badge bg-warning text-dark">Pending</span></td>
+            <td>
+              <%= button_to "Cancel", grant_devices_path(id: grant.id),
+                            method: :delete,
+                            class: "btn btn-sm btn-outline-danger",
+                            data: { turbo_confirm: "Cancel this pending device authorization?" } %>
+            </td>
+          </tr>
+        <% end %>
+
         <% @tokens.each do |token| %>
           <tr>
             <% if current_user.admin? %>

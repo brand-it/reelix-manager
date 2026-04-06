@@ -23,4 +23,15 @@ module Doorkeeper
     def self.order: (Symbol | String column) -> untyped
     def self.find_by: (**untyped kwargs) -> untyped
   end
+
+  module DeviceAuthorizationGrant
+    class DeviceGrant
+      def self.all: () -> untyped
+      def self.where: (**untyped kwargs) -> untyped
+      def self.find_by: (**untyped kwargs) -> untyped
+      def self.order: (**untyped kwargs) -> untyped
+      def resource_owner_id: () -> (Integer | nil)
+      def destroy: () -> untyped
+    end
+  end
 end

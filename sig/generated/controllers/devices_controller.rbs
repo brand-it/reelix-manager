@@ -3,14 +3,22 @@
 class DevicesController < ApplicationController
   @tokens: untyped
 
+  @device_grants: untyped
+
   # : () -> void
   def index: () -> void
 
   # : () -> void
   def destroy: () -> void
 
+  # : () -> void
+  def destroy_grant: () -> void
+
   private
 
   # : () -> untyped
   def find_token: () -> untyped
+
+  # : () -> untyped
+  def find_grant: () -> untyped
 end

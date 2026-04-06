@@ -139,14 +139,5 @@ module Resolvers
     def result_title(result)
       result["title"] || result["name"] || ""
     end
-
-    #: (String? message) -> String
-    def sanitize_error_message(message)
-      return "" if message.nil?
-
-      message.dup
-             .gsub(/api_key=[^&\s]*/i, "api_key=[REDACTED]")
-             .gsub(/(Bearer\s+)[A-Za-z0-9\-._]+/i, '\1[REDACTED]')
-    end
   end
 end

@@ -6,7 +6,7 @@ class Config
 
     class << self
       def call(block)
-        new.tap(&block)
+        new.tap(&block) # steep:ignore BlockTypeMismatch
       end
     end
 
@@ -23,7 +23,7 @@ class Config
     end
 
     def attributes
-      @attributes ||= ({} #: ::Hash[Symbol, Config::Setting::Option])
+      @attributes ||= {} #: ::Hash[Symbol, Config::Setting::Option]
     end
 
     private
@@ -45,7 +45,7 @@ class Config
     end
 
     def instance_exec_default(item, option)
-      item.instance_exec(&option.default)
+      item.instance_exec(&option.default) # steep:ignore BlockTypeMismatch
     end
 
     def contains_key?(object, key)

@@ -1,11 +1,11 @@
 class Config
   class Serializer
     def self.load(json)
-      data = json.present? ? JSON.parse(json) : ({} #: ::Hash[untyped, untyped])
+      data = json.present? ? JSON.parse(json) : {} #: ::Hash[untyped, untyped]
       new(data.with_indifferent_access)
     end
 
-    def initialize(data = ({}.with_indifferent_access #: ::Hash[untyped, untyped]))
+    def initialize(data = {}.with_indifferent_access) # steep:ignore UnannotatedEmptyCollection
       @data = data
     end
 

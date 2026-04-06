@@ -50,18 +50,5 @@ target :web do
 
   library "json"
 
-  configure_code_diagnostics(D::Ruby.default) do |hash|
-    # graphql-ruby DSL methods (field, argument, type, mutation, …) are not typed.
-    hash[D::Ruby::NoMethod]                     = :warning
-    hash[D::Ruby::UnknownConstant]              = :warning
-    hash[D::Ruby::UnknownInstanceVariable]      = :warning
-    hash[D::Ruby::UnresolvedOverloading]        = :warning
-
-    # Our own code logic must be type-correct.
-    hash[D::Ruby::ArgumentTypeMismatch]         = :error
-    hash[D::Ruby::IncompatibleAssignment]       = :error
-    hash[D::Ruby::IncompatibleArgumentForwarding] = :error
-    hash[D::Ruby::ReturnTypeMismatch]           = :error
-    hash[D::Ruby::MethodBodyTypeMismatch]       = :error
-  end
+  configure_code_diagnostics(D::Ruby.strict)
 end

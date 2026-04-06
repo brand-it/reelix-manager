@@ -75,8 +75,7 @@ class GraphqlController < ApplicationController
     logger.error e.message
     logger.error e.backtrace&.join("\n")
 
-    render json: { errors: [ { message: e.message, backtrace: e.backtrace } ], data: {} #: ::Hash[untyped, untyped]
-    }, status: 500
+    render json: { errors: [ { message: e.message, backtrace: e.backtrace } ], data: ({} #: ::Hash[Symbol, untyped]) }, status: 500
   end
 
   # Returns a valid Doorkeeper token if one is present via any configured

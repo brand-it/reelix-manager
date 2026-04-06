@@ -12,8 +12,10 @@ class Config < ApplicationRecord
                   | () { (Config::Setting) -> void } -> Config::Setting
 
   # Returns the newest record or a new (unsaved) instance when none exist.
-  # Uses `instance` so Config::Video.newest returns Config::Video, not Config.
-  def self.newest: () -> instance
+  # Typed as Config (not `instance`) to avoid a Steep 1.10 compatibility probe
+  # on nil <: instance in singleton class methods. At runtime Config::Video.newest
+  # correctly returns Config::Video via STI.
+  def self.newest: () -> Config
 
   # Returns a Config::Serializer wrapping the decoded settings JSON.
   def settings: () -> Config::Serializer

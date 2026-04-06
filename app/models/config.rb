@@ -12,7 +12,7 @@ class Config < ApplicationRecord
       end
     end
 
-    #: () -> instance
+    #: () -> Config
     def newest
       order(updated_at: :desc).first || new # steep:ignore NoMethod
     end

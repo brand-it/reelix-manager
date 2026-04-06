@@ -101,6 +101,16 @@ To update to the latest image:
 docker compose pull && docker compose up -d
 ```
 
+> **`latest` tag limitation:** Docker caches images locally and will not re-pull `latest` just because a newer version was published — it only pulls if no local image exists. If `docker compose pull` doesn't seem to fetch a new release, force a fresh pull by removing the cached image first:
+>
+> ```bash
+> docker compose down
+> docker rmi brandiit/reelix-manager:latest
+> docker compose up -d
+> ```
+>
+> Alternatively, pin to a specific version tag (e.g. `brandiit/reelix-manager:v1.2.3`) in your `docker-compose.yml`. Docker will always pull a tag it hasn't seen before, making updates explicit and predictable.
+
 
 
 The recommended tag for most users is **`latest`** — it always points to the most recent release.

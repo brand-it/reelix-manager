@@ -41,8 +41,11 @@ class DevicesController < ApplicationController
   def destroy_grant
     grant = find_grant
     if grant
-      grant.destroy
-      redirect_to devices_path, notice: "Pending device authorization cancelled."
+      if grant.destroy
+        redirect_to devices_path, notice: "Pending device authorization cancelled."
+      else
+        redirect_to devices_path, alert: "Failed to cancel pending device authorization."
+      end
     else
       redirect_to devices_path, alert: "Pending device not found."
     end

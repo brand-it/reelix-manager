@@ -1,4 +1,8 @@
 class GraphqlController < ApplicationController
+  @current_user: User?
+  @doorkeeper_token: untyped
+  @doorkeeper_access_token: untyped
+
   def execute: () -> void
 
   private
@@ -10,6 +14,10 @@ class GraphqlController < ApplicationController
   def prepare_variables: (untyped variables_param) -> ::Hash[String, untyped]
 
   def handle_error_in_development: (StandardError e) -> void
+
+  # Provided by ActionController::Base — declared here because Steep cannot
+  # resolve it through the full inheritance chain.
+  def logger: () -> ::Logger
 
   # Memoised Doorkeeper token lookup (any configured access_token_method).
   def doorkeeper_access_token: () -> untyped

@@ -1,0 +1,23 @@
+# Supplements to the graphql-ruby RBS in .gem_rbs_collection — adds methods
+# that the collection ships without signatures.
+module GraphQL
+  class Query
+    class Context
+      # Returns the schema that is executing this query.
+      def schema: () -> untyped
+    end
+  end
+
+  class Schema
+    # Executes a GraphQL query string and returns a result hash.
+    def self.execute: (
+      String? query_str,
+      ?variables: ::Hash[String, untyped] | nil,
+      ?context: ::Hash[Symbol, untyped],
+      ?operation_name: String | nil
+    ) -> untyped
+
+    # Caps the number of query string tokens accepted.
+    def self.max_query_string_tokens: (Integer limit) -> void
+  end
+end

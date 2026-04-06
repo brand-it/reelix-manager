@@ -1,6 +1,9 @@
 # Mixin for GraphQL resolvers and mutations that enforces Doorkeeper token scopes.
 # graphql-ruby's `context` is untyped — we accept that limitation here.
 module ScopeEnforceable
+  # Provided by the including GraphQL resolver/mutation class via graphql-ruby.
+  def context: () -> GraphQL::Query::Context
+
   def can_search?: () -> bool
   def require_search!: () -> void
 

@@ -19,7 +19,7 @@ class Config
     def load: (Config item, String? json) -> Config::Serializer
 
     # Applies defaults, encrypts encrypted fields, and encodes back to JSON.
-    def dump: (Config item, ::Hash[untyped, untyped] object) -> String
+    def dump: (Config item, ::Hash[String | Symbol, untyped] object) -> String
 
     # Registers an attribute with an optional default proc and encryption flag.
     def attribute: (Symbol | String name, ?default: Proc, ?encrypted: bool) -> void
@@ -31,8 +31,8 @@ class Config
     @attributes: ::Hash[Symbol, Config::Setting::Option]?
 
     def load_attributes: (Config item, Config::Serializer object) -> Config::Serializer
-    def dump_attributes: (Config item, ::Hash[untyped, untyped] object) -> ::Hash[untyped, untyped]
+    def dump_attributes: (Config item, ::Hash[String | Symbol, untyped] object) -> ::Hash[String | Symbol, untyped]
     def instance_exec_default: (Config item, Config::Setting::Option option) -> untyped
-    def contains_key?: (untyped object, Symbol key) -> bool
+    def contains_key?: (Config::Serializer | ::Hash[String | Symbol, untyped] object, Symbol key) -> bool
   end
 end

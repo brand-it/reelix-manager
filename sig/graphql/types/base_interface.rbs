@@ -1,4 +1,9 @@
 module Types
   module BaseInterface
+    include GraphQL::Schema::Interface
+
+    def self.edge_type_class: (Class klass) -> void
+    def self.connection_type_class: (Class klass) -> void
+    def self.field_class: (Class klass) -> void
   end
 end

@@ -83,7 +83,7 @@ module Mutations
 
       header.split(",").each_with_object({} #: ::Hash[String, String?]
       ) do |pair, hash|
-        key, encoded_value = pair.strip.split(" ", 2)
+        key, encoded_value = pair.strip.split(" ", 2) # steep:ignore NoMethod
         hash[key] = encoded_value ? Base64.decode64(encoded_value) : nil
       end
     end

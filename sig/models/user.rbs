@@ -11,7 +11,13 @@ class User < ApplicationRecord
   attr_accessor reset_password_token: String?
 
   # has_many :access_tokens
-  def access_tokens: () -> ActiveRecord::Associations::CollectionProxy
+  # Returns a CollectionProxy; callers chain .newest and .includes on it.
+  def access_tokens: () -> untyped
 
   def admin?: () -> bool
+
+  # ActiveRecord query methods — declared explicitly because Steep cannot
+  # resolve them through the full ActiveRecord inheritance chain.
+  def self.any?: () -> bool
+  def self.none?: () -> bool
 end

@@ -15,21 +15,21 @@ module TheMovieDb
     @api_key: String?
     @language: String?
     @connection: Faraday::Connection?
-    @results: ::Hash[[bool, Class], untyped]
+    @results: ::Hash[[bool, Class], ::Hash[String, untyped]]
 
     # dry-initializer introspection (used by query_params).
     def self.option_names: () -> Array[Symbol]
     def self.param_names: () -> Array[Symbol]
 
     # Delegates to new.results — convenience so callers don't need to instantiate.
-    def self.results: (?use_cache: bool, ?object_class: Class) -> untyped
+    def self.results: (?use_cache: bool, ?object_class: Class) -> ::Hash[String, untyped]
 
     # Validates the given API key against the TMDB authentication endpoint.
     # Returns true/false — safe to call from model validations.
     def self.ping: (api_key: String) -> bool
 
     # Fetches (and optionally caches) the API response for this client's endpoint.
-    def results: (?use_cache: bool, ?object_class: Class) -> untyped
+    def results: (?use_cache: bool, ?object_class: Class) -> ::Hash[String, untyped]
 
     # Lightweight connectivity check using the /authentication endpoint.
     def ping: () -> bool
@@ -37,12 +37,12 @@ module TheMovieDb
     private
 
     def ping_uri: () -> URI::HTTPS
-    def cache_get: (?object_class: Class) -> untyped
-    def get: (?object_class: Class) -> untyped
+    def cache_get: (?object_class: Class) -> ::Hash[String, untyped]
+    def get: (?object_class: Class) -> ::Hash[String, untyped]
     def connection: () -> Faraday::Connection
     def uri: () -> URI::HTTPS
     def path: () -> String
-    def query_params: () -> ::Hash[untyped, untyped]
+    def query_params: () -> ::Hash[String | Symbol, String]
 
     # Reads api_key from Config::Video if not supplied at instantiation.
     # Raises TheMovieDb::InvalidConfig when no key is configured.

@@ -1,8 +1,11 @@
 class SetupsController < ApplicationController
+  @user: User
+
   def new: () -> void
   def create: () -> void
 
   private
 
+  def root_path: () -> String
   def setup_params: () -> ActionController::Parameters
 end

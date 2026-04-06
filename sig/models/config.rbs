@@ -3,6 +3,9 @@ class Config < ApplicationRecord
   # STI column
   attr_accessor type: String
 
+  # Class-level @setting instance variable (populated by the setting DSL)
+  self.@setting: Config::Setting?
+
   # Class-level setting DSL: call with a block to define the setting schema,
   # call without a block to retrieve the current schema.
   def self.setting: () -> Config::Setting
@@ -16,5 +19,5 @@ class Config < ApplicationRecord
   def settings: () -> Config::Serializer
 
   # Merges the given hash into the current settings and re-serialises.
-  def settings=: (::Hash[untyped, untyped] hash) -> void
+  def settings=: (::Hash[String | Symbol, untyped] hash) -> void
 end

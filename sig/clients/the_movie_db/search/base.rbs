@@ -14,7 +14,7 @@ module TheMovieDb
       def query: () -> String
 
       # Overrides parent: returns empty result set when query is blank.
-      def results: (?use_cache: bool) -> untyped
+      def results: (?use_cache: bool) -> ::Hash[String, untyped]
 
       def next_page: () -> TheMovieDb::Search::Base
       def previous_page: () -> TheMovieDb::Search::Base

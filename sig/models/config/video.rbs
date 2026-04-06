@@ -9,4 +9,10 @@ class Config::Video < Config
   def settings_tv_path=: (String? val) -> void
   def settings_tmdb_api_key=: (String? val) -> void
   def settings_processed_path=: (String? val) -> void
+
+  private
+
+  def movie_path_must_exist: () -> void
+  def tv_path_must_exist: () -> void
+  def tmdb_api_key_must_be_valid: () -> void
 end

@@ -1,0 +1,26 @@
+# Minimal Doorkeeper stubs — enough to satisfy Steep's UnknownConstant checks.
+# Doorkeeper does not ship RBS; a full rbs-doorkeeper gem does not yet exist.
+# Add methods here as the application uses more of the Doorkeeper API.
+module Doorkeeper
+  def self.configuration: () -> untyped
+
+  module OAuth
+    module Token
+      def self.authenticate: (untyped request, *untyped methods) -> untyped
+    end
+  end
+
+  class AccessToken
+    def self.all: () -> untyped
+    def self.find_by: (**untyped kwargs) -> untyped
+    def accessible?: () -> bool
+    def resource_owner_id: () -> (Integer | nil)
+    def scopes: () -> untyped
+    def includes_scope?: (*String scopes) -> bool
+  end
+
+  class Application
+    def self.order: (Symbol | String column) -> untyped
+    def self.find_by: (**untyped kwargs) -> untyped
+  end
+end

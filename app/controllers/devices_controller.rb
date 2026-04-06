@@ -1,12 +1,19 @@
 class DevicesController < ApplicationController
+  # @rbs @tokens: untyped
+
+  #: () -> void
   def index
-    @tokens = if current_user.admin?
+    user = current_user
+    return unless user
+
+    @tokens = if user.admin?
       Doorkeeper::AccessToken.all.newest.includes(:application, :user)
     else
-      current_user.access_tokens.newest.includes(:application)
-    end
+      user.access_tokens.newest.includes(:application)
+    end #: untyped
   end
 
+  #: () -> void
   def destroy
     token = find_token
     if token
@@ -19,11 +26,15 @@ class DevicesController < ApplicationController
 
   private
 
+  #: () -> untyped
   def find_token
-    if current_user.admin?
+    user = current_user
+    return unless user
+
+    if user.admin?
       Doorkeeper::AccessToken.find_by(id: params[:id])
     else
-      current_user.access_tokens.find_by(id: params[:id])
+      user.access_tokens.find_by(id: params[:id])
     end
   end
 end

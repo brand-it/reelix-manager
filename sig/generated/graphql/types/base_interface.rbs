@@ -1,0 +1,7 @@
+# Generated from app/graphql/types/base_interface.rb with RBS::Inline
+
+module Types
+  module BaseInterface
+    include GraphQL::Schema::Interface
+  end
+end

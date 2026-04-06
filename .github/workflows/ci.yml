@@ -122,3 +122,37 @@ jobs:
           name: screenshots
           path: ${{ github.workspace }}/tmp/screenshots
           if-no-files-found: ignore
+
+  type_check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Cache RBS gem collection
+        uses: actions/cache@v5
+        with:
+          path: .gem_rbs_collection
+          key: rbs-collection-${{ runner.os }}-${{ hashFiles('rbs_collection.lock.yaml') }}
+          restore-keys: |
+            rbs-collection-${{ runner.os }}-
+
+      - name: Install RBS gem signatures
+        run: bundle exec rbs collection install
+
+      - name: Generate RBS from inline annotations
+        run: find app lib -name '*.rb' -print0 | xargs -0 bundle exec rbs-inline --opt-out --output=sig/generated
+
+      - name: Check types (Steep)
+        run: bundle exec steep check --log-level=fatal
+
+      - name: Check type coverage
+        env:
+          RAILS_ENV: test
+        run: bundle exec ruby -Itest test/type_coverage_test.rb

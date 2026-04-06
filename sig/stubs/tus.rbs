@@ -1,0 +1,9 @@
+# Minimal Tus-Ruby-Server stubs — enough to satisfy Steep's UnknownConstant checks.
+module Tus
+  class Server
+    def self.opts: () -> ::Hash[untyped, untyped]
+  end
+
+  class NotFound < StandardError
+  end
+end

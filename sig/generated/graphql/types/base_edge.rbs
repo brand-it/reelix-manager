@@ -1,0 +1,7 @@
+# Generated from app/graphql/types/base_edge.rb with RBS::Inline
+
+module Types
+  class BaseEdge < Types::BaseObject
+    include GraphQL::Types::Relay::EdgeBehaviors
+  end
+end

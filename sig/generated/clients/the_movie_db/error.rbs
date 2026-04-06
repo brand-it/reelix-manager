@@ -1,0 +1,20 @@
+# Generated from app/clients/the_movie_db/error.rb with RBS::Inline
+
+module TheMovieDb
+  class Error < StandardError
+    attr_reader object: untyped
+
+    attr_reader body: untyped
+
+    # : (untyped object) -> void
+    def initialize: (untyped object) -> void
+
+    private
+
+    # : (String? raw_body) -> untyped
+    def parse_body: (String? raw_body) -> untyped
+
+    # : (untyped object) -> String
+    def build_message: (untyped object) -> String
+  end
+end

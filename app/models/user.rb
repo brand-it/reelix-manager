@@ -7,6 +7,7 @@ class User < ApplicationRecord
            foreign_key: :resource_owner_id,
            dependent: :delete_all
 
+  #: () -> bool
   def admin?
     admin
   end

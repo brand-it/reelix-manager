@@ -6,6 +6,9 @@ class Config::Video < Config
     s.attribute :processed_path
   end
 
+  #: () -> Config::Video
+  def self.newest = super # steep:ignore MethodBodyTypeMismatch
+
   validates :settings_movie_path, presence: true
   validates :settings_tv_path, presence: true
   validates :settings_tmdb_api_key, presence: true
@@ -17,20 +20,23 @@ class Config::Video < Config
 
   private
 
+  #: () -> void
   def movie_path_must_exist
-    unless Dir.exist?(settings_movie_path)
+    unless Dir.exist?(settings_movie_path.to_s)
       errors.add(:settings_movie_path, "does not exist on the filesystem")
     end
   end
 
+  #: () -> void
   def tv_path_must_exist
-    unless Dir.exist?(settings_tv_path)
+    unless Dir.exist?(settings_tv_path.to_s)
       errors.add(:settings_tv_path, "does not exist on the filesystem")
     end
   end
 
+  #: () -> void
   def tmdb_api_key_must_be_valid
-    unless TheMovieDb::Base.ping(api_key: settings_tmdb_api_key)
+    unless TheMovieDb::Base.ping(api_key: settings_tmdb_api_key.to_s)
       errors.add(:settings_tmdb_api_key, "is invalid or the TMDB API could not be reached")
     end
   end

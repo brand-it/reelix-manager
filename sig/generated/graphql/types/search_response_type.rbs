@@ -1,0 +1,6 @@
+# Generated from app/graphql/types/search_response_type.rb with RBS::Inline
+
+module Types
+  class SearchResponseType < Types::BaseObject
+  end
+end

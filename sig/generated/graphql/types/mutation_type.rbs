@@ -1,0 +1,6 @@
+# Generated from app/graphql/types/mutation_type.rb with RBS::Inline
+
+module Types
+  class MutationType < Types::BaseObject
+  end
+end

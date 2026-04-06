@@ -17,12 +17,14 @@
 #   3. Add can_<scope>? and require_<scope>! methods below
 #   4. Call require_<scope>! in the relevant resolver/mutation
 module ScopeEnforceable
+  #: () -> bool
   def can_search?
     return true if session_user?
     token = context[:doorkeeper_token]
     token&.includes_scope?("all") || token&.includes_scope?("search")
   end
 
+  #: () -> void
   def require_search!
     return if can_search?
 
@@ -32,12 +34,14 @@ module ScopeEnforceable
     )
   end
 
+  #: () -> bool
   def can_upload?
     return true if session_user?
     token = context[:doorkeeper_token]
     token&.includes_scope?("all") || token&.includes_scope?("upload")
   end
 
+  #: () -> void
   def require_upload!
     return if can_upload?
 
@@ -51,6 +55,7 @@ module ScopeEnforceable
 
   # Returns true when the request is authenticated via Devise session rather
   # than a Doorkeeper token (e.g. GraphiQL in the browser).
+  #: () -> bool
   def session_user?
     context[:current_user].present? && context[:doorkeeper_token].nil?
   end

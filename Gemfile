@@ -53,8 +53,6 @@ gem "graphql"
 
 # TheMovieDB HTTP client
 gem "faraday"
-gem "dry-initializer"
-gem "dry-types"
 
 # Resumable file uploads via the tus protocol (https://tus.io)
 gem "tus-server", ">= 2.0"
@@ -76,6 +74,11 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+
+  # RBS type signatures + Steep type checker + inline annotations
+  gem "rbs"
+  gem "rbs-inline"
+  gem "steep"
 end
 
 group :test do

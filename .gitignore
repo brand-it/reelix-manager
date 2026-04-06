@@ -39,3 +39,6 @@
 !/app/assets/builds/.keep
 
 /node_modules
+
+# RBS collection — downloaded gem signatures, regenerated via `rbs collection install`
+/.gem_rbs_collection

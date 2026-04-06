@@ -1,0 +1,7 @@
+# Generated from app/graphql/mutations/base_mutation.rb with RBS::Inline
+
+module Mutations
+  class BaseMutation < GraphQL::Schema::RelayClassicMutation
+    include ScopeEnforceable
+  end
+end

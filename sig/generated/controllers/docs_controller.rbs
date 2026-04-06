@@ -1,0 +1,10 @@
+# Generated from app/controllers/docs_controller.rb with RBS::Inline
+
+class DocsController < ApplicationController
+  @applications: untyped
+
+  @default_app: untyped
+
+  # : () -> void
+  def api: () -> void
+end

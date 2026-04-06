@@ -26,6 +26,7 @@ module Resolvers
 
     MAX_PAGE = 500
 
+    #: (query: String, page: Integer, language: String) -> ::Hash[Symbol, untyped]
     def resolve(query:, page:, language:)
       require_search!
       page = page.clamp(1, MAX_PAGE)
@@ -56,6 +57,7 @@ module Resolvers
     # Run both API calls concurrently. Thread#value re-raises any exception from the thread.
     # Threads are wrapped with Rails.application.executor and connection_pool.with_connection
     # to prevent AR connection leaks when Config::Video is accessed inside the thread.
+    #: (String query, Integer page, String language) -> [untyped, untyped]
     def fetch_both(query, page, language)
       movie_thread = Thread.new do
         Rails.application.executor.wrap do
@@ -75,20 +77,20 @@ module Resolvers
     end
 
     # Ensure every result has an explicit media_type field.
+    #: (::Array[::Hash[String, untyped]] results, String type) -> ::Array[::Hash[String, untyped]]
     def tag_media_type(results, type)
       results.map { |r| r.merge("media_type" => type) }
     end
 
     # Merge results and sort by composite relevance score (descending).
+    #: (::Array[::Hash[String, untyped]] results, String query) -> ::Array[::Hash[String, untyped]]
     def merge_and_rank(results, query)
       normalized_query = query.downcase.strip
-      results
-        .map { |r| [ r, composite_score(r, normalized_query) ] }
-        .sort_by { |_, score| -score }
-        .map(&:first)
+      results.sort_by { |r| -composite_score(r, normalized_query) }
     end
 
     # Composite relevance score (0.0–1.0).
+    #: (::Hash[String, untyped] result, String query) -> Float
     def composite_score(result, query)
       kw_score  = keyword_score(result_title(result), query)
       pop_score = popularity_score(result["popularity"].to_f)
@@ -99,11 +101,13 @@ module Resolvers
     # TMDB popularity values can reach into the thousands for blockbusters.
     POPULARITY_CEILING = 1000.0
 
+    #: (Float popularity) -> Float
     def popularity_score(popularity)
       (popularity / POPULARITY_CEILING).clamp(0.0, 1.0)
     end
 
     # Keyword similarity score (0.0–1.0) based on the result title vs. query.
+    #: (String? title, String query) -> Float
     def keyword_score(title, query)
       return 0.0 if title.blank? || query.blank?
 
@@ -118,6 +122,7 @@ module Resolvers
 
     # Proportional word-level match (0.0–0.5).
     # Scores based on how many query words have a prefix match in the title.
+    #: (String title, String query) -> Float
     def word_match_score(title, query)
       query_words = query.split
       return 0.0 if query_words.empty?
@@ -130,10 +135,12 @@ module Resolvers
       (matched.to_f / query_words.size) * 0.5
     end
 
+    #: (::Hash[String, untyped] result) -> String
     def result_title(result)
       result["title"] || result["name"] || ""
     end
 
+    #: (String? message) -> String
     def sanitize_error_message(message)
       return "" if message.nil?
 

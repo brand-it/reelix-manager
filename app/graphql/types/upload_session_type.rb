@@ -11,10 +11,12 @@ module Types
     field :upload_complete, Boolean, null: false
     field :error_message, String, null: true, description: "Set when status is 'failed'"
 
+    #: () -> ::Array[Integer]
     def missing_chunks
       object.missing_chunks
     end
 
+    #: () -> bool
     def upload_complete
       object.upload_complete?
     end

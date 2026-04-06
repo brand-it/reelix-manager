@@ -1,0 +1,6 @@
+# Generated from app/clients/the_movie_db/invalid_config.rb with RBS::Inline
+
+module TheMovieDb
+  class InvalidConfig < StandardError
+  end
+end

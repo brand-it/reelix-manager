@@ -1,0 +1,67 @@
+# Generated from app/clients/the_movie_db/base.rb with RBS::Inline
+
+module TheMovieDb
+  class Base
+    HOST: ::String
+
+    VERSION: ::String
+
+    CACHE_TTL: untyped
+
+    CACHE_NAMESPACE: ::String
+
+    @connection: Faraday::Connection?
+
+    @results: ::Hash[[ bool, Class ], ::Hash[String, untyped]]
+
+    @language: String?
+
+    @api_key: String?
+
+    # : (?api_key: String?, ?language: String?) -> void
+    def initialize: (?api_key: String?, ?language: String?) -> void
+
+    # Validates that the given API key can reach the TMDB API.
+    # Returns true/false — safe to call from model validations.
+    # : (api_key: String) -> bool
+    def self.ping: (api_key: String) -> bool
+
+    # : (?use_cache: bool, ?object_class: Class) -> untyped
+    def results: (?use_cache: bool, ?object_class: Class) -> untyped
+
+    # : () -> bool
+    def ping: () -> bool
+
+    private
+
+    # : () -> URI::HTTPS
+    def ping_uri: () -> URI::HTTPS
+
+    # : (?object_class: Class) -> ::Hash[String, untyped]
+    def cache_get: (?object_class: Class) -> ::Hash[String, untyped]
+
+    # : (?object_class: Class) -> ::Hash[String, untyped]
+    def get: (?object_class: Class) -> ::Hash[String, untyped]
+
+    # : () -> Faraday::Connection
+    def connection: () -> Faraday::Connection
+
+    # : () -> URI::HTTPS
+    def uri: () -> URI::HTTPS
+
+    # : () -> String
+    def path: () -> String
+
+    # : () -> ::Hash[untyped, untyped]
+    def query_params: () -> ::Hash[untyped, untyped]
+
+    # Reads the API key from Config::Video; may be overridden by passing api_key: at instantiation.
+    # Visit https://www.themoviedb.org/settings/api to obtain a key.
+    # : () -> String
+    def api_key: () -> String
+
+    # Pass an ISO 639-1 value to display translated data (e.g. "en-US").
+    # : () -> String
+    def language: () -> String
+  end
+end

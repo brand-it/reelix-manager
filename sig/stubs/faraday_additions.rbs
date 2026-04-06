@@ -1,0 +1,11 @@
+# Supplements to the Faraday RBS in .gem_rbs_collection — adds env which
+# the collection omits from Faraday::Response.
+module Faraday
+  class Env
+    def url: () -> URI::Generic
+  end
+
+  class Response
+    def env: () -> Faraday::Env
+  end
+end

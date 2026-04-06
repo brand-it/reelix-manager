@@ -1,6 +1,6 @@
 class DevicesController < ApplicationController
-  # @rbs @tokens: untyped
-  # @rbs @device_grants: untyped
+  # @rbs @tokens: ActiveRecord::Relation
+  # @rbs @device_grants: ActiveRecord::Relation
 
   #: () -> void
   def index
@@ -11,7 +11,7 @@ class DevicesController < ApplicationController
       Doorkeeper::AccessToken.all.newest.includes(:application, :user)
     else
       user.access_tokens.newest.includes(:application)
-    end #: untyped
+    end #: ActiveRecord::Relation
 
     @device_grants = if user.admin?
       Doorkeeper::DeviceAuthorizationGrant::DeviceGrant
@@ -23,7 +23,7 @@ class DevicesController < ApplicationController
         .where(resource_owner_id: user.id)
         .order(created_at: :desc)
         .includes(:application)
-    end #: untyped
+    end #: ActiveRecord::Relation
   end
 
   #: () -> void
@@ -50,7 +50,7 @@ class DevicesController < ApplicationController
 
   private
 
-  #: () -> untyped
+  #: () -> Doorkeeper::AccessToken?
   def find_token
     user = current_user
     return unless user
@@ -62,7 +62,7 @@ class DevicesController < ApplicationController
     end
   end
 
-  #: () -> untyped
+  #: () -> Doorkeeper::DeviceAuthorizationGrant::DeviceGrant?
   def find_grant
     user = current_user
     return unless user

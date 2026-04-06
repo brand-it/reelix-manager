@@ -18,16 +18,16 @@ module Resolvers
   class SearchResolver < Resolvers::BaseResolver
     MAX_PAGE: ::Integer
 
-    # : (query: String, page: Integer, language: String) -> ::Hash[Symbol, untyped]
-    def resolve: (query: String, page: Integer, language: String) -> ::Hash[Symbol, untyped]
+    # : (query: String, page: Integer, language: String) -> ::Hash[Symbol, ::Array[::Hash[String, untyped]] | Integer]
+    def resolve: (query: String, page: Integer, language: String) -> ::Hash[Symbol, ::Array[::Hash[String, untyped]] | Integer]
 
     private
 
     # Run both API calls concurrently. Thread#value re-raises any exception from the thread.
     # Threads are wrapped with Rails.application.executor and connection_pool.with_connection
     # to prevent AR connection leaks when Config::Video is accessed inside the thread.
-    # : (String query, Integer page, String language) -> [untyped, untyped]
-    def fetch_both: (String query, Integer page, String language) -> [ untyped, untyped ]
+    # : (String query, Integer page, String language) -> [::Hash[String, untyped], ::Hash[String, untyped]]
+    def fetch_both: (String query, Integer page, String language) -> [ ::Hash[String, untyped], ::Hash[String, untyped] ]
 
     # Ensure every result has an explicit media_type field.
     # : (::Array[::Hash[String, untyped]] results, String type) -> ::Array[::Hash[String, untyped]]

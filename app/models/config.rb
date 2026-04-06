@@ -23,7 +23,7 @@ class Config < ApplicationRecord
     self.class.setting.load(self, super) # steep:ignore UnexpectedSuper
   end
 
-  #: (::Hash[untyped, untyped] hash) -> void
+  #: (::Hash[String | Symbol, untyped] hash) -> void
   def settings=(hash)
     super(self.class.setting.dump(self, settings.to_h.with_indifferent_access.merge(hash))) # steep:ignore UnexpectedSuper
   end

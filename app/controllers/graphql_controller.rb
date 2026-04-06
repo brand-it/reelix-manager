@@ -2,8 +2,8 @@
 
 class GraphqlController < ApplicationController
   # @rbs @current_user: User?
-  # @rbs @doorkeeper_token: untyped
-  # @rbs @doorkeeper_access_token: untyped
+  # @rbs @doorkeeper_token: Doorkeeper::AccessToken?
+  # @rbs @doorkeeper_access_token: Doorkeeper::AccessToken?
 
   # Doorkeeper token requests are stateless — CSRF doesn't apply.
   # Covers all configured access_token_methods (Authorization header, access_token
@@ -44,7 +44,7 @@ class GraphqlController < ApplicationController
 
     if token&.accessible?
       @current_user = User.find_by(id: token.resource_owner_id) #: User?
-      @doorkeeper_token = token #: untyped
+      @doorkeeper_token = token #: Doorkeeper::AccessToken?
       return if @current_user
     end
 
@@ -58,7 +58,7 @@ class GraphqlController < ApplicationController
   end
 
   # Handle variables in form data, JSON body, or a blank value
-  #: (untyped variables_param) -> ::Hash[String, untyped]
+  #: (String | ::Hash[String, untyped] | ActionController::Parameters | nil variables_param) -> ::Hash[String, untyped]
   def prepare_variables(variables_param)
     case variables_param
     when String
@@ -83,24 +83,24 @@ class GraphqlController < ApplicationController
     logger.error e.message
     logger.error e.backtrace&.join("\n")
 
-    data = {} #: ::Hash[Symbol, untyped]
+    data = {} #: ::Hash[Symbol, ::Array[::Hash[String, untyped]] | String | nil]
     render json: { errors: [ { message: e.message, backtrace: e.backtrace } ], data: data }, status: 500
   end
 
   # Returns a valid Doorkeeper token if one is present via any configured
   # access_token_method (Authorization header, access_token param, bearer_token
   # param). Memoized so the token is only looked up once per request.
-  #: () -> untyped
+  #: () -> Doorkeeper::AccessToken?
   def doorkeeper_access_token
     @doorkeeper_access_token ||= Doorkeeper::OAuth::Token.authenticate(
       request, *Doorkeeper.configuration.access_token_methods
-    ) #: untyped
+    ) #: Doorkeeper::AccessToken?
   end
 
   # Skip CSRF for any request carrying a valid Doorkeeper access token —
   # covers all configured access_token_methods, not just the Bearer header.
   #: () -> bool
   def doorkeeper_token_request?
-    doorkeeper_access_token&.accessible?
+    !!doorkeeper_access_token&.accessible?
   end
 end

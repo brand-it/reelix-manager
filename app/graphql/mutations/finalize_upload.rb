@@ -14,13 +14,13 @@ module Mutations
     field :filename, String, null: true
     field :errors, [ String ], null: false
 
-    #: (**untyped _args) -> bool
-    def ready?(**_args)
+    #: (upload_id: String, ?filename: String?, ?media_type: String) -> bool
+    def ready?(upload_id:, filename: nil, media_type: "movie")
       require_upload!
       true
     end
 
-    #: (upload_id: String, ?filename: String?, ?media_type: String) -> ::Hash[Symbol, untyped]
+    #: (upload_id: String, ?filename: String?, ?media_type: String) -> ::Hash[Symbol, String? | ::Array[String]]
     def resolve(upload_id:, filename: nil, media_type: "movie")
       storage = Tus::Server.opts[:storage]
 
@@ -68,7 +68,7 @@ module Mutations
       FileUtils.mv(File.join(storage.directory, upload_id), dest_path)
       storage.delete_file(upload_id, info)
 
-      { destination_path: dest_path, filename: resolved_filename, errors: [] } #: ::Hash[Symbol, untyped]
+      { destination_path: dest_path, filename: resolved_filename, errors: [] } #: ::Hash[Symbol, String? | ::Array[String]]
     rescue => e
       { destination_path: nil, filename: nil, errors: [ e.message ] }
     end

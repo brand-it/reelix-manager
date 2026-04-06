@@ -26,7 +26,7 @@ module Resolvers
 
     MAX_PAGE = 500
 
-    #: (query: String, page: Integer, language: String) -> ::Hash[Symbol, untyped]
+    #: (query: String, page: Integer, language: String) -> ::Hash[Symbol, ::Array[::Hash[String, untyped]] | Integer]
     def resolve(query:, page:, language:)
       require_search!
       page = page.clamp(1, MAX_PAGE)
@@ -57,7 +57,7 @@ module Resolvers
     # Run both API calls concurrently. Thread#value re-raises any exception from the thread.
     # Threads are wrapped with Rails.application.executor and connection_pool.with_connection
     # to prevent AR connection leaks when Config::Video is accessed inside the thread.
-    #: (String query, Integer page, String language) -> [untyped, untyped]
+    #: (String query, Integer page, String language) -> [::Hash[String, untyped], ::Hash[String, untyped]]
     def fetch_both(query, page, language)
       movie_thread = Thread.new do
         Rails.application.executor.wrap do

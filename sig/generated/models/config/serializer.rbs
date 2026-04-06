@@ -2,28 +2,28 @@
 
 class Config
   class Serializer
-    @data: ::Hash[untyped, untyped]
+    @data: ::Hash[String | Symbol, untyped]
 
     # : (String? json) -> Config::Serializer
     def self.load: (String? json) -> Config::Serializer
 
-    # : (?::Hash[untyped, untyped] data) -> void
-    def initialize: (?::Hash[untyped, untyped] data) -> void
+    # : (?::Hash[String | Symbol, untyped] data) -> void
+    def initialize: (?::Hash[String | Symbol, untyped] data) -> void
 
-    # : (untyped key) -> untyped
-    def []: (untyped key) -> untyped
+    # : (String | Symbol key) -> untyped
+    def []: (String | Symbol key) -> untyped
 
-    # : (untyped key, untyped value) -> untyped
-    def []=: (untyped key, untyped value) -> untyped
+    # : (String | Symbol key, untyped value) -> untyped
+    def []=: (String | Symbol key, untyped value) -> untyped
 
-    # : (untyped key) -> bool
-    def key?: (untyped key) -> bool
+    # : (String | Symbol key) -> bool
+    def key?: (String | Symbol key) -> bool
 
     # Used by Setting#contains_key? to introspect the underlying hash.
-    # : () -> ::Hash[untyped, untyped]
-    def marshal_dump: () -> ::Hash[untyped, untyped]
+    # : () -> ::Hash[String | Symbol, untyped]
+    def marshal_dump: () -> ::Hash[String | Symbol, untyped]
 
-    # : () -> ::Hash[untyped, untyped]
-    def to_h: () -> ::Hash[untyped, untyped]
+    # : () -> ::Hash[String | Symbol, untyped]
+    def to_h: () -> ::Hash[String | Symbol, untyped]
   end
 end

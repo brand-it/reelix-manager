@@ -4,10 +4,10 @@ module Types
   class QueryType < Types::BaseObject
     include ScopeEnforceable
 
-    # : (id: String) -> untyped
-    def node: (id: String) -> untyped
+    # : (id: String) -> ApplicationRecord?
+    def node: (id: String) -> ApplicationRecord?
 
-    # : (ids: ::Array[String]) -> ::Array[untyped]
-    def nodes: (ids: ::Array[String]) -> ::Array[untyped]
+    # : (ids: ::Array[String]) -> ::Array[ApplicationRecord?]
+    def nodes: (ids: ::Array[String]) -> ::Array[ApplicationRecord?]
   end
 end

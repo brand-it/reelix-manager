@@ -3,9 +3,9 @@
 class GraphqlController < ApplicationController
   @current_user: User?
 
-  @doorkeeper_token: untyped
+  @doorkeeper_token: Doorkeeper::AccessToken?
 
-  @doorkeeper_access_token: untyped
+  @doorkeeper_access_token: Doorkeeper::AccessToken?
 
   # : () -> void
   def execute: () -> void
@@ -19,8 +19,8 @@ class GraphqlController < ApplicationController
   def authenticate_graphql_user!: () -> void
 
   # Handle variables in form data, JSON body, or a blank value
-  # : (untyped variables_param) -> ::Hash[String, untyped]
-  def prepare_variables: (untyped variables_param) -> ::Hash[String, untyped]
+  # : (String | ::Hash[String, untyped] | ActionController::Parameters | nil variables_param) -> ::Hash[String, untyped]
+  def prepare_variables: (String | ::Hash[String, untyped] | ActionController::Parameters | nil variables_param) -> ::Hash[String, untyped]
 
   # : (StandardError e) -> void
   def handle_error_in_development: (StandardError e) -> void
@@ -28,8 +28,8 @@ class GraphqlController < ApplicationController
   # Returns a valid Doorkeeper token if one is present via any configured
   # access_token_method (Authorization header, access_token param, bearer_token
   # param). Memoized so the token is only looked up once per request.
-  # : () -> untyped
-  def doorkeeper_access_token: () -> untyped
+  # : () -> Doorkeeper::AccessToken?
+  def doorkeeper_access_token: () -> Doorkeeper::AccessToken?
 
   # Skip CSRF for any request carrying a valid Doorkeeper access token —
   # covers all configured access_token_methods, not just the Bearer header.

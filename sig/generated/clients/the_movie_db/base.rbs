@@ -26,8 +26,8 @@ module TheMovieDb
     # : (api_key: String) -> bool
     def self.ping: (api_key: String) -> bool
 
-    # : (?use_cache: bool, ?object_class: Class) -> untyped
-    def results: (?use_cache: bool, ?object_class: Class) -> untyped
+    # : (?use_cache: bool, ?object_class: Class) -> ::Hash[String, untyped]
+    def results: (?use_cache: bool, ?object_class: Class) -> ::Hash[String, untyped]
 
     # : () -> bool
     def ping: () -> bool
@@ -52,8 +52,8 @@ module TheMovieDb
     # : () -> String
     def path: () -> String
 
-    # : () -> ::Hash[untyped, untyped]
-    def query_params: () -> ::Hash[untyped, untyped]
+    # : () -> ::Hash[Symbol | String, String]
+    def query_params: () -> ::Hash[Symbol | String, String]
 
     # Reads the API key from Config::Video; may be overridden by passing api_key: at instantiation.
     # Visit https://www.themoviedb.org/settings/api to obtain a key.

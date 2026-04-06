@@ -17,7 +17,7 @@ module TheMovieDb
         @page = page.to_i   #: Integer
       end
 
-      #: (?use_cache: bool) -> untyped
+      #: (?use_cache: bool) -> ::Hash[String, untyped]
       def results(use_cache: true)
         return ({ "results" => [] }) if query.blank? # steep:ignore UnannotatedEmptyCollection
 
@@ -36,7 +36,7 @@ module TheMovieDb
 
       private
 
-      #: () -> ::Hash[untyped, untyped]
+      #: () -> ::Hash[Symbol | String, String | Integer]
       def query_params
         super.merge(query:, page:)
       end

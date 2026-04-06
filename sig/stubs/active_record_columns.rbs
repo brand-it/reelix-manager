@@ -9,10 +9,10 @@ class User < ApplicationRecord
   # Scope methods provided by ApplicationRecord
   def self.any?: () -> bool
   def self.none?: () -> bool
-  def self.where: (**untyped kwargs) -> untyped
+  def self.where: (**untyped kwargs) -> ActiveRecord::Relation
 
   # Association: has_many :access_tokens, class_name: "Doorkeeper::AccessToken"
-  def access_tokens: () -> untyped
+  def access_tokens: () -> ActiveRecord::Relation
 end
 
 class UploadSession < ApplicationRecord

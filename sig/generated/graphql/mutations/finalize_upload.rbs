@@ -2,11 +2,11 @@
 
 module Mutations
   class FinalizeUpload < Mutations::BaseMutation
-    # : (**untyped _args) -> bool
-    def ready?: (**untyped _args) -> bool
+    # : (upload_id: String, ?filename: String?, ?media_type: String) -> bool
+    def ready?: (upload_id: String, ?filename: String?, ?media_type: String) -> bool
 
-    # : (upload_id: String, ?filename: String?, ?media_type: String) -> ::Hash[Symbol, untyped]
-    def resolve: (upload_id: String, ?filename: String?, ?media_type: String) -> ::Hash[Symbol, untyped]
+    # : (upload_id: String, ?filename: String?, ?media_type: String) -> ::Hash[Symbol, String? | ::Array[String]]
+    def resolve: (upload_id: String, ?filename: String?, ?media_type: String) -> ::Hash[Symbol, String? | ::Array[String]]
 
     private
 

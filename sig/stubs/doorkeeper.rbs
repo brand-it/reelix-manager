@@ -2,37 +2,55 @@
 # Doorkeeper does not ship RBS; a full rbs-doorkeeper gem does not yet exist.
 # Add methods here as the application uses more of the Doorkeeper API.
 module Doorkeeper
-  def self.configuration: () -> untyped
+  def self.configuration: () -> ::Doorkeeper::Config
+
+  class Config
+    def access_token_methods: () -> ::Array[Symbol]
+  end
 
   module OAuth
-    module Token
-      def self.authenticate: (untyped request, *untyped methods) -> untyped
+    class Token
+      def self.authenticate: (untyped request, *Symbol methods) -> Doorkeeper::AccessToken?
+      def accessible?: () -> bool
     end
   end
 
   class AccessToken
-    def self.all: () -> untyped
-    def self.find_by: (**untyped kwargs) -> untyped
+    def self.all: () -> ActiveRecord::Relation
+    def self.find_by: (?id: Integer | String | nil) -> Doorkeeper::AccessToken?
     def accessible?: () -> bool
     def resource_owner_id: () -> (Integer | nil)
-    def scopes: () -> untyped
+    def scopes: () -> ::Doorkeeper::OAuth::Scopes
     def includes_scope?: (*String scopes) -> bool
+    def revoke: (?::Time clock) -> void
+    def application: () -> Doorkeeper::Application?
+    def user: () -> ::User?
+  end
+
+  module OAuth
+    class Scopes
+      def to_a: () -> ::Array[String]
+      def include?: (String scope) -> bool
+    end
   end
 
   class Application
-    def self.order: (Symbol | String column) -> untyped
-    def self.find_by: (**untyped kwargs) -> untyped
+    def self.order: (Symbol | String column) -> ActiveRecord::Relation
+    def self.find_by: (?name: String | nil) -> Doorkeeper::Application?
+    def name: () -> String
   end
 
   module DeviceAuthorizationGrant
     class DeviceGrant
-      def self.all: () -> untyped
-      def self.where: (**untyped kwargs) -> untyped
-      def self.find_by: (**untyped kwargs) -> untyped
-      def self.order: (**untyped kwargs) -> untyped
+      def self.all: () -> ActiveRecord::Relation
+      def self.where: () -> ::ActiveRecord::QueryMethods::WhereChain[::ActiveRecord::Relation]
+                    | (**untyped kwargs) -> ActiveRecord::Relation
+      def self.find_by: (?id: Integer | String | nil, ?resource_owner_id: Integer | nil) -> Doorkeeper::DeviceAuthorizationGrant::DeviceGrant?
+      def self.order: (**untyped kwargs) -> ActiveRecord::Relation
       def resource_owner_id: () -> (Integer | nil)
       def user: () -> (::User | nil)
-      def destroy: () -> untyped
+      def destroy: () -> bool
+      def application: () -> Doorkeeper::Application?
     end
   end
 end

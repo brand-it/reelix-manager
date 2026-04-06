@@ -2,18 +2,18 @@
 
 class ReelixManagerSchema < GraphQL::Schema
   # GraphQL-Ruby calls this when something goes wrong while running a query:
-  # : (untyped err, GraphQL::Query::Context context) -> untyped
-  def self.type_error: (untyped err, GraphQL::Query::Context context) -> untyped
+  # : (GraphQL::Error err, GraphQL::Query::Context context) -> void
+  def self.type_error: (GraphQL::Error err, GraphQL::Query::Context context) -> void
 
   # Union and Interface Resolution
-  # : (untyped abstract_type, untyped obj, GraphQL::Query::Context ctx) -> untyped
-  def self.resolve_type: (untyped abstract_type, untyped obj, GraphQL::Query::Context ctx) -> untyped
+  # : (Class abstract_type, ApplicationRecord obj, GraphQL::Query::Context ctx) -> Class
+  def self.resolve_type: (Class abstract_type, ApplicationRecord obj, GraphQL::Query::Context ctx) -> Class
 
   # Return a string UUID for `object`
-  # : (untyped object, untyped type_definition, GraphQL::Query::Context query_ctx) -> String
-  def self.id_from_object: (untyped object, untyped type_definition, GraphQL::Query::Context query_ctx) -> String
+  # : (ApplicationRecord object, Class type_definition, GraphQL::Query::Context query_ctx) -> String
+  def self.id_from_object: (ApplicationRecord object, Class type_definition, GraphQL::Query::Context query_ctx) -> String
 
   # Given a string UUID, find the object
-  # : (String global_id, GraphQL::Query::Context query_ctx) -> untyped
-  def self.object_from_id: (String global_id, GraphQL::Query::Context query_ctx) -> untyped
+  # : (String global_id, GraphQL::Query::Context query_ctx) -> ApplicationRecord?
+  def self.object_from_id: (String global_id, GraphQL::Query::Context query_ctx) -> ApplicationRecord?
 end

@@ -27,9 +27,9 @@
               <td><%= grant.user&.email || "Unknown" %></td>
             <% end %>
             <td><%= grant.application&.name || "—" %></td>
-            <td><%= grant.created_at.strftime("%b %-d, %Y") %></td>
+            <td><%= grant.created_at.to_fs(:usa_pretty) %></td>
             <td>
-              <%= grant.created_at.advance(seconds: grant.expires_in).strftime("%b %-d, %Y") %>
+              <%= grant.created_at.advance(seconds: grant.expires_in).to_fs(:usa_pretty) %>
             </td>
             <td>
               <% if grant_expired %>
@@ -55,10 +55,10 @@
               <td><%= token.user&.email || "Unknown" %></td>
             <% end %>
             <td><%= token.application&.name || "—" %></td>
-            <td><%= token.created_at.strftime("%b %-d, %Y") %></td>
+            <td><%= token.created_at.to_fs(:usa_pretty) %></td>
             <td>
               <% if token.expires_in %>
-                <%= token.created_at.advance(seconds: token.expires_in).strftime("%b %-d, %Y") %>
+                <%= token.created_at.advance(seconds: token.expires_in).to_fs(:usa_pretty) %>
               <% else %>
                 Never
               <% end %>

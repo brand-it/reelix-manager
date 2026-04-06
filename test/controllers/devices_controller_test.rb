@@ -14,9 +14,21 @@ class DevicesControllerTest < ActionDispatch::IntegrationTest
   end
 
   teardown do
-    Doorkeeper::AccessToken.delete_all
-    Doorkeeper::DeviceAuthorizationGrant::DeviceGrant.delete_all
-    Doorkeeper::Application.delete_all
+    owner_ids = [ @user&.id, @admin&.id ].compact
+
+    Doorkeeper::AccessToken.where(application_id: @oauth_app&.id)
+                           .or(Doorkeeper::AccessToken.where(resource_owner_id: owner_ids))
+                           .delete_all
+
+    Doorkeeper::DeviceAuthorizationGrant::DeviceGrant.where(application_id: @oauth_app&.id)
+                                                     .or(
+                                                       Doorkeeper::DeviceAuthorizationGrant::DeviceGrant.where(
+                                                         resource_owner_id: owner_ids
+                                                       )
+                                                     )
+                                                     .delete_all
+
+    @oauth_app&.destroy!
   end
 
   # ---------------------------------------------------------------------------

@@ -9,4 +9,8 @@ Rails.application.config.after_initialize do
     foreign_key: :resource_owner_id,
     inverse_of:  :access_tokens,
     optional:    true
+
+  Doorkeeper::DeviceAuthorizationGrant::DeviceGrant.belongs_to :user,
+    foreign_key: :resource_owner_id,
+    optional:    true
 end

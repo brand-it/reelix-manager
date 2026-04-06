@@ -24,7 +24,7 @@
           <% grant_expired = grant.created_at + grant.expires_in.seconds < Time.current %>
           <tr>
             <% if current_user.admin? %>
-              <td><%= @grant_users[grant.resource_owner_id]&.email || "Unknown" %></td>
+              <td><%= grant.user&.email || "Unknown" %></td>
             <% end %>
             <td><%= grant.application&.name || "—" %></td>
             <td><%= grant.created_at.strftime("%b %-d, %Y") %></td>

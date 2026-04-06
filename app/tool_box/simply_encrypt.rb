@@ -6,6 +6,7 @@ module SimplyEncrypt
   # `.to_s` coerces nil to "" safely, `|| ""` satisfies the String constant type.
   KEY = Digest::SHA1.hexdigest(Rails.application.credentials.secret_key_base.to_s)[..31] || ""
 
+  #: (String? data) -> [String?, String?]
   def encrypt(data)
     return [ nil, nil ] if data.blank?
 
@@ -18,6 +19,7 @@ module SimplyEncrypt
     [ encode(encrypted), encode(vi) ]
   end
 
+  #: (String? data, String? iv) -> String?
   def decrypt(data, iv) # rubocop:disable Naming/MethodParameterName
     return if data.blank? || iv.blank?
 

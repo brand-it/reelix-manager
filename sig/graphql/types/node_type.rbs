@@ -1,0 +1,4 @@
+module Types
+  module NodeType
+  end
+end

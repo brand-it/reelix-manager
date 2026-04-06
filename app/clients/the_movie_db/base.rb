@@ -15,12 +15,14 @@ module TheMovieDb
     # steep:ignore:end
 
     class << self
+      #: () -> Array[Symbol]
       def option_names
         # steep:ignore:start
         @option_names ||= dry_initializer.options.map(&:target)
         # steep:ignore:end
       end
 
+      #: () -> Array[Symbol]
       def param_names
         # steep:ignore:start
         @param_names ||= dry_initializer.params.map(&:target)
@@ -31,6 +33,7 @@ module TheMovieDb
 
       # Validates that the given API key can reach the TMDB API.
       # Returns true/false — safe to call from model validations.
+      #: (api_key: String) -> bool
       def ping(api_key:)
         new(api_key: api_key).ping
       rescue InvalidConfig
@@ -38,12 +41,14 @@ module TheMovieDb
       end
     end
 
+    #: (?use_cache: bool, ?object_class: Class) -> untyped
     def results(use_cache: true, object_class: Hash)
       @results ||= {} # steep:ignore UnannotatedEmptyCollection
       key = [ use_cache, object_class ]
       @results[key] ||= use_cache ? cache_get(object_class:) : get(object_class:) # steep:ignore
     end
 
+    #: () -> bool
     def ping
       response = connection.get(ping_uri, { api_key: api_key })
       response.success?

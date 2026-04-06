@@ -13,6 +13,7 @@ target :core do
   check "app/clients"
   check "app/tool_box"
   check "app/jobs"
+  check "app/services"
 
   # Standard library modules used by app code
   library "pathname"
@@ -44,6 +45,8 @@ target :web do
 
   check "app/graphql"
   check "app/controllers"
+  check "app/helpers"
+  check "app/mailers"
 
   library "json"
 

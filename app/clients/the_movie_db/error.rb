@@ -4,6 +4,7 @@ module TheMovieDb
   class Error < StandardError
     attr_reader :object, :body
 
+    #: (untyped object) -> void
     def initialize(object)
       @object = object
       @body = parse_body(object.body)
@@ -12,12 +13,14 @@ module TheMovieDb
 
     private
 
+    #: (String? raw_body) -> untyped
     def parse_body(raw_body)
       JSON.parse(raw_body.to_s)
     rescue JSON::ParserError, TypeError
       raw_body
     end
 
+    #: (untyped object) -> String
     def build_message(object)
       status = object.respond_to?(:status) ? object.status : nil
       url    = object.env.respond_to?(:url) ? object.env.url : nil

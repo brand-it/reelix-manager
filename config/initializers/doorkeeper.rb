@@ -312,15 +312,9 @@ Doorkeeper.configure do
   # types, but you **need** to manually drop `NOT NULL` constraint from `redirect_uri`
   # column for `oauth_applications` database table.
   #
-  # You can completely disable this feature with:
-  #
-  # allow_blank_redirect_uri false
-  #
-  # Or you can define your custom check:
-  #
-  # allow_blank_redirect_uri do |grant_flows, client|
-  #   client.superapp?
-  # end
+  # Device authorization grant clients do not use redirect URIs, so allow
+  # blank redirect_uri for all applications.
+  allow_blank_redirect_uri true
 
   # Specify how authorization errors should be handled.
   # By default, doorkeeper renders json errors when access token
@@ -378,9 +372,8 @@ Doorkeeper.configure do
   # Long-lived tokens for device clients (1 year). Use nil for non-expiring.
   access_token_expires_in 1.year
 
-  # Only enable the device authorization grant flow. No password, implicit, or
-  # authorization code flows are needed.
-  grant_flows %w[urn:ietf:params:oauth:grant-type:device_code]
+  # Enable authorization code (web UI) and device authorization grant flows.
+  grant_flows %w[authorization_code device_code]
 
   # Allows to customize OAuth grant flows that +each+ application support.
   # You can configure a custom block (or use a class respond to `#call`) that must

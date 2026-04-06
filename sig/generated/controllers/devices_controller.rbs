@@ -1,7 +1,9 @@
 # Generated from app/controllers/devices_controller.rb with RBS::Inline
 
 class DevicesController < ApplicationController
-  @tokens: untyped
+  @tokens: ActiveRecord::Relation
+
+  @device_grants: ActiveRecord::Relation
 
   # : () -> void
   def index: () -> void
@@ -9,8 +11,14 @@ class DevicesController < ApplicationController
   # : () -> void
   def destroy: () -> void
 
+  # : () -> void
+  def destroy_grant: () -> void
+
   private
 
-  # : () -> untyped
-  def find_token: () -> untyped
+  # : () -> Doorkeeper::AccessToken?
+  def find_token: () -> Doorkeeper::AccessToken?
+
+  # : () -> Doorkeeper::DeviceAuthorizationGrant::DeviceGrant?
+  def find_grant: () -> Doorkeeper::DeviceAuthorizationGrant::DeviceGrant?
 end

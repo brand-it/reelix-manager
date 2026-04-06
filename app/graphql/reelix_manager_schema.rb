@@ -8,7 +8,7 @@ class ReelixManagerSchema < GraphQL::Schema
   use GraphQL::Dataloader
 
   # GraphQL-Ruby calls this when something goes wrong while running a query:
-  #: (untyped err, GraphQL::Query::Context context) -> untyped
+  #: (GraphQL::Error err, GraphQL::Query::Context context) -> void
   def self.type_error(err, context)
     # if err.is_a?(GraphQL::InvalidNullError)
     #   # report to your bug tracker here
@@ -18,7 +18,7 @@ class ReelixManagerSchema < GraphQL::Schema
   end
 
   # Union and Interface Resolution
-  #: (untyped abstract_type, untyped obj, GraphQL::Query::Context ctx) -> untyped
+  #: (Class abstract_type, ApplicationRecord obj, GraphQL::Query::Context ctx) -> Class
   def self.resolve_type(abstract_type, obj, ctx)
     # TODO: Implement this method
     # to return the correct GraphQL object type for `obj`
@@ -34,14 +34,14 @@ class ReelixManagerSchema < GraphQL::Schema
   # Relay-style Object Identification:
 
   # Return a string UUID for `object`
-  #: (untyped object, untyped type_definition, GraphQL::Query::Context query_ctx) -> String
+  #: (ApplicationRecord object, Class type_definition, GraphQL::Query::Context query_ctx) -> String
   def self.id_from_object(object, type_definition, query_ctx)
     # For example, use Rails' GlobalID library (https://github.com/rails/globalid):
     object.to_gid_param
   end
 
   # Given a string UUID, find the object
-  #: (String global_id, GraphQL::Query::Context query_ctx) -> untyped
+  #: (String global_id, GraphQL::Query::Context query_ctx) -> ApplicationRecord?
   def self.object_from_id(global_id, query_ctx)
     # For example, use Rails' GlobalID library (https://github.com/rails/globalid):
     GlobalID.find(global_id)

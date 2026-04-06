@@ -12,6 +12,6 @@ class Config < ApplicationRecord
   # : () -> Config::Serializer
   def settings: () -> Config::Serializer
 
-  # : (::Hash[untyped, untyped] hash) -> void
-  def settings=: (::Hash[untyped, untyped] hash) -> void
+  # : (::Hash[String | Symbol, untyped] hash) -> void
+  def settings=: (::Hash[String | Symbol, untyped] hash) -> void
 end

@@ -18,8 +18,8 @@ module TheMovieDb
       # : (query: String, ?page: Integer, ?api_key: String?, ?language: String?) -> void
       def initialize: (query: String, ?page: Integer, ?api_key: String?, ?language: String?) -> void
 
-      # : (?use_cache: bool) -> untyped
-      def results: (?use_cache: bool) -> untyped
+      # : (?use_cache: bool) -> ::Hash[String, untyped]
+      def results: (?use_cache: bool) -> ::Hash[String, untyped]
 
       # : () -> TheMovieDb::Search::Base
       def next_page: () -> TheMovieDb::Search::Base
@@ -29,8 +29,8 @@ module TheMovieDb
 
       private
 
-      # : () -> ::Hash[untyped, untyped]
-      def query_params: () -> ::Hash[untyped, untyped]
+      # : () -> ::Hash[Symbol | String, String | Integer]
+      def query_params: () -> ::Hash[Symbol | String, String | Integer]
     end
   end
 end

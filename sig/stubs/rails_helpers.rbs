@@ -15,3 +15,24 @@ class ActionController::Base
   def edit_config_video_path: () -> String
   def graphiql_path: () -> String
 end
+
+# GlobalID::Identification is included into ActiveRecord::Base by the globalid gem.
+# These are the most commonly used methods.
+class ApplicationRecord < ActiveRecord::Base
+  def to_gid_param: (?::Hash[::Symbol | ::String, untyped] options) -> String
+  def to_sgid_param: (?::Hash[::Symbol | ::String, untyped] options) -> String
+end
+
+# ApplicationRecord defines :newest and :oldest scopes, and these are also
+# applied to Doorkeeper models via config/initializers/doorkeeper_extensions.rb.
+# Adding them to ActiveRecord::Relation makes them available on any relation chain.
+class ActiveRecord::Relation
+  def newest: () -> ActiveRecord::Relation
+  def oldest: () -> ActiveRecord::Relation
+end
+
+# ActiveRecord's WhereChain supports .not(...) but the rbs_collection omits it.
+class ActiveRecord::QueryMethods::WhereChain[Relation]
+  def not: (::Hash[::Symbol | ::String, untyped] opts) -> Relation
+         | (::String opts) -> Relation
+end

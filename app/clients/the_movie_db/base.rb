@@ -29,7 +29,7 @@ module TheMovieDb
       end
     end
 
-    #: (?use_cache: bool, ?object_class: Class) -> untyped
+    #: (?use_cache: bool, ?object_class: Class) -> ::Hash[String, untyped]
     def results(use_cache: true, object_class: Hash)
       @results ||= {} #: ::Hash[[bool, Class], ::Hash[String, untyped]]
       key = [ use_cache, object_class ]
@@ -96,7 +96,7 @@ module TheMovieDb
           &.parameterize(separator: "/") || ""
     end
 
-    #: () -> ::Hash[untyped, untyped]
+    #: () -> ::Hash[Symbol | String, String]
     def query_params
       { api_key:, language: }.compact.with_indifferent_access
     end

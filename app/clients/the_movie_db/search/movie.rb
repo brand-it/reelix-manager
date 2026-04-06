@@ -27,7 +27,7 @@ module TheMovieDb
 
       private
 
-      #: () -> ::Hash[untyped, untyped]
+      #: () -> ::Hash[Symbol | String, String | Integer]
       def query_params
         super.merge(year:, primary_release_year:).compact
       end

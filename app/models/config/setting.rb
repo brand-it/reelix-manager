@@ -2,7 +2,7 @@ class Config
   class Setting
     include SimplyEncrypt
 
-    # @rbs @attributes: untyped
+    # @rbs @attributes: ::Hash[Symbol, Config::Setting::Option]
 
     Option = Struct.new(:default, :encrypted?)
 
@@ -18,7 +18,7 @@ class Config
       load_attributes(item, Config::Serializer.load(json))
     end
 
-    #: (Config item, ::Hash[untyped, untyped] object) -> String
+    #: (Config item, ::Hash[String | Symbol, untyped] object) -> String
     def dump(item, object)
       JSON.dump dump_attributes(item, object).to_h
     end
@@ -44,7 +44,7 @@ class Config
       object
     end
 
-    #: (Config item, ::Hash[untyped, untyped] object) -> ::Hash[untyped, untyped]
+    #: (Config item, ::Hash[String | Symbol, untyped] object) -> ::Hash[String | Symbol, untyped]
     def dump_attributes(item, object)
       attributes.each do |name, option|
         object[name] = instance_exec_default(item, option) unless contains_key?(object, name)
@@ -53,12 +53,15 @@ class Config
       object
     end
 
-    #: (Config item, Config::Setting::Option option) -> untyped
+    #: (Config item, Config::Setting::Option option) -> String?
     def instance_exec_default(item, option)
       item.instance_exec(&option.default) # steep:ignore BlockTypeMismatch
+      # Steep cannot verify the return type of the Proc stored in option.default
+      # through the `&` coercion + instance_exec dispatch. The Proc is always
+      # defined to return String? in Config::Setting::Option, so the ignore is safe.
     end
 
-    #: (untyped object, Symbol key) -> bool
+    #: (Config::Serializer | ::Hash[String | Symbol, untyped] object, Symbol key) -> bool
     def contains_key?(object, key)
       (object.try(:marshal_dump) || object).key?(key)
     end

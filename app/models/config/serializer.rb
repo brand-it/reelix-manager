@@ -1,40 +1,43 @@
 class Config
   class Serializer
-    # @rbs @data: ::Hash[untyped, untyped]
+    # @rbs @data: ::Hash[String | Symbol, untyped]
 
     #: (String? json) -> Config::Serializer
     def self.load(json)
-      data = json.present? ? JSON.parse(json) : {} #: ::Hash[untyped, untyped]
+      data = json.present? ? JSON.parse(json) : {} #: ::Hash[String | Symbol, untyped]
       new(data.with_indifferent_access)
     end
 
-    #: (?::Hash[untyped, untyped] data) -> void
+    #: (?::Hash[String | Symbol, untyped] data) -> void
     def initialize(data = {}.with_indifferent_access) # steep:ignore UnannotatedEmptyCollection
-      @data = data #: ::Hash[untyped, untyped]
+      # Steep cannot infer the element type of the `{}` literal before
+      # with_indifferent_access is called; the hash is always typed as
+      # Hash[String | Symbol, untyped] at the call sites, so the ignore is safe.
+      @data = data #: ::Hash[String | Symbol, untyped]
     end
 
-    #: (untyped key) -> untyped
+    #: (String | Symbol key) -> untyped
     def [](key)
       @data[key]
     end
 
-    #: (untyped key, untyped value) -> untyped
+    #: (String | Symbol key, untyped value) -> untyped
     def []=(key, value)
       @data[key] = value
     end
 
-    #: (untyped key) -> bool
+    #: (String | Symbol key) -> bool
     def key?(key)
       @data.key?(key)
     end
 
     # Used by Setting#contains_key? to introspect the underlying hash.
-    #: () -> ::Hash[untyped, untyped]
+    #: () -> ::Hash[String | Symbol, untyped]
     def marshal_dump
       @data
     end
 
-    #: () -> ::Hash[untyped, untyped]
+    #: () -> ::Hash[String | Symbol, untyped]
     def to_h
       @data.to_h
     end

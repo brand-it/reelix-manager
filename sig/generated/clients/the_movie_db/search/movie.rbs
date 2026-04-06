@@ -22,8 +22,8 @@ module TheMovieDb
 
       private
 
-      # : () -> ::Hash[untyped, untyped]
-      def query_params: () -> ::Hash[untyped, untyped]
+      # : () -> ::Hash[Symbol | String, String | Integer]
+      def query_params: () -> ::Hash[Symbol | String, String | Integer]
     end
   end
 end

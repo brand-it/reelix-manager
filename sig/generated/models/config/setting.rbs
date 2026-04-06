@@ -4,7 +4,7 @@ class Config
   class Setting
     include SimplyEncrypt
 
-    @attributes: untyped
+    @attributes: ::Hash[Symbol, Config::Setting::Option]
 
     class Option < Struct[untyped]
       attr_accessor default(): untyped
@@ -21,8 +21,8 @@ class Config
     # : (Config item, String? json) -> Config::Serializer
     def load: (Config item, String? json) -> Config::Serializer
 
-    # : (Config item, ::Hash[untyped, untyped] object) -> String
-    def dump: (Config item, ::Hash[untyped, untyped] object) -> String
+    # : (Config item, ::Hash[String | Symbol, untyped] object) -> String
+    def dump: (Config item, ::Hash[String | Symbol, untyped] object) -> String
 
     # : (Symbol | String name, ?default: Proc, ?encrypted: bool) -> void
     def attribute: (Symbol | String name, ?default: Proc, ?encrypted: bool) -> void
@@ -35,13 +35,13 @@ class Config
     # : (Config item, Config::Serializer object) -> Config::Serializer
     def load_attributes: (Config item, Config::Serializer object) -> Config::Serializer
 
-    # : (Config item, ::Hash[untyped, untyped] object) -> ::Hash[untyped, untyped]
-    def dump_attributes: (Config item, ::Hash[untyped, untyped] object) -> ::Hash[untyped, untyped]
+    # : (Config item, ::Hash[String | Symbol, untyped] object) -> ::Hash[String | Symbol, untyped]
+    def dump_attributes: (Config item, ::Hash[String | Symbol, untyped] object) -> ::Hash[String | Symbol, untyped]
 
-    # : (Config item, Config::Setting::Option option) -> untyped
-    def instance_exec_default: (Config item, Config::Setting::Option option) -> untyped
+    # : (Config item, Config::Setting::Option option) -> String?
+    def instance_exec_default: (Config item, Config::Setting::Option option) -> String?
 
-    # : (untyped object, Symbol key) -> bool
-    def contains_key?: (untyped object, Symbol key) -> bool
+    # : (Config::Serializer | ::Hash[String | Symbol, untyped] object, Symbol key) -> bool
+    def contains_key?: (Config::Serializer | ::Hash[String | Symbol, untyped] object, Symbol key) -> bool
   end
 end

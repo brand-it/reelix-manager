@@ -4,23 +4,23 @@ module TheMovieDb
   class Error < StandardError
     attr_reader :object, :body
 
-    #: (untyped object) -> void
+    #: (Faraday::Response object) -> void
     def initialize(object)
-      @object = object #: untyped
-      @body = parse_body(object.body) #: untyped
+      @object = object #: Faraday::Response
+      @body = parse_body(object.body) #: ::Hash[String, untyped] | String?
       super(build_message(object))
     end
 
     private
 
-    #: (String? raw_body) -> untyped
+    #: (String? raw_body) -> (::Hash[String, untyped] | String?)
     def parse_body(raw_body)
       JSON.parse(raw_body.to_s)
     rescue JSON::ParserError, TypeError
       raw_body
     end
 
-    #: (untyped object) -> String
+    #: (Faraday::Response object) -> String
     def build_message(object)
       status = object.respond_to?(:status) ? object.status : nil
       url    = object.env.respond_to?(:url) ? object.env.url : nil

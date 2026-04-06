@@ -1,5 +1,6 @@
 class DevicesController < ApplicationController
-  # @rbs @tokens: untyped
+  # @rbs @tokens: ActiveRecord::Relation
+  # @rbs @device_grants: ActiveRecord::Relation
 
   #: () -> void
   def index
@@ -10,7 +11,19 @@ class DevicesController < ApplicationController
       Doorkeeper::AccessToken.all.newest.includes(:application, :user)
     else
       user.access_tokens.newest.includes(:application)
-    end #: untyped
+    end #: ActiveRecord::Relation
+
+    @device_grants = if user.admin?
+      Doorkeeper::DeviceAuthorizationGrant::DeviceGrant
+        .where.not(resource_owner_id: nil)
+        .order(created_at: :desc)
+        .includes(:application, :user)
+    else
+      Doorkeeper::DeviceAuthorizationGrant::DeviceGrant
+        .where(resource_owner_id: user.id)
+        .order(created_at: :desc)
+        .includes(:application)
+    end #: ActiveRecord::Relation
   end
 
   #: () -> void
@@ -24,9 +37,23 @@ class DevicesController < ApplicationController
     end
   end
 
+  #: () -> void
+  def destroy_grant
+    grant = find_grant
+    if grant
+      if grant.destroy
+        redirect_to devices_path, notice: "Pending device authorization cancelled."
+      else
+        redirect_to devices_path, alert: "Failed to cancel pending device authorization."
+      end
+    else
+      redirect_to devices_path, alert: "Pending device not found."
+    end
+  end
+
   private
 
-  #: () -> untyped
+  #: () -> Doorkeeper::AccessToken?
   def find_token
     user = current_user
     return unless user
@@ -35,6 +62,21 @@ class DevicesController < ApplicationController
       Doorkeeper::AccessToken.find_by(id: params[:id])
     else
       user.access_tokens.find_by(id: params[:id])
+    end
+  end
+
+  #: () -> Doorkeeper::DeviceAuthorizationGrant::DeviceGrant?
+  def find_grant
+    user = current_user
+    return unless user
+
+    if user.admin?
+      Doorkeeper::DeviceAuthorizationGrant::DeviceGrant.find_by(id: params[:id])
+    else
+      Doorkeeper::DeviceAuthorizationGrant::DeviceGrant.find_by(
+        id: params[:id],
+        resource_owner_id: user.id
+      )
     end
   end
 end

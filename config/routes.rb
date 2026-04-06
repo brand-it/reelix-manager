@@ -26,7 +26,11 @@ Rails.application.routes.draw do
   use_doorkeeper_device_authorization_grant
 
   # Devices management — list and revoke authorized Reelix clients.
-  resources :devices, only: %i[index destroy]
+  resources :devices, only: %i[index destroy] do
+    collection do
+      delete "grant/:id", action: :destroy_grant, as: :grant
+    end
+  end
 
   namespace :config do
     resource :video, only: %i[new create edit update]

@@ -4,7 +4,7 @@ module GraphQL
   class Query
     class Context
       # Returns the schema that is executing this query.
-      def schema: () -> untyped
+      def schema: () -> singleton(GraphQL::Schema)
     end
   end
 
@@ -19,6 +19,9 @@ module GraphQL
 
     # Caps the number of query string tokens accepted.
     def self.max_query_string_tokens: (Integer limit) -> void
+
+    # Resolves a global ID to an object. Override in schema subclasses.
+    def self.object_from_id: (String global_id, GraphQL::Query::Context query_ctx) -> ApplicationRecord?
 
     module Interface
       def self.edge_type_class: (untyped klass) -> void

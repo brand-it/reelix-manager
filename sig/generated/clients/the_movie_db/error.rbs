@@ -6,15 +6,15 @@ module TheMovieDb
 
     attr_reader body: untyped
 
-    # : (untyped object) -> void
-    def initialize: (untyped object) -> void
+    # : (Faraday::Response object) -> void
+    def initialize: (Faraday::Response object) -> void
 
     private
 
-    # : (String? raw_body) -> untyped
-    def parse_body: (String? raw_body) -> untyped
+    # : (String? raw_body) -> (::Hash[String, untyped] | String?)
+    def parse_body: (String? raw_body) -> (::Hash[String, untyped] | String?)
 
-    # : (untyped object) -> String
-    def build_message: (untyped object) -> String
+    # : (Faraday::Response object) -> String
+    def build_message: (Faraday::Response object) -> String
   end
 end

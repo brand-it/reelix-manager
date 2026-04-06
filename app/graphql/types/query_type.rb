@@ -8,7 +8,7 @@ module Types
       argument :id, ID, required: true, description: "ID of the object."
     end
 
-    #: (id: String) -> untyped
+    #: (id: String) -> ApplicationRecord?
     def node(id:)
       require_search!
       context.schema.object_from_id(id, context)
@@ -18,7 +18,7 @@ module Types
       argument :ids, [ ID ], required: true, description: "IDs of the objects."
     end
 
-    #: (ids: ::Array[String]) -> ::Array[untyped]
+    #: (ids: ::Array[String]) -> ::Array[ApplicationRecord?]
     def nodes(ids:)
       require_search!
       ids.map { |id| context.schema.object_from_id(id, context) }

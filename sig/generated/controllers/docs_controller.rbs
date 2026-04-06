@@ -1,9 +1,9 @@
 # Generated from app/controllers/docs_controller.rb with RBS::Inline
 
 class DocsController < ApplicationController
-  @applications: untyped
+  @applications: ActiveRecord::Relation
 
-  @default_app: untyped
+  @default_app: Doorkeeper::Application?
 
   # : () -> void
   def api: () -> void

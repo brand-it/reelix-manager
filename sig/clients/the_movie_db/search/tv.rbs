@@ -1,6 +1,6 @@
 module TheMovieDb
   module Search
-    class Tv < TheMovieDb::Search::Base
+    class Tv < Base
     end
   end
 end

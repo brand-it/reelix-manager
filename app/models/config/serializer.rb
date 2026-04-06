@@ -8,7 +8,7 @@ class Config
 
     #: (?::Hash[untyped, untyped] data) -> void
     def initialize(data = {}.with_indifferent_access) # steep:ignore UnannotatedEmptyCollection
-      @data = data
+      @data = data #: ::Hash[untyped, untyped]
     end
 
     #: (untyped key) -> untyped

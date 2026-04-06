@@ -1,8 +1,7 @@
-# DB schema: upload_sessions table (string primary key via SecureRandom.uuid)
+# DB schema: upload_sessions table
 class UploadSession < ApplicationRecord
   STATUSES: Array[String]
 
-  # Column accessors (from db/schema.rb)
   attr_accessor filename: String
   attr_accessor total_chunks: Integer
   attr_accessor received_chunks: Integer
@@ -12,16 +11,23 @@ class UploadSession < ApplicationRecord
   attr_accessor destination_path: String?
   attr_accessor error_message: String?
 
+  #: () -> Pathname
   def chunks_dir: () -> Pathname
+
+  #: (Integer chunk_number) -> Pathname
   def chunk_path: (Integer chunk_number) -> Pathname
 
-  # Returns chunk numbers (1-based) not yet present on disk.
+  #: () -> Array[Integer]
   def missing_chunks: () -> Array[Integer]
 
+  #: () -> bool
   def upload_complete?: () -> bool
+
+  #: () -> String?
   def assembled_file_path: () -> String?
 
   private
 
+  #: () -> void
   def set_id: () -> void
 end

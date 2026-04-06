@@ -36,14 +36,28 @@ module Types
       description: "Best available title: uses 'title' for movies, 'name' for TV shows"
 
     # Provide defaults for fields that TMDB omits on TV show results
+    #: () -> bool
     def video           = object["video"] || false
+
+    #: () -> bool
     def adult           = object["adult"] || false
+
+    #: () -> String
     def overview        = object["overview"] || ""
+
+    #: () -> Float
     def vote_average    = object["vote_average"] || 0.0
+
+    #: () -> Integer
     def vote_count      = object["vote_count"] || 0
+
+    #: () -> String
     def original_language = object["original_language"] || ""
+
+    #: () -> ::Array[Integer]
     def genre_ids       = object["genre_ids"] || []
 
+    #: () -> String
     def display_title
       object["title"] || object["name"] || "Unknown"
     end

@@ -35,10 +35,12 @@ module SimplyEncrypt
 
   private
 
+  #: (String string) -> String
   def encode(string)
     CGI.escape(Base64.encode64(string))
   end
 
+  #: (String string) -> String
   def decode(string)
     Base64.decode64(CGI.unescape(string))
   end

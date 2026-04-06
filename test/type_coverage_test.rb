@@ -1,48 +1,40 @@
+# frozen_string_literal: true
+
 require "test_helper"
 
-# Enforces that every Ruby file under app/ that Steep type-checks has a
-# corresponding RBS signature file under sig/.
+# Enforces that every Ruby source file checked by Steep has at least one inline
+# type annotation (#:) — unless it is a trivially empty file (no def statements).
 #
-# When this test fails, run:
-#   bundle exec rbs prototype rb <file> > sig/<path>.rbs
-# to generate a skeleton, then fill in the types.
+# This prevents type coverage from silently eroding as new files are added.
 class TypeCoverageTest < ActiveSupport::TestCase
-  # Directories under app/ whose Ruby files must have sig/**/*.rbs counterparts.
-  # app/javascript, app/assets, and app/views are excluded (not Ruby).
   CHECKED_DIRS = %w[
-    models
-    clients
-    controllers
-    graphql
-    helpers
-    jobs
-    mailers
-    services
-    tool_box
+    app/models
+    app/clients
+    app/tool_box
+    app/jobs
+    app/graphql
+    app/controllers
+    app/helpers
+    app/mailers
   ].freeze
 
-  test "every app Ruby file has a corresponding RBS signature" do
-    app_root = Rails.root
+  test "all checked source files have inline type annotations or no methods" do
+    missing = []
 
-    app_files = CHECKED_DIRS.flat_map do |dir|
-      Dir[app_root.join("app", dir, "**", "*.rb")]
+    CHECKED_DIRS.each do |dir|
+      Dir.glob(Rails.root.join(dir, "**", "*.rb")).sort.each do |path|
+        source = File.read(path)
+        has_def    = source.match?(/^\s*def /)
+        has_annotation = source.include?("#:")
+        missing << path.sub("#{Rails.root}/", "") if has_def && !has_annotation
+      end
     end
 
-    missing = app_files.filter_map do |rb_file|
-      relative = Pathname.new(rb_file).relative_path_from(app_root).to_s
-      rbs_file  = app_root.join(relative.sub("app/", "sig/").sub(/\.rb\z/, ".rbs"))
-      relative unless rbs_file.exist?
-    end
-
-    assert missing.empty?, <<~MSG
-      Missing RBS signatures for #{missing.size} file(s):
-
-      #{missing.map { |f| "  #{f}" }.join("\n")}
-
-      To generate a skeleton for each file, run:
-        bundle exec rbs prototype rb <file>
-
-      Then add the output to the corresponding sig/ path and fill in the types.
-    MSG
+    assert missing.empty?,
+      "The following files have method definitions but no #: type annotations:\n\n" \
+      "#{missing.map { |f| "  #{f}" }.join("\n")}\n\n" \
+      "Add inline RBS annotations. Example:\n" \
+      "  #: (String name) -> void\n" \
+      "  def my_method(name)\n"
   end
 end

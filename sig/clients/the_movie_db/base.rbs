@@ -1,53 +1,67 @@
 module TheMovieDb
-  # Base HTTP client for TMDB. Subclasses implement `path` (via naming
-  # convention) and optionally declare additional `option`s via dry-initializer.
   class Base
-    HOST: String
-    VERSION: String
-    CACHE_TTL: ActiveSupport::Duration
-    CACHE_NAMESPACE: String
+    @api_key: untyped
 
-    # dry-initializer defines keyword params on initialize from `option` calls.
-    # Declared here so Steep knows what .new accepts.
-    def initialize: (?api_key: String?, ?language: String?) -> void
+    @language: untyped
 
-    # Instance variables allocated by dry-initializer and memoisation.
-    @api_key: String?
-    @language: String?
-    @connection: Faraday::Connection?
-    @results: ::Hash[[bool, Class], ::Hash[String, untyped]]
+    @results: untyped
 
-    # dry-initializer introspection (used by query_params).
-    def self.option_names: () -> Array[Symbol]
-    def self.param_names: () -> Array[Symbol]
+    # Only enable Faraday logging in local environments to avoid leaking the api_key
+    # in query parameters into production logs.
+    @connection: untyped
 
-    # Delegates to new.results — convenience so callers don't need to instantiate.
-    def self.results: (?use_cache: bool, ?object_class: Class) -> ::Hash[String, untyped]
+    HOST: "api.themoviedb.org"
 
-    # Validates the given API key against the TMDB authentication endpoint.
+    VERSION: "3"
+
+    CACHE_TTL: untyped
+
+    CACHE_NAMESPACE: "the_movie_db"
+
+    #  (?api_key: String?, ?language: String?) -> void
+    def initialize: (?api_key: untyped?, ?language: untyped?) -> void
+
+    # Validates that the given API key can reach the TMDB API.
     # Returns true/false — safe to call from model validations.
-    def self.ping: (api_key: String) -> bool
+    #  (api_key: String) -> bool
+    def self.ping: (api_key: untyped) -> untyped
 
-    # Fetches (and optionally caches) the API response for this client's endpoint.
-    def results: (?use_cache: bool, ?object_class: Class) -> ::Hash[String, untyped]
+    #  (?use_cache: bool, ?object_class: Class) -> untyped
+    def results: (?use_cache: bool, ?object_class: untyped) -> untyped
 
-    # Lightweight connectivity check using the /authentication endpoint.
-    def ping: () -> bool
+    #  () -> bool
+    def ping: () -> untyped
 
     private
 
-    def ping_uri: () -> URI::HTTPS
-    def cache_get: (?object_class: Class) -> ::Hash[String, untyped]
-    def get: (?object_class: Class) -> ::Hash[String, untyped]
-    def connection: () -> Faraday::Connection
-    def uri: () -> URI::HTTPS
-    def path: () -> String
-    def query_params: () -> ::Hash[String | Symbol, String]
+    #  () -> URI::HTTPS
+    def ping_uri: () -> untyped
 
-    # Reads api_key from Config::Video if not supplied at instantiation.
-    # Raises TheMovieDb::InvalidConfig when no key is configured.
-    def api_key: () -> String
+    #  (?object_class: Class) -> ::Hash[String, untyped]
+    def cache_get: (?object_class: untyped) -> untyped
 
-    def language: () -> String
+    #  (?object_class: Class) -> ::Hash[String, untyped]
+    def get: (?object_class: untyped) -> untyped
+
+    #  () -> Faraday::Connection
+    def connection: () -> untyped
+
+    #  () -> URI::HTTPS
+    def uri: () -> untyped
+
+    #  () -> String
+    def path: () -> untyped
+
+    #  () -> ::Hash[untyped, untyped]
+    def query_params: () -> untyped
+
+    # Reads the API key from Config::Video; may be overridden by passing api_key: at instantiation.
+    # Visit https://www.themoviedb.org/settings/api to obtain a key.
+    #  () -> String
+    def api_key: () -> untyped
+
+    # Pass an ISO 639-1 value to display translated data (e.g. "en-US").
+    #  () -> String
+    def language: () -> untyped
   end
 end

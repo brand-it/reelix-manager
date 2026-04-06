@@ -3,26 +3,37 @@
 module TheMovieDb
   module Search
     class Base < TheMovieDb::Base
-      # steep:ignore:start
-      option :page, type: Types::Integer, default: proc { 1 }, optional: true
-      option :query, type: Types::Coercible::String
-      # steep:ignore:end
+      attr_reader :query, :page
+
+      #: (query: String, ?page: Integer, ?api_key: String?, ?language: String?) -> void
+      def initialize(query:, page: 1, api_key: nil, language: nil)
+        super(api_key: api_key, language: language)
+        @query = query.to_s #: String
+        @page = page.to_i   #: Integer
+      end
 
       #: (?use_cache: bool) -> untyped
       def results(use_cache: true)
-        return { "previous_pageults" => [] } if query.blank? # steep:ignore UnannotatedEmptyCollection
+        return ({ "results" => [] }) if query.blank? # steep:ignore UnannotatedEmptyCollection
 
         super(use_cache:)
       end
 
       #: () -> TheMovieDb::Search::Base
       def next_page
-        @next_page ||= self.class.new(page: page + 1, query:, language:)
+        @next_page ||= self.class.new(page: page + 1, query:, language:) #: TheMovieDb::Search::Base
       end
 
       #: () -> TheMovieDb::Search::Base
       def previous_page
-        @previous_page ||= self.class.new(page: [ page - 1, 1 ].max, query:, language:)
+        @previous_page ||= self.class.new(page: [ page - 1, 1 ].max, query:, language:) #: TheMovieDb::Search::Base
+      end
+
+      private
+
+      #: () -> ::Hash[untyped, untyped]
+      def query_params
+        super.merge(query:, page:)
       end
     end
   end

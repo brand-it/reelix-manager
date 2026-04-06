@@ -6,8 +6,8 @@ module TheMovieDb
 
     #: (untyped object) -> void
     def initialize(object)
-      @object = object
-      @body = parse_body(object.body)
+      @object = object #: untyped
+      @body = parse_body(object.body) #: untyped
       super(build_message(object))
     end
 

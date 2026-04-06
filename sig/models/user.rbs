@@ -1,8 +1,5 @@
 # DB schema: users table
-# Devise adds many methods (authenticate, valid_password?, etc.) not declared
-# here — they are contributed by the devise RBS collection entry.
 class User < ApplicationRecord
-  # Column accessors (from db/schema.rb)
   attr_accessor admin: bool
   attr_accessor email: String
   attr_accessor encrypted_password: String
@@ -10,14 +7,11 @@ class User < ApplicationRecord
   attr_accessor reset_password_sent_at: ActiveSupport::TimeWithZone?
   attr_accessor reset_password_token: String?
 
-  # has_many :access_tokens
-  # Returns a CollectionProxy; callers chain .newest and .includes on it.
   def access_tokens: () -> untyped
 
+  #: () -> bool
   def admin?: () -> bool
 
-  # ActiveRecord query methods — declared explicitly because Steep cannot
-  # resolve them through the full ActiveRecord inheritance chain.
   def self.any?: () -> bool
   def self.none?: () -> bool
 end

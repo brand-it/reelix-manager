@@ -1,13 +1,16 @@
 class DevicesController < ApplicationController
   @tokens: untyped
 
+  #: () -> void
   def index: () -> void
+
+  #: () -> void
   def destroy: () -> void
 
   private
 
   def devices_path: () -> String
 
-  # Returns the matching Doorkeeper::AccessToken or nil.
+  #: () -> untyped
   def find_token: () -> untyped
 end

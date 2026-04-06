@@ -3,25 +3,25 @@ class GraphqlController < ApplicationController
   @doorkeeper_token: untyped
   @doorkeeper_access_token: untyped
 
+  #: () -> void
   def execute: () -> void
 
   private
 
+  #: () -> void
   def authenticate_graphql_user!: () -> void
 
-  # Normalises the GraphQL `variables` param regardless of how it arrives
-  # (JSON string, Hash, ActionController::Parameters, or nil).
+  #: (untyped variables_param) -> ::Hash[String, untyped]
   def prepare_variables: (untyped variables_param) -> ::Hash[String, untyped]
 
+  #: (StandardError e) -> void
   def handle_error_in_development: (StandardError e) -> void
 
-  # Provided by ActionController::Base — declared here because Steep cannot
-  # resolve it through the full inheritance chain.
   def logger: () -> ::Logger
 
-  # Memoised Doorkeeper token lookup (any configured access_token_method).
+  #: () -> untyped
   def doorkeeper_access_token: () -> untyped
 
-  # Returns true when the request carries a valid Doorkeeper token.
+  #: () -> bool
   def doorkeeper_token_request?: () -> bool
 end

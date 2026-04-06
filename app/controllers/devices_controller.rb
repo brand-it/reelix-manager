@@ -1,4 +1,5 @@
 class DevicesController < ApplicationController
+  #: () -> void
   def index
     user = current_user
     return unless user
@@ -7,9 +8,10 @@ class DevicesController < ApplicationController
       Doorkeeper::AccessToken.all.newest.includes(:application, :user)
     else
       user.access_tokens.newest.includes(:application)
-    end
+    end #: untyped
   end
 
+  #: () -> void
   def destroy
     token = find_token
     if token
@@ -22,6 +24,7 @@ class DevicesController < ApplicationController
 
   private
 
+  #: () -> untyped
   def find_token
     user = current_user
     return unless user

@@ -1,17 +1,21 @@
-# AES-256-CBC encryption/decryption mixin used by Config::Setting.
 module SimplyEncrypt
-  MODE: String
-  KEY: String
+  MODE: "AES-256-CBC"
 
-  # Returns [encrypted_data, iv], both URL-safe Base64 encoded.
-  # Returns [nil, nil] when data is blank.
-  def encrypt: (String? data) -> [String?, String?]
+  # `credentials.secret_key_base` is String|nil per RBS, but always present in production.
+  # `.to_s` coerces nil to "" safely, `|| ""` satisfies the String constant type.
+  KEY: untyped
 
-  # Returns the decrypted plaintext, or nil when data/iv is blank or decryption fails.
-  def decrypt: (String? data, String? iv) -> String?
+  #  (String? data) -> [String?, String?]
+  def encrypt: (untyped data) -> (::Array[nil] | ::Array[untyped])
+
+  #  (String? data, String? iv) -> String?
+  def decrypt: (untyped data, untyped iv) -> untyped
 
   private
 
-  def encode: (String string) -> String
-  def decode: (String string) -> String
+  #  (String string) -> String
+  def encode: (untyped string) -> untyped
+
+  #  (String string) -> String
+  def decode: (untyped string) -> untyped
 end

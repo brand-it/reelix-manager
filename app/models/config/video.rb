@@ -6,6 +6,9 @@ class Config::Video < Config
     s.attribute :processed_path
   end
 
+  #: () -> Config::Video
+  def self.newest = super # steep:ignore MethodBodyTypeMismatch
+
   validates :settings_movie_path, presence: true
   validates :settings_tv_path, presence: true
   validates :settings_tmdb_api_key, presence: true

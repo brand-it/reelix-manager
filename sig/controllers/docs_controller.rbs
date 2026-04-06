@@ -1,6 +1,8 @@
 class DocsController < ApplicationController
   @applications: untyped
+
   @default_app: untyped
 
-  def api: () -> void
+  #  () -> void
+  def api: () -> untyped
 end

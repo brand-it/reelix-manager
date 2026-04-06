@@ -14,11 +14,13 @@ module Mutations
     field :filename, String, null: true
     field :errors, [ String ], null: false
 
+    #: (**untyped _args) -> bool
     def ready?(**_args)
       require_upload!
       true
     end
 
+    #: (upload_id: String, ?filename: String?, ?media_type: String) -> ::Hash[Symbol, untyped]
     def resolve(upload_id:, filename: nil, media_type: "movie")
       storage = Tus::Server.opts[:storage]
 
@@ -66,18 +68,20 @@ module Mutations
       FileUtils.mv(File.join(storage.directory, upload_id), dest_path)
       storage.delete_file(upload_id, info)
 
-      { destination_path: dest_path, filename: resolved_filename, errors: [] }
+      { destination_path: dest_path, filename: resolved_filename, errors: [] } #: ::Hash[Symbol, untyped]
     rescue => e
       { destination_path: nil, filename: nil, errors: [ e.message ] }
     end
 
     private
 
+    #: (String path) -> void
     def safe_mkdir_p(path)
       expanded_path = File.expand_path(path)
       FileUtils.mkdir_p(expanded_path)
     end
 
+    #: (String? header) -> ::Hash[String, String?]
     def decode_tus_metadata(header)
       return {} if header.blank?
 

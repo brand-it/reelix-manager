@@ -1,8 +1,7 @@
 class Config::Video < Config
-  # Narrows the return type of Config.newest to Config::Video for this subclass.
+  #: () -> Config::Video
   def self.newest: () -> Config::Video
 
-  # These methods are dynamically defined by Config.setting in config/video.rb.
   def settings_movie_path: () -> String?
   def settings_tv_path: () -> String?
   def settings_tmdb_api_key: () -> String?
@@ -15,7 +14,12 @@ class Config::Video < Config
 
   private
 
+  #: () -> void
   def movie_path_must_exist: () -> void
+
+  #: () -> void
   def tv_path_must_exist: () -> void
+
+  #: () -> void
   def tmdb_api_key_must_be_valid: () -> void
 end

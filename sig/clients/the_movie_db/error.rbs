@@ -1,17 +1,22 @@
 module TheMovieDb
-  # Raised when the TMDB API returns a non-2xx response.
   class Error < StandardError
-    # The raw Faraday response object.
-    attr_reader object: Faraday::Response
+    @object: untyped
 
-    # Parsed JSON body, or the raw body string if JSON parsing fails.
-    attr_reader body: ::Hash[String, untyped] | String?
+    @body: untyped
 
-    def initialize: (Faraday::Response object) -> void
+    attr_reader object: untyped
+
+    attr_reader body: untyped
+
+    #  (untyped object) -> void
+    def initialize: (untyped object) -> void
 
     private
 
-    def parse_body: (String? raw_body) -> (::Hash[String, untyped] | String?)
-    def build_message: (Faraday::Response object) -> String
+    #  (String? raw_body) -> untyped
+    def parse_body: (untyped raw_body) -> untyped
+
+    #  (untyped object) -> String
+    def build_message: (untyped object) -> untyped
   end
 end

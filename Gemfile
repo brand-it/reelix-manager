@@ -53,8 +53,6 @@ gem "graphql"
 
 # TheMovieDB HTTP client
 gem "faraday"
-gem "dry-initializer"
-gem "dry-types"
 
 # Resumable file uploads via the tus protocol (https://tus.io)
 gem "tus-server", ">= 2.0"

@@ -1,23 +1,34 @@
 module TheMovieDb
   module Search
-    # Adds pagination (page, query) on top of TheMovieDb::Base.
     class Base < TheMovieDb::Base
-      # dry-initializer defines keyword params. Declared for Steep.
-      def initialize: (?page: Integer, query: String, ?language: String?) -> void
+      @query: untyped
 
-      # Memoisation instance variables.
-      @next_page: TheMovieDb::Search::Base?
-      @previous_page: TheMovieDb::Search::Base?
+      @page: untyped
 
-      # dry-initializer option readers
-      def page: () -> Integer
-      def query: () -> String
+      @next_page: untyped
 
-      # Overrides parent: returns empty result set when query is blank.
-      def results: (?use_cache: bool) -> ::Hash[String, untyped]
+      @previous_page: untyped
 
-      def next_page: () -> TheMovieDb::Search::Base
-      def previous_page: () -> TheMovieDb::Search::Base
+      attr_reader query: untyped
+
+      attr_reader page: untyped
+
+      #  (query: String, ?page: Integer, ?api_key: String?, ?language: String?) -> void
+      def initialize: (query: untyped, ?page: ::Integer, ?api_key: untyped?, ?language: untyped?) -> void
+
+      #  (?use_cache: bool) -> untyped
+      def results: (?use_cache: bool) -> untyped
+
+      #  () -> TheMovieDb::Search::Base
+      def next_page: () -> untyped
+
+      #  () -> TheMovieDb::Search::Base
+      def previous_page: () -> untyped
+
+      private
+
+      #  () -> ::Hash[untyped, untyped]
+      def query_params: () -> untyped
     end
   end
 end

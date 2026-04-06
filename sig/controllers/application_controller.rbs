@@ -1,18 +1,16 @@
 class ApplicationController < ActionController::Base
-  # Devise session helpers (added by devise :authenticatable)
   def current_user: () -> User?
   def authenticate_user!: () -> void
   def sign_in: (Symbol scope, untyped resource) -> void
   def user_signed_in?: () -> bool
 
-  # importmap-rails helper — called at class level in class body
   def self.stale_when_importmap_changes: () -> void
 
-  # Route helpers used in this controller
   def setup_path: () -> String
   def root_path: () -> String
 
   private
 
+  #: () -> void
   def authenticate_or_setup!: () -> void
 end

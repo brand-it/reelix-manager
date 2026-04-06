@@ -10,7 +10,7 @@ module Doorkeeper
 
   module OAuth
     class Token
-      def self.authenticate: (untyped request, *Symbol methods) -> Doorkeeper::AccessToken?
+      def self.authenticate: (ActionDispatch::Request request, *Symbol methods) -> Doorkeeper::AccessToken?
       def accessible?: () -> bool
     end
   end

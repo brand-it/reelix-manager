@@ -19,8 +19,8 @@ end
 # GlobalID::Identification is included into ActiveRecord::Base by the globalid gem.
 # These are the most commonly used methods.
 class ApplicationRecord < ActiveRecord::Base
-  def to_gid_param: (?::Hash[untyped, untyped] options) -> String
-  def to_sgid_param: (?::Hash[untyped, untyped] options) -> String
+  def to_gid_param: (?::Hash[::Symbol | ::String, untyped] options) -> String
+  def to_sgid_param: (?::Hash[::Symbol | ::String, untyped] options) -> String
 end
 
 # ApplicationRecord defines :newest and :oldest scopes, and these are also
@@ -33,5 +33,6 @@ end
 
 # ActiveRecord's WhereChain supports .not(...) but the rbs_collection omits it.
 class ActiveRecord::QueryMethods::WhereChain[Relation]
-  def not: (?untyped opts, *untyped rest) -> Relation
+  def not: (::Hash[::Symbol | ::String, untyped] opts) -> Relation
+         | (::String opts) -> Relation
 end

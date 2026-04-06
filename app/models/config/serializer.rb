@@ -10,6 +10,9 @@ class Config
 
     #: (?::Hash[String | Symbol, untyped] data) -> void
     def initialize(data = {}.with_indifferent_access) # steep:ignore UnannotatedEmptyCollection
+      # Steep cannot infer the element type of the `{}` literal before
+      # with_indifferent_access is called; the hash is always typed as
+      # Hash[String | Symbol, untyped] at the call sites, so the ignore is safe.
       @data = data #: ::Hash[String | Symbol, untyped]
     end
 

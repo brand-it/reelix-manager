@@ -1,0 +1,8 @@
+module Types
+  class QueryType < Types::BaseObject
+    include ScopeEnforceable
+
+    def node: (id: String) -> untyped
+    def nodes: (ids: Array[String]) -> Array[untyped]
+  end
+end

@@ -1,0 +1,14 @@
+# Mixin for GraphQL resolvers and mutations that enforces Doorkeeper token scopes.
+# graphql-ruby's `context` is untyped — we accept that limitation here.
+module ScopeEnforceable
+  def can_search?: () -> bool
+  def require_search!: () -> void
+
+  def can_upload?: () -> bool
+  def require_upload!: () -> void
+
+  private
+
+  # True when the request is authenticated via a Devise session (no Doorkeeper token).
+  def session_user?: () -> bool
+end

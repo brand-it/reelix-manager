@@ -2,7 +2,9 @@
 
 module SimplyEncrypt
   MODE = "AES-256-CBC"
-  KEY = Digest::SHA1.hexdigest(Rails.application.credentials.secret_key_base)[..31]
+  # `credentials.secret_key_base` is String|nil per RBS, but always present in production.
+  # `.to_s` coerces nil to "" safely, `|| ""` satisfies the String constant type.
+  KEY = Digest::SHA1.hexdigest(Rails.application.credentials.secret_key_base.to_s)[..31] || ""
 
   def encrypt(data)
     return [ nil, nil ] if data.blank?

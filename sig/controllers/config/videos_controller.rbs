@@ -1,0 +1,10 @@
+class Config::VideosController < ApplicationController
+  def new: () -> void
+  def create: () -> void
+  def edit: () -> void
+  def update: () -> void
+
+  private
+
+  def video_params: () -> ActionController::Parameters
+end

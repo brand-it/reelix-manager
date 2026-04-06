@@ -1,0 +1,53 @@
+module TheMovieDb
+  # Base HTTP client for TMDB. Subclasses implement `path` (via naming
+  # convention) and optionally declare additional `option`s via dry-initializer.
+  class Base
+    HOST: String
+    VERSION: String
+    CACHE_TTL: ActiveSupport::Duration
+    CACHE_NAMESPACE: String
+
+    # dry-initializer defines keyword params on initialize from `option` calls.
+    # Declared here so Steep knows what .new accepts.
+    def initialize: (?api_key: String?, ?language: String?) -> void
+
+    # Instance variables allocated by dry-initializer and memoisation.
+    @api_key: String?
+    @language: String?
+    @connection: Faraday::Connection?
+    @results: ::Hash[[bool, Class], untyped]
+
+    # dry-initializer introspection (used by query_params).
+    def self.option_names: () -> Array[Symbol]
+    def self.param_names: () -> Array[Symbol]
+
+    # Delegates to new.results — convenience so callers don't need to instantiate.
+    def self.results: (?use_cache: bool, ?object_class: Class) -> untyped
+
+    # Validates the given API key against the TMDB authentication endpoint.
+    # Returns true/false — safe to call from model validations.
+    def self.ping: (api_key: String) -> bool
+
+    # Fetches (and optionally caches) the API response for this client's endpoint.
+    def results: (?use_cache: bool, ?object_class: Class) -> untyped
+
+    # Lightweight connectivity check using the /authentication endpoint.
+    def ping: () -> bool
+
+    private
+
+    def ping_uri: () -> URI::HTTPS
+    def cache_get: (?object_class: Class) -> untyped
+    def get: (?object_class: Class) -> untyped
+    def connection: () -> Faraday::Connection
+    def uri: () -> URI::HTTPS
+    def path: () -> String
+    def query_params: () -> ::Hash[untyped, untyped]
+
+    # Reads api_key from Config::Video if not supplied at instantiation.
+    # Raises TheMovieDb::InvalidConfig when no key is configured.
+    def api_key: () -> String
+
+    def language: () -> String
+  end
+end

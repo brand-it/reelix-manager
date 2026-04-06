@@ -1,0 +1,3 @@
+class DocsController < ApplicationController
+  def api: () -> void
+end

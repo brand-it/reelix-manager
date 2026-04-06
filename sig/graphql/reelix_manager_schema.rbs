@@ -1,0 +1,7 @@
+# graphql-ruby does not publish RBS — GraphQL::Schema::* base classes are untyped.
+class ReelixManagerSchema < GraphQL::Schema
+  def self.type_error: (untyped err, untyped context) -> void
+  def self.resolve_type: (untyped abstract_type, untyped obj, untyped ctx) -> untyped
+  def self.id_from_object: (untyped object, untyped type_definition, untyped query_ctx) -> String
+  def self.object_from_id: (String global_id, untyped query_ctx) -> untyped
+end

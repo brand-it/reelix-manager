@@ -1,0 +1,16 @@
+module Types
+  class SearchResultType < Types::BaseObject
+    # These methods override graphql-ruby's default field resolution to provide
+    # safe defaults for fields that TMDB omits on some result types.
+    def video: () -> bool
+    def adult: () -> bool
+    def overview: () -> String
+    def vote_average: () -> Float
+    def vote_count: () -> Integer
+    def original_language: () -> String
+    def genre_ids: () -> Array[Integer]
+
+    # Returns the best available title: "title" for movies, "name" for TV shows.
+    def display_title: () -> String
+  end
+end

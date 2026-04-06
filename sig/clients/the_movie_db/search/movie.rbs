@@ -1,0 +1,15 @@
+module TheMovieDb
+  module Search
+    class Movie < TheMovieDb::Search::Base
+      # Overrides parent initialize to accept year filter kwargs.
+      def initialize: (?page: Integer, query: String, ?language: String?, ?year: Integer?, ?primary_release_year: Integer?) -> void
+
+      # dry-initializer option readers (optional integers for year filtering)
+      def year: () -> Integer?
+      def primary_release_year: () -> Integer?
+
+      def next_page: () -> TheMovieDb::Search::Movie
+      def previous_page: () -> TheMovieDb::Search::Movie
+    end
+  end
+end

@@ -1,11 +1,11 @@
 class Config
   class Serializer
     def self.load(json)
-      data = json.present? ? JSON.parse(json) : {}
+      data = json.present? ? JSON.parse(json) : ({} #: ::Hash[untyped, untyped])
       new(data.with_indifferent_access)
     end
 
-    def initialize(data = {}.with_indifferent_access)
+    def initialize(data = ({}.with_indifferent_access #: ::Hash[untyped, untyped]))
       @data = data
     end
 

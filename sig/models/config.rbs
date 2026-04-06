@@ -1,0 +1,20 @@
+# DB schema: configs table (single-table inheritance via `type` column)
+class Config < ApplicationRecord
+  # STI column
+  attr_accessor type: String
+
+  # Class-level setting DSL: call with a block to define the setting schema,
+  # call without a block to retrieve the current schema.
+  def self.setting: () -> Config::Setting
+                  | () { (Config::Setting) -> void } -> Config::Setting
+
+  # Returns the newest record or a new (unsaved) instance when none exist.
+  # Uses `instance` so Config::Video.newest returns Config::Video, not Config.
+  def self.newest: () -> instance
+
+  # Returns a Config::Serializer wrapping the decoded settings JSON.
+  def settings: () -> Config::Serializer
+
+  # Merges the given hash into the current settings and re-serialises.
+  def settings=: (::Hash[untyped, untyped] hash) -> void
+end

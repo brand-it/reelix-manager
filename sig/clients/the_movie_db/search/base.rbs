@@ -1,0 +1,23 @@
+module TheMovieDb
+  module Search
+    # Adds pagination (page, query) on top of TheMovieDb::Base.
+    class Base < TheMovieDb::Base
+      # dry-initializer defines keyword params. Declared for Steep.
+      def initialize: (?page: Integer, query: String, ?language: String?) -> void
+
+      # Memoisation instance variables.
+      @next_page: TheMovieDb::Search::Base?
+      @previous_page: TheMovieDb::Search::Base?
+
+      # dry-initializer option readers
+      def page: () -> Integer
+      def query: () -> String
+
+      # Overrides parent: returns empty result set when query is blank.
+      def results: (?use_cache: bool) -> untyped
+
+      def next_page: () -> TheMovieDb::Search::Base
+      def previous_page: () -> TheMovieDb::Search::Base
+    end
+  end
+end

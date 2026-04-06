@@ -1,0 +1,14 @@
+module Mutations
+  class FinalizeUpload < Mutations::BaseMutation
+    def ready?: (**untyped args) -> bool
+
+    def resolve: (upload_id: String, ?filename: String?, ?media_type: String) -> ::Hash[Symbol, untyped]
+
+    private
+
+    def safe_mkdir_p: (String path) -> void
+
+    # Decodes a tus Upload-Metadata header value into a plain hash.
+    def decode_tus_metadata: (String? header) -> ::Hash[String, String?]
+  end
+end

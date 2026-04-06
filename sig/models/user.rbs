@@ -1,0 +1,17 @@
+# DB schema: users table
+# Devise adds many methods (authenticate, valid_password?, etc.) not declared
+# here — they are contributed by the devise RBS collection entry.
+class User < ApplicationRecord
+  # Column accessors (from db/schema.rb)
+  attr_accessor admin: bool
+  attr_accessor email: String
+  attr_accessor encrypted_password: String
+  attr_accessor remember_created_at: ActiveSupport::TimeWithZone?
+  attr_accessor reset_password_sent_at: ActiveSupport::TimeWithZone?
+  attr_accessor reset_password_token: String?
+
+  # has_many :access_tokens
+  def access_tokens: () -> ActiveRecord::Associations::CollectionProxy
+
+  def admin?: () -> bool
+end

@@ -3,8 +3,10 @@
 module TheMovieDb
   module Search
     class Movie < Base
+      # steep:ignore:start
       option :year, type: Types::Coercible::Integer.optional, optional: true
       option :primary_release_year, type: Types::Coercible::Integer.optional, optional: true
+      # steep:ignore:end
 
       def next_page
         @next_page ||= self.class.new(page: page + 1, query:, language:, year:, primary_release_year:)

@@ -23,7 +23,7 @@ class Config
     end
 
     def attributes
-      @attributes ||= {}
+      @attributes ||= ({} #: ::Hash[Symbol, Config::Setting::Option])
     end
 
     private

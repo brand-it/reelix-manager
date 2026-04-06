@@ -13,7 +13,7 @@ module TheMovieDb
     private
 
     def parse_body(raw_body)
-      JSON.parse(raw_body)
+      JSON.parse(raw_body.to_s)
     rescue JSON::ParserError, TypeError
       raw_body
     end
@@ -24,7 +24,7 @@ module TheMovieDb
 
       path =
         if url.respond_to?(:path)
-          url.path
+          url.path # steep:ignore NoMethod
         elsif url
           url.to_s.split("?", 2).first
         end

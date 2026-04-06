@@ -1,0 +1,8 @@
+class SetupsController < ApplicationController
+  def new: () -> void
+  def create: () -> void
+
+  private
+
+  def setup_params: () -> ActionController::Parameters
+end

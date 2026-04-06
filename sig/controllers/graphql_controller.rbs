@@ -1,0 +1,19 @@
+class GraphqlController < ApplicationController
+  def execute: () -> void
+
+  private
+
+  def authenticate_graphql_user!: () -> void
+
+  # Normalises the GraphQL `variables` param regardless of how it arrives
+  # (JSON string, Hash, ActionController::Parameters, or nil).
+  def prepare_variables: (untyped variables_param) -> ::Hash[String, untyped]
+
+  def handle_error_in_development: (StandardError e) -> void
+
+  # Memoised Doorkeeper token lookup (any configured access_token_method).
+  def doorkeeper_access_token: () -> untyped
+
+  # Returns true when the request carries a valid Doorkeeper token.
+  def doorkeeper_token_request?: () -> bool
+end

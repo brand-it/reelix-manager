@@ -3,11 +3,13 @@
 module TheMovieDb
   module Search
     class Base < TheMovieDb::Base
+      # steep:ignore:start
       option :page, type: Types::Integer, default: proc { 1 }, optional: true
       option :query, type: Types::Coercible::String
+      # steep:ignore:end
 
       def results(use_cache: true)
-        return { "previous_pageults" => [] } if query.blank?
+        return { "previous_pageults" => [] } if query.blank? # steep:ignore UnannotatedEmptyCollection
 
         super(use_cache:)
       end

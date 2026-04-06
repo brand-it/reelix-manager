@@ -2,23 +2,29 @@
 
 module TheMovieDb
   class Base
-    extend Dry::Initializer
+    extend Dry::Initializer # steep:ignore UnknownConstant
 
     HOST = "api.themoviedb.org"
     VERSION = "3"
     CACHE_TTL = 7.days
     CACHE_NAMESPACE = "the_movie_db"
 
+    # steep:ignore:start
     option :api_key, optional: true
     option :language, optional: true
+    # steep:ignore:end
 
     class << self
       def option_names
+        # steep:ignore:start
         @option_names ||= dry_initializer.options.map(&:target)
+        # steep:ignore:end
       end
 
       def param_names
+        # steep:ignore:start
         @param_names ||= dry_initializer.params.map(&:target)
+        # steep:ignore:end
       end
 
       delegate :results, to: :new
@@ -33,9 +39,9 @@ module TheMovieDb
     end
 
     def results(use_cache: true, object_class: Hash)
-      @results ||= {}
+      @results ||= {} # steep:ignore UnannotatedEmptyCollection
       key = [ use_cache, object_class ]
-      @results[key] ||= use_cache ? cache_get(object_class:) : get(object_class:)
+      @results[key] ||= use_cache ? cache_get(object_class:) : get(object_class:) # steep:ignore
     end
 
     def ping
@@ -86,9 +92,9 @@ module TheMovieDb
     def path
       self.class
           .name
-          .split("::")[1..]
-          .join("::")
-          .parameterize(separator: "/")
+          .split("::")[1..] # steep:ignore NoMethod
+          &.join("::")
+          &.parameterize(separator: "/") || ""
     end
 
     def query_params
@@ -102,14 +108,16 @@ module TheMovieDb
     # Reads the API key from Config::Video; may be overridden by passing api_key: at instantiation.
     # Visit https://www.themoviedb.org/settings/api to obtain a key.
     def api_key
+      # steep:ignore:start
       @api_key = super.presence || Config::Video.newest&.settings_tmdb_api_key.tap do |key|
         raise InvalidConfig, "TMDB API key is blank and is required" if key.blank?
       end
+      # steep:ignore:end
     end
 
     # Pass an ISO 639-1 value to display translated data (e.g. "en-US").
     def language
-      super || "en-US"
+      super || "en-US" # steep:ignore UnexpectedSuper
     end
   end
 end

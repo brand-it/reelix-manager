@@ -1,0 +1,5 @@
+class ApplicationRecord < ActiveRecord::Base
+  # Declared here so subclasses inherit the scopes without repeating them.
+  def self.newest: () -> ActiveRecord::Relation
+  def self.oldest: () -> ActiveRecord::Relation
+end

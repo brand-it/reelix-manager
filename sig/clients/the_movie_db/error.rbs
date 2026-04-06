@@ -1,0 +1,17 @@
+module TheMovieDb
+  # Raised when the TMDB API returns a non-2xx response.
+  class Error < StandardError
+    # The raw Faraday response object.
+    attr_reader object: untyped
+
+    # Parsed JSON body, or the raw body string if parsing fails.
+    attr_reader body: untyped
+
+    def initialize: (untyped object) -> void
+
+    private
+
+    def parse_body: (String? raw_body) -> untyped
+    def build_message: (untyped object) -> String
+  end
+end

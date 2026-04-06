@@ -1,0 +1,30 @@
+module Resolvers
+  class SearchResolver < Resolvers::BaseResolver
+    MAX_PAGE: Integer
+    POPULARITY_CEILING: Float
+
+    def resolve: (query: String, page: Integer, language: String) -> ::Hash[Symbol, untyped]
+
+    private
+
+    def fetch_both: (String query, Integer page, String language) -> [untyped, untyped]
+
+    def tag_media_type: (Array[::Hash[String, untyped]] results, String type) -> Array[::Hash[String, untyped]]
+
+    def merge_and_rank: (Array[::Hash[String, untyped]] results, String query) -> Array[::Hash[String, untyped]]
+
+    def composite_score: (::Hash[String, untyped] result, String query) -> Float
+    def popularity_score: (Float popularity) -> Float
+
+    # Returns a score in 0.0–1.0 reflecting keyword similarity between title and query.
+    def keyword_score: (String title, String query) -> Float
+
+    # Proportional word-level match, scoring 0.0–0.5.
+    def word_match_score: (String title, String query) -> Float
+
+    def result_title: (::Hash[String, untyped] result) -> String
+
+    # Strips api_key and Bearer tokens from error messages before logging.
+    def sanitize_error_message: (String? message) -> String
+  end
+end

@@ -82,10 +82,7 @@ module Resolvers
     # Merge results and sort by composite relevance score (descending).
     def merge_and_rank(results, query)
       normalized_query = query.downcase.strip
-      results
-        .map { |r| [ r, composite_score(r, normalized_query) ] }
-        .sort_by { |_, score| -score }
-        .map(&:first)
+      results.sort_by { |r| -composite_score(r, normalized_query) }
     end
 
     # Composite relevance score (0.0–1.0).

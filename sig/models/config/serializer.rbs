@@ -1,0 +1,20 @@
+class Config
+  # Hash-like wrapper around a JSON settings blob. Keys are always strings or
+  # symbols (via HashWithIndifferentAccess under the hood).
+  class Serializer
+    @data: ::Hash[untyped, untyped]
+
+    def self.load: (String? json) -> Config::Serializer
+
+    def initialize: (?::Hash[untyped, untyped] data) -> void
+
+    def []: (untyped key) -> untyped
+    def []=: (untyped key, untyped value) -> untyped
+    def key?: (untyped key) -> bool
+
+    # Returns the underlying hash so that Setting#contains_key? can introspect it.
+    def marshal_dump: () -> ::Hash[untyped, untyped]
+
+    def to_h: () -> ::Hash[untyped, untyped]
+  end
+end

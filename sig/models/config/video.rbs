@@ -1,0 +1,12 @@
+class Config::Video < Config
+  # These methods are dynamically defined by Config.setting in config/video.rb.
+  def settings_movie_path: () -> String?
+  def settings_tv_path: () -> String?
+  def settings_tmdb_api_key: () -> String?
+  def settings_processed_path: () -> String?
+
+  def settings_movie_path=: (String? val) -> void
+  def settings_tv_path=: (String? val) -> void
+  def settings_tmdb_api_key=: (String? val) -> void
+  def settings_processed_path=: (String? val) -> void
+end

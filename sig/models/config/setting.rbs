@@ -1,0 +1,38 @@
+class Config
+  # Defines the schema for a Config subclass's `settings` JSON blob.
+  # Instantiated once per subclass via the `Config.setting` DSL.
+  class Setting
+    include SimplyEncrypt
+
+    # Metadata for a single declared attribute.
+    class Option < Struct[untyped]
+      def self.new: (Proc default, bool encrypted) -> instance
+
+      def default: () -> Proc
+      def encrypted?: () -> bool
+    end
+
+    # Called by Config.setting { |s| … } — wraps the block into a new Setting.
+    def self.call: (Proc block) -> Config::Setting
+
+    # Decodes raw JSON, decrypts encrypted fields, and fills in defaults.
+    def load: (Config item, String? json) -> Config::Serializer
+
+    # Applies defaults, encrypts encrypted fields, and encodes back to JSON.
+    def dump: (Config item, ::Hash[untyped, untyped] object) -> String
+
+    # Registers an attribute with an optional default proc and encryption flag.
+    def attribute: (Symbol | String name, ?default: Proc, ?encrypted: bool) -> void
+
+    def attributes: () -> ::Hash[Symbol, Config::Setting::Option]
+
+    private
+
+    @attributes: ::Hash[Symbol, Config::Setting::Option]?
+
+    def load_attributes: (Config item, Config::Serializer object) -> Config::Serializer
+    def dump_attributes: (Config item, ::Hash[untyped, untyped] object) -> ::Hash[untyped, untyped]
+    def instance_exec_default: (Config item, Config::Setting::Option option) -> untyped
+    def contains_key?: (untyped object, Symbol key) -> bool
+  end
+end

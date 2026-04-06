@@ -8,7 +8,8 @@ if [ "$(id -u)" = "0" ]; then
   exec gosu rails "$0" "$@"
 fi
 
-# If running the rails server then create or migrate existing database
+# If running the rails server, create the database if it doesn't exist yet.
+# Migrations are handled automatically by config/initializers/auto_migrate.rb.
 if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
   echo "============================================================"
   echo "Reelix Manager v$(cat VERSION) booting"
@@ -18,7 +19,7 @@ if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
   echo "Hostname    : $(hostname)"
   echo "Port        : ${HTTP_PORT:-80} (Thruster) → ${PORT:-3000} (Puma)"
   echo "============================================================"
-  ./bin/rails db:prepare
+  ./bin/rails db:create
 fi
 
 exec "${@}"

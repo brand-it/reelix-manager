@@ -1,0 +1,7 @@
+<%- submit_btn_css ||= 'btn btn-link' %>
+<%= form_tag oauth_application_path(application), method: :delete do %>
+  <%= button_tag t('doorkeeper.applications.buttons.destroy'),
+                 type: "submit",
+                 class: submit_btn_css,
+                 data: { turbo_confirm: t('doorkeeper.applications.confirmations.destroy') } %>
+<% end %>

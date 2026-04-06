@@ -1,0 +1,229 @@
+<% content_for :title, "API Documentation" %>
+
+<% client_id = @default_app&.uid || "YOUR_CLIENT_ID" %>
+
+<div class="container py-4" style="max-width: 860px;">
+  <h1 class="mb-1">API Documentation</h1>
+  <p class="text-muted mb-4">How to authenticate Reelix clients and query the GraphQL API.</p>
+
+  <%# ── Overview ── %>
+  <div class="card mb-4">
+    <div class="card-body">
+      <h4 class="card-title">Overview</h4>
+      <p>
+        Reelix Manager uses the
+        <strong>OAuth 2.0 Device Authorization Grant</strong> (RFC 8628) to issue API tokens
+        to client apps such as Reelix TV or the Reelix CLI. Once a token is issued it is
+        passed as a <code>Bearer</code> token on every GraphQL request.
+      </p>
+      <p class="mb-0">
+        The flow has <strong>three steps</strong>:
+        request a device code → approve it in your browser → poll for the access token.
+      </p>
+    </div>
+  </div>
+
+  <%# ── Registered client applications ── %>
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Registered client applications</h5>
+      <% if user_signed_in? %>
+        <p>The following OAuth applications are registered on this server. Use the <strong>Client ID</strong> for your client app when following the steps below.</p>
+        <% if @applications.any? %>
+          <div class="table-responsive">
+            <table class="table table-sm mb-0">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Client ID</th>
+                  <th>Confidential</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @applications.each do |app| %>
+                  <tr>
+                    <td><strong><%= app.name %></strong></td>
+                    <td><code><%= app.uid %></code></td>
+                    <td><%= app.confidential? ? "Yes" : "No (public)" %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+          <% if current_user.admin? %>
+            <p class="mt-2 mb-0 small">
+              <%= link_to "Manage applications →", oauth_applications_path %>
+            </p>
+          <% end %>
+        <% else %>
+          <div class="alert alert-warning mb-0">
+            No OAuth applications have been registered yet.
+            <% if current_user.admin? %>
+              <%= link_to "Create one now →", new_oauth_application_path %>
+            <% end %>
+          </div>
+        <% end %>
+      <% else %>
+        <p class="mb-0 text-muted">
+          Sign in to view the registered client applications and their client IDs.
+          <%= link_to "Sign in →", new_user_session_path %>
+        </p>
+      <% end %>
+    </div>
+  </div>
+
+  <%# ── Step 1 ── %>
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Step 1 — Request a device code</h5>
+      <p>
+        Your client app calls <code>POST /oauth/authorize_device</code> with its
+        <code>client_id</code> and the scopes it needs. Public clients (confidential: No) do not require a secret.
+        For GraphQL queries and uploads, request at least <code>search upload</code>.
+      </p>
+
+      <pre class="bg-dark text-light p-3 rounded"><code>curl -X POST https://YOUR_HOST/oauth/authorize_device \
+  -H "Content-Type: application/json" \
+  -d '{"client_id": "<%= client_id %>", "scope": "search upload"}'</code></pre>
+
+      <p class="mb-1">Example response:</p>
+      <pre class="bg-dark text-light p-3 rounded"><code>{
+  "device_code": "GmRhmhcxhwAzkoEqiMEg_DnyEysG5",
+  "user_code": "WDJB-MJHT",
+  "verification_uri": "https://YOUR_HOST/oauth/device",
+  "expires_in": 900,
+  "interval": 5
+}</code></pre>
+
+      <p class="mb-0">
+        Display the <code>user_code</code> and the <code>verification_uri</code> to the user.
+        They need to visit that URL and enter the code in their browser.
+      </p>
+    </div>
+  </div>
+
+  <%# ── Step 2 ── %>
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Step 2 — User approves in the browser</h5>
+      <p class="mb-0">
+        The user navigates to
+        <a href="/oauth/device"><code>/oauth/device</code></a>
+        (or the <code>verification_uri</code> from Step 1), enters the <code>user_code</code>,
+        and approves the request. This requires a Reelix Manager account.
+      </p>
+    </div>
+  </div>
+
+  <%# ── Step 3 ── %>
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Step 3 — Poll for the access token</h5>
+      <p>
+        While the user is approving, your client polls <code>POST /oauth/token</code>
+        every <code>interval</code> seconds (default 5 s) until it receives a token or an error.
+      </p>
+
+      <pre class="bg-dark text-light p-3 rounded"><code>curl -X POST https://YOUR_HOST/oauth/token \
+  -H "Content-Type: application/json" \
+  -d '{
+    "client_id":   "<%= client_id %>",
+    "grant_type":  "urn:ietf:params:oauth:grant-type:device_code",
+    "device_code": "GmRhmhcxhwAzkoEqiMEg_DnyEysG5"
+  }'</code></pre>
+
+      <p class="mb-1">While waiting you will receive:</p>
+      <pre class="bg-dark text-light p-3 rounded"><code>{"error": "authorization_pending"}</code></pre>
+
+      <p class="mb-1">Once approved:</p>
+      <pre class="bg-dark text-light p-3 rounded"><code>{
+  "access_token": "s6BhdRkqt3…",
+  "token_type":   "Bearer",
+  "expires_in":   31536000
+}</code></pre>
+
+      <p class="mb-0">
+        Store the <code>access_token</code> securely. It is valid for <strong>1 year</strong>
+        and should be treated like a password.
+      </p>
+    </div>
+  </div>
+
+  <%# ── Using the token ── %>
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Calling the GraphQL API</h5>
+      <p>
+        Include the token as a <code>Bearer</code> header on every request to
+        <code>POST /graphql</code>.
+      </p>
+
+      <pre class="bg-dark text-light p-3 rounded"><code>curl -X POST https://YOUR_HOST/graphql \
+  -H "Authorization: Bearer s6BhdRkqt3…" \
+  -H "Content-Type: application/json" \
+  -d '{"query": "{ __typename }"}'</code></pre>
+
+      <p class="mb-0">A <code>401 Unauthorized</code> response means the token is missing, expired, or revoked.</p>
+    </div>
+  </div>
+
+  <%# ── GraphiQL ── %>
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Browsing the schema with GraphiQL</h5>
+      <p>
+        The interactive GraphQL explorer at
+        <a href="/graphiql"><code>/graphiql</code></a>
+        requires a Reelix Manager account (sign in with username and password).
+      </p>
+      <p>
+        Once signed in, you can use GraphiQL with your current session. If you want to test API
+        queries as a specific user or token, open the <strong>Headers</strong> panel and add a
+        Bearer token:
+      </p>
+      <pre class="bg-dark text-light p-3 rounded"><code>{ "Authorization": "Bearer s6BhdRkqt3…" }</code></pre>
+      <p class="mb-0">
+        The token is optional in GraphiQL when you are already signed in. Requests that require
+        authentication will still return <code>401 Unauthorized</code> if neither a valid session
+        nor a valid Bearer token is present.
+      </p>
+    </div>
+  </div>
+
+  <%# ── Token management ── %>
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Managing tokens</h5>
+      <p class="mb-0">
+        Signed-in users can view and revoke their active tokens on the
+        <a href="/devices">Devices</a> page.
+        Revoking a token immediately invalidates it — the client will receive
+        <code>401 Unauthorized</code> on its next API call.
+      </p>
+    </div>
+  </div>
+
+  <%# ── Error reference ── %>
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Device flow error codes</h5>
+      <div class="table-responsive">
+        <table class="table table-sm mb-0">
+          <thead>
+            <tr>
+              <th>Error</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>authorization_pending</code></td><td>User has not yet approved — keep polling.</td></tr>
+            <tr><td><code>slow_down</code></td><td>Polling too fast — increase interval by 5 s.</td></tr>
+            <tr><td><code>access_denied</code></td><td>User denied the request — stop polling.</td></tr>
+            <tr><td><code>expired_token</code></td><td>Device code expired (15 min) — restart from Step 1.</td></tr>
+            <tr><td><code>invalid_grant</code></td><td>Device code already used or invalid.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

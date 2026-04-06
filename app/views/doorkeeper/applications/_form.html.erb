@@ -1,0 +1,71 @@
+<%= simple_form_for application, url: doorkeeper_submit_path(application), as: :doorkeeper_application do |f| %>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+  <div class="row">
+    <div class="col-md-8 col-lg-6">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Application Details</h5>
+        </div>
+        <div class="card-body">
+          <%= f.input :name, required: true, hint: "A friendly name to identify this client application." %>
+
+          <%= f.input :description,
+                      as: :text,
+                      required: false,
+                      hint: "Optional notes about what this application does and who is using it.",
+                      input_html: { rows: 3 } %>
+
+          <% unless application.persisted? %>
+            <%= f.input :uid,
+                        label: "Client ID",
+                        required: false,
+                        placeholder: "Leave blank to auto-generate",
+                        hint: "A unique identifier for this application. Auto-generated if left blank. Cannot be changed after creation." %>
+          <% end %>
+
+          <%= f.input :redirect_uri,
+                      as: :text,
+                      label: "Callback URLs",
+                      hint: t('doorkeeper.applications.help.redirect_uri'),
+                      input_html: { rows: 3 } %>
+
+          <% if Doorkeeper.configuration.allow_blank_redirect_uri?(application) %>
+            <p class="text-muted small mt-n2 mb-3">
+              <%= t('doorkeeper.applications.help.blank_redirect_uri') %>
+            </p>
+          <% end %>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Scopes</label>
+            <div class="d-flex flex-column gap-2">
+              <% DOORKEEPER_SCOPES.each do |scope, description| %>
+                <div class="form-check">
+                  <%= check_box_tag "doorkeeper_application[scopes][]",
+                                    scope,
+                                    application.scopes.include?(scope),
+                                    id: "scope_#{scope}",
+                                    class: "form-check-input" %>
+                  <label class="form-check-label" for="scope_<%= scope %>">
+                    <strong><%= scope %></strong>
+                    <span class="text-muted ms-1 small">— <%= description %></span>
+                  </label>
+                </div>
+              <% end %>
+            </div>
+            <div class="form-text text-muted mt-1"><%= t('doorkeeper.applications.help.scopes') %></div>
+          </div>
+
+          <%= f.input :confidential,
+                      as: :boolean,
+                      hint: t('doorkeeper.applications.help.confidential') %>
+        </div>
+        <div class="card-footer">
+          <%= f.button :submit, t('doorkeeper.applications.buttons.submit'), class: "btn btn-primary me-2" %>
+          <%= link_to t('doorkeeper.applications.buttons.cancel'), oauth_applications_path, class: "btn btn-outline-secondary" %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

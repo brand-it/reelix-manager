@@ -1,19 +1,25 @@
 # frozen_string_literal: true
 
 class GraphqlController < ApplicationController
-  # Nullify the session instead of raising an InvalidAuthenticityToken exception.
-  # This allows API clients (e.g. GraphiQL, mobile apps) to POST without a CSRF
-  # token while still preventing cross-site request forgery — any forged request
-  # just runs without a session (i.e. as an unauthenticated user).
-  protect_from_forgery with: :null_session
+  # Doorkeeper token requests are stateless — CSRF doesn't apply.
+  # Covers all configured access_token_methods (Authorization header, access_token
+  # param, bearer_token param). Session-based requests (GraphiQL in the browser)
+  # still use the real session and CSRF protection.
+  protect_from_forgery with: :exception
+  skip_before_action :verify_authenticity_token, if: :doorkeeper_token_request?
+
+  # Override the standard web-session auth: accept a Doorkeeper Bearer token,
+  # or fall back to the Devise session (used by GraphiQL in the browser).
+  skip_before_action :authenticate_or_setup!
+  before_action :authenticate_graphql_user!
 
   def execute
     variables = prepare_variables(params[:variables])
     query = params[:query]
     operation_name = params[:operationName]
     context = {
-      # Query context goes here, for example:
-      # current_user: current_user,
+      current_user: @current_user,
+      doorkeeper_token: @doorkeeper_token
     }
     result = ReelixManagerSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
     render json: result
@@ -23,6 +29,27 @@ class GraphqlController < ApplicationController
   end
 
   private
+
+  # Authenticate via Doorkeeper token (any configured method), or fall back to the
+  # Devise session (so GraphiQL works in the browser when logged in).
+  # Scope enforcement is handled per-operation inside GraphQL resolvers and mutations.
+  def authenticate_graphql_user!
+    token = doorkeeper_access_token
+
+    if token&.accessible?
+      @current_user = User.find_by(id: token.resource_owner_id)
+      @doorkeeper_token = token
+      return if @current_user
+    end
+
+    # Fall back to Devise session (e.g. GraphiQL in the browser).
+    if current_user
+      @current_user = current_user
+      return
+    end
+
+    render json: { errors: [ { message: "Unauthorized" } ] }, status: :unauthorized
+  end
 
   # Handle variables in form data, JSON body, or a blank value
   def prepare_variables(variables_param)
@@ -49,5 +76,20 @@ class GraphqlController < ApplicationController
     logger.error e.backtrace.join("\n")
 
     render json: { errors: [ { message: e.message, backtrace: e.backtrace } ], data: {} }, status: 500
+  end
+
+  # Returns a valid Doorkeeper token if one is present via any configured
+  # access_token_method (Authorization header, access_token param, bearer_token
+  # param). Memoized so the token is only looked up once per request.
+  def doorkeeper_access_token
+    @doorkeeper_access_token ||= Doorkeeper::OAuth::Token.authenticate(
+      request, *Doorkeeper.configuration.access_token_methods
+    )
+  end
+
+  # Skip CSRF for any request carrying a valid Doorkeeper access token —
+  # covers all configured access_token_methods, not just the Bearer header.
+  def doorkeeper_token_request?
+    doorkeeper_access_token&.accessible?
   end
 end

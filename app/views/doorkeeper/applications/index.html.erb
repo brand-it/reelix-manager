@@ -1,0 +1,54 @@
+<h1 class="mb-4"><%= t('.title') %></h1>
+
+<% if @applications.any? %>
+  <div class="table-responsive">
+    <table class="table table-bordered align-middle">
+      <thead class="table-light">
+        <tr>
+          <th><%= t('.name') %></th>
+          <th>Client ID</th>
+          <th>Description</th>
+          <th>Scopes</th>
+          <th><%= t('.confidential') %></th>
+          <th class="text-end">
+            <%= link_to t('.new'), new_oauth_application_path, class: "btn btn-primary btn-sm" %>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @applications.each do |application| %>
+          <tr id="application_<%= application.id %>">
+            <td><%= link_to application.name, oauth_application_path(application) %></td>
+            <td><code class="small"><%= application.uid %></code></td>
+            <td class="text-muted small"><%= application.description.presence || "—" %></td>
+            <td>
+              <% if application.scopes.present? %>
+                <% application.scopes.to_a.each do |scope| %>
+                  <span class="badge bg-secondary me-1"><%= scope %></span>
+                <% end %>
+              <% else %>
+                <span class="text-muted fst-italic small">None</span>
+              <% end %>
+            </td>
+            <td>
+              <% if application.confidential? %>
+                <span class="badge bg-secondary"><%= t('doorkeeper.applications.index.confidentiality.yes') %></span>
+              <% else %>
+                <span class="badge bg-light text-dark border"><%= t('doorkeeper.applications.index.confidentiality.no') %></span>
+              <% end %>
+            </td>
+            <td class="text-end">
+              <%= link_to t('doorkeeper.applications.buttons.edit'), edit_oauth_application_path(application), class: "btn btn-sm btn-outline-secondary me-1" %>
+              <%= render 'delete_form', application: application %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <div class="alert alert-info d-flex justify-content-between align-items-center">
+    No OAuth applications registered yet.
+    <%= link_to t('.new'), new_oauth_application_path, class: "btn btn-primary btn-sm" %>
+  </div>
+<% end %>

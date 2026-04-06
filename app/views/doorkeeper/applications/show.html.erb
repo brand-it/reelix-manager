@@ -1,0 +1,76 @@
+<h1 class="mb-4"><%= t('.title', name: @application.name) %></h1>
+
+<div class="row">
+  <div class="col-md-8">
+    <div class="card mb-4">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="card-title mb-0">Application Details</h5>
+        <%= link_to t('doorkeeper.applications.buttons.edit'), edit_oauth_application_path(@application), class: "btn btn-outline-secondary btn-sm" %>
+      </div>
+      <div class="card-body">
+        <dl class="row mb-0">
+          <dt class="col-sm-4">Client ID</dt>
+          <dd class="col-sm-8"><code id="application_id"><%= @application.uid %></code></dd>
+
+          <% if @application.description.present? %>
+            <dt class="col-sm-4">Description</dt>
+            <dd class="col-sm-8"><%= @application.description %></dd>
+          <% end %>
+
+          <dt class="col-sm-4"><%= t('.secret') %></dt>
+          <dd class="col-sm-8">
+            <% secret = flash[:application_secret].presence || @application.plaintext_secret %>
+            <% if secret.blank? && Doorkeeper.config.application_secret_hashed? %>
+              <span class="text-muted fst-italic"><%= t('.secret_hashed') %></span>
+            <% elsif secret.present? %>
+              <code id="secret"><%= secret %></code>
+            <% else %>
+              <span class="text-muted">—</span>
+            <% end %>
+          </dd>
+
+          <dt class="col-sm-4"><%= t('.scopes') %></dt>
+          <dd class="col-sm-8">
+            <% if @application.scopes.present? %>
+              <% @application.scopes.to_a.each do |scope| %>
+                <span class="badge bg-secondary me-1"><%= scope %></span>
+              <% end %>
+            <% else %>
+              <span class="text-muted fst-italic"><%= t('.not_defined') %></span>
+            <% end %>
+          </dd>
+
+          <dt class="col-sm-4"><%= t('.confidential') %></dt>
+          <dd class="col-sm-8">
+            <% if @application.confidential? %>
+              <span class="badge bg-secondary"><%= t('doorkeeper.applications.index.confidentiality.yes') %></span>
+            <% else %>
+              <span class="badge bg-light text-dark border"><%= t('doorkeeper.applications.index.confidentiality.no') %></span>
+            <% end %>
+          </dd>
+
+          <dt class="col-sm-4"><%= t('.callback_urls') %></dt>
+          <dd class="col-sm-8">
+            <% if @application.redirect_uri.present? %>
+              <% @application.redirect_uri.split.each do |uri| %>
+                <code class="d-block"><%= uri %></code>
+              <% end %>
+            <% else %>
+              <span class="text-muted fst-italic"><%= t('.not_defined') %></span>
+            <% end %>
+          </dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="card border-danger">
+      <div class="card-header bg-danger-subtle">
+        <h6 class="card-title text-danger mb-0">Danger zone</h6>
+      </div>
+      <div class="card-body">
+        <p class="text-muted small mb-3">Deleting this application will immediately revoke all tokens issued to it.</p>
+        <%= render 'delete_form', application: @application, submit_btn_css: 'btn btn-danger' %>
+      </div>
+    </div>
+  </div>
+</div>

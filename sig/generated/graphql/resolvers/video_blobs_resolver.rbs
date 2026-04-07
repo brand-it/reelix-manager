@@ -1,0 +1,10 @@
+# Generated from app/graphql/resolvers/video_blobs_resolver.rb with RBS::Inline
+
+module Resolvers
+  # Returns VideoBlob records from the local library cache.
+  # Optionally filter by media type and/or TMDB ID.
+  class VideoBlobsResolver < Resolvers::BaseResolver
+    # : (?media_type: String?, ?tmdb_id: Integer?) -> ::ActiveRecord::Relation
+    def resolve: (?media_type: String?, ?tmdb_id: Integer?) -> ::ActiveRecord::Relation
+  end
+end

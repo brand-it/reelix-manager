@@ -1,0 +1,13 @@
+# Generated from app/jobs/library_scan_job.rb with RBS::Inline
+
+# Runs the library scanner and then enqueues a TmdbMatcherJob for every
+# VideoBlob that is still missing a TMDB ID.
+class LibraryScanJob < ApplicationJob
+  # : () -> void
+  def perform: () -> void
+
+  private
+
+  # : () -> void
+  def enqueue_tmdb_matchers: () -> void
+end

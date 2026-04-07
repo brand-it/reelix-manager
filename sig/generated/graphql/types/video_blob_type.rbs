@@ -1,0 +1,32 @@
+# Generated from app/graphql/types/video_blob_type.rb with RBS::Inline
+
+module Types
+  class VideoBlobType < Types::BaseObject
+    # : () -> Integer
+    def id: () -> Integer
+
+    # : () -> String
+    def key: () -> String
+
+    # : () -> String
+    def filename: () -> String
+
+    # : () -> String
+    def media_type: () -> String
+
+    # : () -> String
+    def extra_type: () -> String
+
+    # : () -> bool
+    def plex_version: () -> bool
+
+    # : () -> bool
+    def optimized: () -> bool
+
+    # : () -> String
+    def created_at: () -> String
+
+    # : () -> String
+    def updated_at: () -> String
+  end
+end

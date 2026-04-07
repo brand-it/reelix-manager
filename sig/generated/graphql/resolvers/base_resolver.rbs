@@ -3,5 +3,11 @@
 module Resolvers
   class BaseResolver < GraphQL::Schema::Resolver
     include ScopeEnforceable
+
+    private
+
+    # Scrubs sensitive values from error messages before logging.
+    # : (String? message) -> String
+    def sanitize_error_message: (String? message) -> String
   end
 end

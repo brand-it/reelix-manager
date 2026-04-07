@@ -39,5 +39,8 @@ module Types
 
     field :season, resolver: Resolvers::SeasonResolver,
       description: "Fetch full season details (with episodes) from TMDB."
+
+    field :video_blobs, resolver: Resolvers::VideoBlobsResolver,
+      description: "List locally-indexed video files. Optionally filter by media_type or tmdb_id."
   end
 end

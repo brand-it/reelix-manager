@@ -1,0 +1,36 @@
+inception:
+  key: "/movies/Inception (2010)/Inception (2010).mkv"
+  filename: "Inception (2010).mkv"
+  content_type: "video/x-matroska"
+  media_type: 0
+  tmdb_id: 27205
+  title: "Inception"
+  year: 2010
+  extra_type: 0
+  plex_version: false
+  optimized: false
+
+breaking_bad_s01e01:
+  key: "/tv/Breaking Bad (2008)/Season 01/Breaking Bad (2008) - S01E01 - Pilot.mkv"
+  filename: "Breaking Bad (2008) - S01E01 - Pilot.mkv"
+  content_type: "video/x-matroska"
+  media_type: 1
+  tmdb_id: 1396
+  title: "Breaking Bad"
+  year: 2008
+  season_number: 1
+  episode_number: 1
+  extra_type: 0
+  plex_version: false
+  optimized: false
+
+unmatched_movie:
+  key: "/movies/Some Obscure Film (2023)/Some Obscure Film (2023).mkv"
+  filename: "Some Obscure Film (2023).mkv"
+  content_type: "video/x-matroska"
+  media_type: 0
+  title: "Some Obscure Film"
+  year: 2023
+  extra_type: 0
+  plex_version: false
+  optimized: false

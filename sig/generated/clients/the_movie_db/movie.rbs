@@ -1,0 +1,20 @@
+# Generated from app/clients/the_movie_db/movie.rb with RBS::Inline
+
+module TheMovieDb
+  # Fetches full movie details from TMDB GET /movie/{id}.
+  #
+  # Usage:
+  #   TheMovieDb::Movie.new(id: 27205).results
+  #   => { "id" => 27205, "title" => "Inception", ... }
+  class Movie < Base
+    @id: Integer
+
+    # : (id: Integer, ?api_key: String?, ?language: String?) -> void
+    def initialize: (id: Integer, ?api_key: String?, ?language: String?) -> void
+
+    private
+
+    # : () -> String
+    def path: () -> String
+  end
+end

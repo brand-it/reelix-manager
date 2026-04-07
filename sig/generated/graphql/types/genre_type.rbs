@@ -1,0 +1,11 @@
+# Generated from app/graphql/types/genre_type.rb with RBS::Inline
+
+module Types
+  class GenreType < Types::BaseObject
+    # : () -> Integer
+    def id: () -> Integer
+
+    # : () -> String
+    def name: () -> String
+  end
+end

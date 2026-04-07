@@ -1,0 +1,177 @@
+# Generated from app/services/key_parser_service.rb with RBS::Inline
+
+# Converts a file path into structured metadata by matching it against the
+# naming conventions used by Plex (and compatible media managers).
+#
+# Usage:
+#   result = KeyParserService.call("/movies/Inception (2010)/Inception (2010).mkv")
+#   result.movie?   # => true
+#   result.title    # => "Inception"
+#   result.year     # => 2010
+class KeyParserService
+  VIDEO_FORMATS: untyped
+
+  VIDEO_MIME_TYPES: untyped
+
+  EXTRA_DIR_NAMES: untyped
+
+  PLEX_VERSIONS: ::String
+
+  OPTIMIZED: ::String
+
+  class BlobData < Data
+    attr_reader content_type(): untyped
+
+    attr_reader edition(): untyped
+
+    attr_reader episode_last(): untyped
+
+    attr_reader episode(): untyped
+
+    attr_reader extra_number(): untyped
+
+    attr_reader extra_type(): untyped
+
+    attr_reader extra(): untyped
+
+    attr_reader filename(): untyped
+
+    attr_reader optimized(): untyped
+
+    attr_reader part(): untyped
+
+    attr_reader plex_version(): untyped
+
+    attr_reader season(): untyped
+
+    attr_reader title(): untyped
+
+    attr_reader type(): untyped
+
+    attr_reader year(): untyped
+
+    def self.new: (untyped content_type, untyped edition, untyped episode_last, untyped episode, untyped extra_number, untyped extra_type, untyped extra, untyped filename, untyped optimized, untyped part, untyped plex_version, untyped season, untyped title, untyped type, untyped year) -> instance
+                | (content_type: untyped, edition: untyped, episode_last: untyped, episode: untyped, extra_number: untyped, extra_type: untyped, extra: untyped, filename: untyped, optimized: untyped, part: untyped, plex_version: untyped, season: untyped, title: untyped, type: untyped, year: untyped) -> instance
+
+    def self.members: () -> [ :content_type, :edition, :episode_last, :episode, :extra_number, :extra_type, :extra, :filename, :optimized, :part, :plex_version, :season, :title, :type, :year ]
+
+    def members: () -> [ :content_type, :edition, :episode_last, :episode, :extra_number, :extra_type, :extra, :filename, :optimized, :part, :plex_version, :season, :title, :type, :year ]
+  end
+
+  class BlobData
+    # : () -> bool
+    def movie?: () -> bool
+
+    # : () -> bool
+    def tv?: () -> bool
+  end
+
+  # Helper regex fragments
+  SPACE_OR_NOTHING: ::Regexp
+
+  TITLE_MATCHER: ::Regexp
+
+  EDITION: ::Regexp
+
+  MATCHER_WITH_YEAR_EDITION: ::Regexp
+
+  MATCHER_WITH_YEAR: ::Regexp
+
+  VIDEO_FORMAT_UNION: untyped
+
+  TV_SHOW_SEASON_EPISODE: ::Regexp
+
+  TV_SHOW_SEASON_EPISODE_LAST: ::Regexp
+
+  TV_SHOW_MATCHER_FULL: ::Regexp
+
+  TV_SHOW_WITHOUT_EP_NAME: ::Regexp
+
+  TV_SHOW_WITHOUT_DATE: ::Regexp
+
+  TV_SHOW_WITHOUT_NUMBER: ::Regexp
+
+  TV_SHOW_WITHOUT_YEAR: ::Regexp
+
+  TV_SHOW_NUMBER_ONLY: ::Regexp
+
+  # : (String key, ?movie_path: String?, ?tv_path: String?) -> BlobData?
+  def self.call: (String key, ?movie_path: String?, ?tv_path: String?) -> BlobData?
+
+  @filename: String
+
+  @directory_name: String
+
+  @simplified_key: String
+
+  @tv_path: String?
+
+  @movie_path: String?
+
+  @key: String
+
+  # : (String key, ?movie_path: String?, ?tv_path: String?) -> void
+  def initialize: (String key, ?movie_path: String?, ?tv_path: String?) -> void
+
+  # : () -> BlobData?
+  def call: () -> BlobData?
+
+  private
+
+  attr_reader key: untyped
+
+  attr_reader movie_path: untyped
+
+  attr_reader tv_path: untyped
+
+  # : () -> bool
+  def video_file?: () -> bool
+
+  # : () -> bool
+  def key_movie?: () -> bool
+
+  # : () -> bool
+  def key_tv_show?: () -> bool
+
+  # : () -> BlobData
+  def parsed_movie: () -> BlobData
+
+  # : () -> BlobData
+  def parsed_tv_show: () -> BlobData
+
+  # : () -> String
+  def simplified_key: () -> String
+
+  # : () -> String
+  def directory_name: () -> String
+
+  # : () -> String
+  def filename: () -> String
+
+  # : () -> String?
+  def extra: () -> String?
+
+  # : () -> Integer?
+  def extra_number: () -> Integer?
+
+  # : () -> Symbol
+  def extra_type_key: () -> Symbol
+
+  # : () -> bool
+  def plex_version?: () -> bool
+
+  # : () -> String?
+  def content_type: () -> String?
+
+  # : () -> bool
+  def optimized?: () -> bool
+
+  # : () -> Integer?
+  def part: () -> Integer?
+
+  # : () -> Integer?
+  def episode_last: () -> Integer?
+
+  # : (String? raw) -> String?
+  def coerce_title: (String? raw) -> String?
+end

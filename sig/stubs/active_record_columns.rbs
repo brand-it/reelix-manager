@@ -37,3 +37,56 @@ class UploadSession < ApplicationRecord
   def id=: (String value) -> String
 end
 
+class VideoBlob < ApplicationRecord
+  def self.find_by: (?::Hash[::Symbol | ::String, untyped] conditions) -> ::VideoBlob?
+  def self.all: () -> ::ActiveRecord::Relation
+  def self.where: () -> ::ActiveRecord::QueryMethods::WhereChain[::ActiveRecord::Relation]
+               | (::Hash[::Symbol | ::String, untyped] conditions) -> ::ActiveRecord::Relation
+               | (::String conditions, *untyped params) -> ::ActiveRecord::Relation
+  def self.create!: (::Hash[::Symbol | ::String, untyped] attrs) -> ::VideoBlob
+  def self.find_each: (?batch_size: Integer) { (::VideoBlob) -> void } -> void
+  def self.update_all: (::Hash[::Symbol | ::String, untyped] updates) -> Integer
+                     | (::String updates) -> Integer
+  def self.without_tmdb_id: () -> ::ActiveRecord::Relation
+  def self.with_tmdb_id:    () -> ::ActiveRecord::Relation
+  def self.movies:          () -> ::ActiveRecord::Relation
+  def self.tv_shows:        () -> ::ActiveRecord::Relation
+  def self.plex_versions:   () -> ::ActiveRecord::Relation
+  def self.optimized_blobs: () -> ::ActiveRecord::Relation
+
+  def key:                 () -> String
+  def key=:                (String value) -> String
+  def filename:            () -> String
+  def filename=:           (String value) -> String
+  def content_type:        () -> String?
+  def content_type=:       (String? value) -> String?
+  def media_type:          () -> String
+  def media_type=:         (untyped value) -> untyped
+  def tmdb_id:             () -> Integer?
+  def tmdb_id=:            (Integer? value) -> Integer?
+  def title:               () -> String?
+  def title=:              (String? value) -> String?
+  def year:                () -> Integer?
+  def year=:               (Integer? value) -> Integer?
+  def edition:             () -> String?
+  def edition=:            (String? value) -> String?
+  def season_number:       () -> Integer?
+  def season_number=:      (Integer? value) -> Integer?
+  def episode_number:      () -> Integer?
+  def episode_number=:     (Integer? value) -> Integer?
+  def episode_last_number: () -> Integer?
+  def episode_last_number=: (Integer? value) -> Integer?
+  def part:                () -> Integer?
+  def part=:               (Integer? value) -> Integer?
+  def extra_type:          () -> String
+  def extra_type=:         (untyped value) -> untyped
+  def extra_type_number:   () -> Integer?
+  def extra_type_number=:  (Integer? value) -> Integer?
+  def plex_version:        () -> bool
+  def plex_version=:       (bool value) -> bool
+  def optimized:           () -> bool
+  def optimized=:          (bool value) -> bool
+
+  def movie?: () -> bool
+  def tv?:    () -> bool
+end

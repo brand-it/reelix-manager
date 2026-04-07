@@ -1,0 +1,23 @@
+# Generated from app/graphql/types/season_type.rb with RBS::Inline
+
+module Types
+  class SeasonType < Types::BaseObject
+    # : () -> Integer
+    def id: () -> Integer
+
+    # : () -> String
+    def name: () -> String
+
+    # : () -> String
+    def overview: () -> String
+
+    # : () -> Integer
+    def season_number: () -> Integer
+
+    # : () -> Float
+    def vote_average: () -> Float
+
+    # : () -> ::Array[::Hash[String, untyped]]
+    def episodes: () -> ::Array[::Hash[String, untyped]]
+  end
+end

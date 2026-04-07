@@ -1,0 +1,59 @@
+# Generated from app/graphql/types/tv_type.rb with RBS::Inline
+
+module Types
+  class TvType < Types::BaseObject
+    # : () -> Integer
+    def id: () -> Integer
+
+    # : () -> String
+    def name: () -> String
+
+    # : () -> String
+    def original_name: () -> String
+
+    # : () -> String
+    def overview: () -> String
+
+    # : () -> String?
+    def show_type: () -> String?
+
+    # : () -> bool
+    def in_production: () -> bool
+
+    # : () -> bool
+    def adult: () -> bool
+
+    # : () -> Float
+    def popularity: () -> Float
+
+    # : () -> Float
+    def vote_average: () -> Float
+
+    # : () -> Integer
+    def vote_count: () -> Integer
+
+    # : () -> Integer
+    def number_of_seasons: () -> Integer
+
+    # : () -> Integer
+    def number_of_episodes: () -> Integer
+
+    # : () -> ::Array[Integer]
+    def episode_run_time: () -> ::Array[Integer]
+
+    # : () -> String
+    def original_language: () -> String
+
+    # : () -> ::Array[String]
+    def languages: () -> ::Array[String]
+
+    # : () -> ::Array[String]
+    def origin_country: () -> ::Array[String]
+
+    # : () -> ::Array[::Hash[String, untyped]]
+    def genres: () -> ::Array[::Hash[String, untyped]]
+
+    # : () -> ::Array[::Hash[String, untyped]]
+    def seasons: () -> ::Array[::Hash[String, untyped]]
+  end
+end

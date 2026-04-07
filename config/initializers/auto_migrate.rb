@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
 # Automatically creates the schema (fresh install) or runs pending migrations
-# (existing install) at server boot. This removes the need for any manual
-# `rails db:migrate` or `rails db:prepare` step in deployment.
+# (existing install) at server boot for ALL configured databases.
+#
+# In single-database environments (e.g. development), SolidQueue and SolidCache
+# share the primary database. Their schemas (db/queue_schema.rb,
+# db/cache_schema.rb) are loaded into the primary database when their sentinel
+# tables are absent.
 #
 # Runs only when:
 #   - The Rails server process is booting (Rails::Server is defined), OR
@@ -30,23 +34,57 @@ Rails.application.config.after_initialize do
   File.open(lock_path, File::RDWR | File::CREAT, 0o644) do |lock|
     lock.flock(File::LOCK_EX)
 
-    conn = ActiveRecord::Base.connection
+    configs = ActiveRecord::Base.configurations.configs_for(env_name: Rails.env)
 
-    if conn.table_exists?("schema_migrations")
-      # Existing database — run any pending migrations.
-      context = ActiveRecord::MigrationContext.new(ActiveRecord::Migrator.migrations_paths)
+    configs.each do |db_config|
+      schema_path = ActiveRecord::Tasks::DatabaseTasks.schema_dump_path(db_config)
 
-      if context.needs_migration?
-        Rails.logger.info "[boot] Pending migrations found — running now."
-        context.migrate
-        Rails.logger.info "[boot] Migrations complete."
+      original_config = ActiveRecord::Base.connection_db_config
+      ActiveRecord::Base.establish_connection(db_config)
+
+      begin
+        conn = ActiveRecord::Base.connection
+
+        if conn.table_exists?("schema_migrations")
+          migrations_paths = Array(db_config.migrations_paths).presence ||
+                               ActiveRecord::Migrator.migrations_paths
+          ctx = ActiveRecord::MigrationContext.new(migrations_paths)
+
+          if ctx.needs_migration?
+            Rails.logger.info "[boot] Pending migrations for '#{db_config.name}' — running now."
+            ctx.migrate
+            Rails.logger.info "[boot] Migrations complete for '#{db_config.name}'."
+          end
+        elsif File.exist?(schema_path)
+          Rails.logger.info "[boot] Fresh '#{db_config.name}' database — loading schema."
+          load(schema_path)
+          Rails.logger.info "[boot] Schema loaded for '#{db_config.name}'."
+        end
+      ensure
+        ActiveRecord::Base.establish_connection(original_config)
       end
-    else
-      # Fresh database — load the full schema instead of replaying every migration.
-      Rails.logger.info "[boot] Fresh database detected — loading schema."
-      load(Rails.root.join("db/schema.rb"))
-      Rails.logger.info "[boot] Schema loaded."
     end
+
+    # In single-database environments (e.g. development), SolidQueue and
+    # SolidCache share the primary database but have separate schema files.
+    # Load them into the primary database when their tables are absent.
+    if configs.size == 1
+      conn = ActiveRecord::Base.connection
+
+      {
+        "solid_queue_processes" => "db/queue_schema.rb",
+        "solid_cache_entries"   => "db/cache_schema.rb"
+      }.each do |sentinel_table, schema_file|
+        path = Rails.root.join(schema_file)
+        next unless File.exist?(path)
+        next if conn.table_exists?(sentinel_table)
+
+        Rails.logger.info "[boot] Loading #{schema_file} into primary database."
+        load(path)
+        Rails.logger.info "[boot] #{schema_file} loaded."
+      end
+    end
+
   ensure
     lock.flock(File::LOCK_UN)
   end

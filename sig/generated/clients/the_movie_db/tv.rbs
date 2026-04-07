@@ -1,0 +1,20 @@
+# Generated from app/clients/the_movie_db/tv.rb with RBS::Inline
+
+module TheMovieDb
+  # Fetches full TV show details from TMDB GET /tv/{id}.
+  #
+  # Usage:
+  #   TheMovieDb::Tv.new(id: 1396).results
+  #   => { "id" => 1396, "name" => "Breaking Bad", ... }
+  class Tv < Base
+    @id: Integer
+
+    # : (id: Integer, ?api_key: String?, ?language: String?) -> void
+    def initialize: (id: Integer, ?api_key: String?, ?language: String?) -> void
+
+    private
+
+    # : () -> String
+    def path: () -> String
+  end
+end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_06_031857) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_07_161915) do
   create_table "configs", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "settings"
@@ -100,6 +100,30 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_06_031857) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
+  create_table "video_blobs", force: :cascade do |t|
+    t.string "content_type"
+    t.datetime "created_at", null: false
+    t.string "edition"
+    t.integer "episode_last_number"
+    t.integer "episode_number"
+    t.integer "extra_type", default: 0, null: false
+    t.integer "extra_type_number"
+    t.string "filename", null: false
+    t.string "key", null: false
+    t.integer "media_type", default: 0, null: false
+    t.boolean "optimized", default: false, null: false
+    t.integer "part"
+    t.boolean "plex_version", default: false, null: false
+    t.integer "season_number"
+    t.string "title"
+    t.integer "tmdb_id"
+    t.datetime "updated_at", null: false
+    t.integer "year"
+    t.index ["key"], name: "index_video_blobs_on_key", unique: true
+    t.index ["media_type", "tmdb_id"], name: "index_video_blobs_on_media_type_and_tmdb_id"
+    t.index ["tmdb_id"], name: "index_video_blobs_on_tmdb_id"
   end
 
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"

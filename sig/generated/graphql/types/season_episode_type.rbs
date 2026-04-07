@@ -1,0 +1,29 @@
+# Generated from app/graphql/types/season_episode_type.rb with RBS::Inline
+
+module Types
+  class SeasonEpisodeType < Types::BaseObject
+    # : () -> Integer
+    def id: () -> Integer
+
+    # : () -> String
+    def name: () -> String
+
+    # : () -> String
+    def overview: () -> String
+
+    # : () -> Integer
+    def episode_number: () -> Integer
+
+    # : () -> Integer
+    def season_number: () -> Integer
+
+    # : () -> Integer
+    def show_id: () -> Integer
+
+    # : () -> Float
+    def vote_average: () -> Float
+
+    # : () -> Integer
+    def vote_count: () -> Integer
+  end
+end

@@ -1,0 +1,9 @@
+# Generated from app/graphql/resolvers/movie_resolver.rb with RBS::Inline
+
+module Resolvers
+  # Resolves full movie details from TMDB GET /movie/{id}.
+  class MovieResolver < Resolvers::BaseResolver
+    # : (id: Integer, language: String) -> ::Hash[String, untyped]
+    def resolve: (id: Integer, language: String) -> ::Hash[String, untyped]
+  end
+end

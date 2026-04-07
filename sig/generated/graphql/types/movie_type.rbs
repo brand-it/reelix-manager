@@ -1,0 +1,41 @@
+# Generated from app/graphql/types/movie_type.rb with RBS::Inline
+
+module Types
+  class MovieType < Types::BaseObject
+    # : () -> Integer
+    def id: () -> Integer
+
+    # : () -> String
+    def title: () -> String
+
+    # : () -> String
+    def original_title: () -> String
+
+    # : () -> String
+    def overview: () -> String
+
+    # : () -> bool
+    def adult: () -> bool
+
+    # : () -> bool
+    def video: () -> bool
+
+    # : () -> Float
+    def popularity: () -> Float
+
+    # : () -> Float
+    def vote_average: () -> Float
+
+    # : () -> Integer
+    def vote_count: () -> Integer
+
+    # : () -> String
+    def original_language: () -> String
+
+    # : () -> ::Array[String]
+    def origin_country: () -> ::Array[String]
+
+    # : () -> ::Array[::Hash[String, untyped]]
+    def genres: () -> ::Array[::Hash[String, untyped]]
+  end
+end

@@ -59,8 +59,5 @@ module Resolvers
 
     # : (::Hash[String, untyped] result) -> String
     def result_title: (::Hash[String, untyped] result) -> String
-
-    # : (String? message) -> String
-    def sanitize_error_message: (String? message) -> String
   end
 end

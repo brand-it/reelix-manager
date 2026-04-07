@@ -1,0 +1,36 @@
+# Generated from app/services/library_scanner_service.rb with RBS::Inline
+
+# Walks the movie and TV library directories defined in Config::Video and
+# upserts a VideoBlob record for every video file found. Files that no longer
+# exist on disk have their VideoBlob records removed.
+#
+# Usage:
+#   result = LibraryScannerService.call
+#   result[:added]   # => 12
+#   result[:updated] # => 3
+#   result[:removed] # => 1
+#   result[:skipped] # => 0
+class LibraryScannerService
+  # : () -> ::Hash[Symbol, Integer]
+  def self.call: () -> ::Hash[Symbol, Integer]
+
+  # : () -> ::Hash[Symbol, Integer]
+  def call: () -> ::Hash[Symbol, Integer]
+
+  private
+
+  # : (String directory, ::Hash[Symbol, Integer] stats, ::Array[String] scanned_keys) -> void
+  def scan_directory: (String directory, ::Hash[Symbol, Integer] stats, ::Array[String] scanned_keys) -> void
+
+  # : (String path, KeyParserService::BlobData blob_data, ::Hash[Symbol, Integer] stats) -> void
+  def upsert_blob: (String path, KeyParserService::BlobData blob_data, ::Hash[Symbol, Integer] stats) -> void
+
+  # : (KeyParserService::BlobData blob_data) -> ::Hash[Symbol, untyped]
+  def build_attrs: (KeyParserService::BlobData blob_data) -> ::Hash[Symbol, untyped]
+
+  # : (::Array[String] scanned_keys, ::Hash[Symbol, Integer] stats) -> void
+  def remove_stale: (::Array[String] scanned_keys, ::Hash[Symbol, Integer] stats) -> void
+
+  # : () -> ::Hash[Symbol, Integer]
+  def empty_stats: () -> ::Hash[Symbol, Integer]
+end

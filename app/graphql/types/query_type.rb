@@ -30,5 +30,17 @@ module Types
     field :search_multi, resolver: Resolvers::SearchResolver,
       description: "Search for both movies and TV shows. Results are ranked by " \
                    "keyword relevance and popularity."
+
+    field :movie, resolver: Resolvers::MovieResolver,
+      description: "Fetch full movie details from TMDB by ID."
+
+    field :tv, resolver: Resolvers::TvResolver,
+      description: "Fetch full TV show details from TMDB by ID."
+
+    field :season, resolver: Resolvers::SeasonResolver,
+      description: "Fetch full season details (with episodes) from TMDB."
+
+    field :video_blobs, resolver: Resolvers::VideoBlobsResolver,
+      description: "List locally-indexed video files. Optionally filter by media_type or tmdb_id."
   end
 end

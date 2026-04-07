@@ -1,0 +1,9 @@
+# Generated from app/graphql/resolvers/season_resolver.rb with RBS::Inline
+
+module Resolvers
+  # Resolves full season details from TMDB GET /tv/{tv_id}/season/{season_number}.
+  class SeasonResolver < Resolvers::BaseResolver
+    # : (tv_id: Integer, season_number: Integer, language: String) -> ::Hash[String, untyped]
+    def resolve: (tv_id: Integer, season_number: Integer, language: String) -> ::Hash[String, untyped]
+  end
+end

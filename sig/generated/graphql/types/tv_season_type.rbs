@@ -1,0 +1,25 @@
+# Generated from app/graphql/types/tv_season_type.rb with RBS::Inline
+
+module Types
+  # Summary season object returned inside a TvType response.
+  # For full episode details use the SeasonType resolver.
+  class TvSeasonType < Types::BaseObject
+    # : () -> Integer
+    def id: () -> Integer
+
+    # : () -> String
+    def name: () -> String
+
+    # : () -> String
+    def overview: () -> String
+
+    # : () -> Integer
+    def episode_count: () -> Integer
+
+    # : () -> Integer
+    def season_number: () -> Integer
+
+    # : () -> Float
+    def vote_average: () -> Float
+  end
+end

@@ -1,0 +1,7 @@
+# Stubs for types that Steep cannot resolve from the rbs_collection.
+# - Find module (stdlib, not in rbs_collection gems list)
+
+module Find
+  def self.find: (String path, *String paths) { (String) -> void } -> nil
+               | (String path, *String paths) -> ::Enumerator[String, nil]
+end

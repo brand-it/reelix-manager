@@ -15,7 +15,10 @@ export default class extends Controller {
   search() {
     clearTimeout(this.timeout)
     this.timeout = setTimeout(() => {
-      this.element.requestSubmit()
+      this.timeout = null
+      if (this.element.isConnected) {
+        this.element.requestSubmit()
+      }
     }, 300)
   }
 }

@@ -61,5 +61,5 @@ class VideoBlob < ApplicationRecord
   scope :plex_versions,    -> { where(plex_version: true) }
   scope :optimized_blobs,  -> { where(optimized: true) }
   scope :by_media_type,    ->(type) { type.present? ? where(media_type: type) : all }
-  scope :search_title,     ->(query) { query.present? ? where("title LIKE ?", "%#{query}%") : all }
+  scope :search_title,     ->(query) { query.present? ? where("title LIKE ?", "%#{sanitize_sql_like(query)}%") : all }
 end

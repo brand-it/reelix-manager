@@ -15,6 +15,7 @@ class VideoBlobsController < ApplicationController
     @video_blobs = VideoBlob
       .by_media_type(@media_type_filter)
       .search_title(@query)
-      .order(:title, :season_number, :episode_number) #: ActiveRecord::Relation
+      .order(:title, :season_number, :episode_number)
+      .load #: ActiveRecord::Relation
   end
 end

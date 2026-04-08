@@ -33,7 +33,4 @@
 class VideoBlob < ApplicationRecord
   # Sort order is important — matches plex_the_ripper convention.
   EXTRA_TYPES: untyped
-
-  # : (String) -> String
-  def self.poster_url_for: (String) -> String
 end

@@ -18,7 +18,7 @@ class TmdbMatcherJob < ApplicationJob
 
     attrs = { #: Hash[Symbol, Integer | String | nil]
       tmdb_id:    match[:id],
-      poster_url: match[:poster_path].present? ? VideoBlob.poster_url_for(match[:poster_path]) : nil
+      poster_url: match[:poster_path].present? ? TheMovieDb::Image.poster_url(match[:poster_path]) : nil
     }
     blob.update!(attrs)
   end

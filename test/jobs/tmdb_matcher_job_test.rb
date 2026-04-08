@@ -108,7 +108,7 @@ class TmdbMatcherJobTest < ActiveSupport::TestCase
       TmdbMatcherJob.perform_now(blob.id)
     end
 
-    assert_equal VideoBlob.poster_url_for("/qmDpIHrmpJINaRKAfWQfftjCdyi.jpg"), blob.reload.poster_url
+    assert_equal TheMovieDb::Image.poster_url("/qmDpIHrmpJINaRKAfWQfftjCdyi.jpg"), blob.reload.poster_url
   end
 
   test "leaves poster_url nil when search result has no poster_path" do

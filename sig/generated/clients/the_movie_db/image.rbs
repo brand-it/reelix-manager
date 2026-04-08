@@ -1,0 +1,10 @@
+# Generated from app/clients/the_movie_db/image.rb with RBS::Inline
+
+module TheMovieDb
+  module Image
+    IMAGE_BASE_URL: ::String
+
+    # : (String poster_path, ?size: String) -> String
+    def self.poster_url: (String poster_path, ?size: String) -> String
+  end
+end

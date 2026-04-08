@@ -60,9 +60,4 @@ class VideoBlob < ApplicationRecord
   scope :tv_shows,         -> { where(media_type: :tv) }
   scope :plex_versions,    -> { where(plex_version: true) }
   scope :optimized_blobs,  -> { where(optimized: true) }
-
-  #: (String) -> String
-  def self.poster_url_for(poster_path)
-    "https://image.tmdb.org/t/p/w342#{poster_path}"
-  end
 end

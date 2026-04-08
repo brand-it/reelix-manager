@@ -27,7 +27,7 @@ class TmdbMatcherJob < ApplicationJob
 
   #: (VideoBlob blob) -> { id: Integer, poster_path: String }?
   def match_movie(blob)
-    return nil if blob.title.blank?
+    return if blob.title.blank?
 
     response = TheMovieDb::Search::Movie.new(
       query: blob.title.to_s,
@@ -39,7 +39,7 @@ class TmdbMatcherJob < ApplicationJob
 
   #: (VideoBlob blob) -> { id: Integer, poster_path: String }?
   def match_tv(blob)
-    return nil if blob.title.blank?
+    return if blob.title.blank?
 
     response = TheMovieDb::Search::Tv.new(
       query: blob.title.to_s
@@ -52,7 +52,7 @@ class TmdbMatcherJob < ApplicationJob
   # Prefers an exact year match; falls back to the first result.
   #: (::Array[::Hash[String, String | Integer | nil]] results, Integer? year, String date_key) -> { id: Integer, poster_path: String }?
   def best_match(results, year, date_key)
-    return nil if results.empty?
+    return if results.empty?
 
     result = if year
       results.find { |r| r[date_key].to_s[0, 4].to_i == year } || results.first
@@ -60,7 +60,7 @@ class TmdbMatcherJob < ApplicationJob
       results.first
     end
 
-    return nil unless result
+    return unless result
 
     id = result["id"].to_i           #: Integer
     poster_path = result["poster_path"].to_s #: String

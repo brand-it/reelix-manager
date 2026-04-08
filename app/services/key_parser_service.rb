@@ -280,7 +280,7 @@ class KeyParserService
 
   #: (String? raw) -> String?
   def coerce_title(raw)
-    return nil if raw.blank?
+    return if raw.blank?
 
     raw.strip.gsub(/ {2,}/, " ").gsub(/ (-\w)/, '\1')
   end

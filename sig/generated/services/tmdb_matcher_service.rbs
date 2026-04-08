@@ -29,4 +29,9 @@ class TmdbMatcherService < ApplicationService
   # Prefers an exact year match; falls back to the first result.
   # : (::Array[::Hash[String, String | Integer | nil]] results, Integer? year, String date_key) -> { id: Integer, poster_path: String }?
   def best_match: (::Array[::Hash[String, String | Integer | nil]] results, Integer? year, String date_key) -> { id: Integer, poster_path: String }?
+
+  TMDB_IMAGE_BASE_URL: ::String
+
+  # : (String poster_path, ?size: String) -> String
+  def poster_url: (String poster_path, ?size: String) -> String
 end

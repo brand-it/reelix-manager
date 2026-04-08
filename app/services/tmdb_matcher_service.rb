@@ -27,7 +27,7 @@ class TmdbMatcherService < ApplicationService
 
     @blob.update!(
       tmdb_id:    match[:id],
-      poster_url: match[:poster_path].present? ? TheMovieDb::Image.poster_url(match[:poster_path]) : nil
+      poster_url: match[:poster_path].present? ? poster_url(match[:poster_path]) : nil
     )
   end
 
@@ -69,5 +69,12 @@ class TmdbMatcherService < ApplicationService
     id = result["id"].to_i           #: Integer
     poster_path = result["poster_path"].to_s #: String
     { id: id, poster_path: poster_path }
+  end
+
+  TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p"
+
+  #: (String poster_path, ?size: String) -> String
+  def poster_url(poster_path, size: "w342")
+    "#{TMDB_IMAGE_BASE_URL}/#{size}#{poster_path}"
   end
 end

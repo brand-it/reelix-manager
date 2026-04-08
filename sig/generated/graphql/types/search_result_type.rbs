@@ -26,5 +26,8 @@ module Types
 
     # : () -> String
     def display_title: () -> String
+
+    # : () -> ::ActiveRecord::Relation
+    def video_blobs: () -> ::ActiveRecord::Relation
   end
 end

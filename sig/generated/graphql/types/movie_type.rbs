@@ -37,5 +37,8 @@ module Types
 
     # : () -> ::Array[::Hash[String, untyped]]
     def genres: () -> ::Array[::Hash[String, untyped]]
+
+    # : () -> ::ActiveRecord::Relation
+    def video_blobs: () -> ::ActiveRecord::Relation
   end
 end

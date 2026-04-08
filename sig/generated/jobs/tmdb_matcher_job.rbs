@@ -1,21 +1,8 @@
 # Generated from app/jobs/tmdb_matcher_job.rb with RBS::Inline
 
-# Resolves the TMDB ID and poster URL for a single VideoBlob by searching TMDB by title and year.
 # Enqueued by LibraryScanJob for every blob that is missing a tmdb_id.
+# Delegates all matching logic to TmdbMatcherService.
 class TmdbMatcherJob < ApplicationJob
   # : (Integer video_blob_id) -> void
   def perform: (Integer video_blob_id) -> void
-
-  private
-
-  # : (VideoBlob blob) -> { id: Integer, poster_path: String }?
-  def match_movie: (VideoBlob blob) -> { id: Integer, poster_path: String }?
-
-  # : (VideoBlob blob) -> { id: Integer, poster_path: String }?
-  def match_tv: (VideoBlob blob) -> { id: Integer, poster_path: String }?
-
-  # Returns a hash with :id and :poster_path for the best-matching result.
-  # Prefers an exact year match; falls back to the first result.
-  # : (::Array[::Hash[String, String | Integer | nil]] results, Integer? year, String date_key) -> { id: Integer, poster_path: String }?
-  def best_match: (::Array[::Hash[String, String | Integer | nil]] results, Integer? year, String date_key) -> { id: Integer, poster_path: String }?
 end

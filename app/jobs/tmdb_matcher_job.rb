@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# Resolves the TMDB ID and poster URL for a single VideoBlob by searching TMDB by title and year.
 # Enqueued by LibraryScanJob for every blob that is missing a tmdb_id.
+# Delegates all matching logic to TmdbMatcherService.
 class TmdbMatcherJob < ApplicationJob
   queue_as :default
 
@@ -13,57 +13,6 @@ class TmdbMatcherJob < ApplicationJob
     return unless blob
     return if blob.tmdb_id.present?
 
-    match = blob.movie? ? match_movie(blob) : match_tv(blob)
-    return unless match
-
-    attrs = { #: Hash[Symbol, Integer | String | nil]
-      tmdb_id:    match[:id],
-      poster_url: match[:poster_path].present? ? TheMovieDb::Image.poster_url(match[:poster_path]) : nil
-    }
-    blob.update!(attrs)
-  end
-
-  private
-
-  #: (VideoBlob blob) -> { id: Integer, poster_path: String }?
-  def match_movie(blob)
-    return if blob.title.blank?
-
-    response = TheMovieDb::Search::Movie.new(
-      query: blob.title.to_s,
-      year:  blob.year
-    ).results
-
-    best_match(response["results"] || [], blob.year, "release_date")
-  end
-
-  #: (VideoBlob blob) -> { id: Integer, poster_path: String }?
-  def match_tv(blob)
-    return if blob.title.blank?
-
-    response = TheMovieDb::Search::Tv.new(
-      query: blob.title.to_s
-    ).results
-
-    best_match(response["results"] || [], blob.year, "first_air_date")
-  end
-
-  # Returns a hash with :id and :poster_path for the best-matching result.
-  # Prefers an exact year match; falls back to the first result.
-  #: (::Array[::Hash[String, String | Integer | nil]] results, Integer? year, String date_key) -> { id: Integer, poster_path: String }?
-  def best_match(results, year, date_key)
-    return if results.empty?
-
-    result = if year
-      results.find { |r| r[date_key].to_s[0, 4].to_i == year } || results.first
-    else
-      results.first
-    end
-
-    return unless result
-
-    id = result["id"].to_i           #: Integer
-    poster_path = result["poster_path"].to_s #: String
-    { id: id, poster_path: poster_path }
+    TmdbMatcherService.call(blob)
   end
 end

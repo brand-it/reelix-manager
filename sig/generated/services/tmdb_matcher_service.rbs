@@ -1,0 +1,32 @@
+# Generated from app/services/tmdb_matcher_service.rb with RBS::Inline
+
+# Resolves the TMDB ID and poster URL for a single VideoBlob by searching TMDB
+# by title and year, then persists the result.
+#
+# Usage:
+#   TmdbMatcherService.call(blob)
+class TmdbMatcherService < ApplicationService
+  # : (VideoBlob blob) -> void
+  def self.call: (VideoBlob blob) -> void
+
+  @blob: VideoBlob
+
+  # : (VideoBlob blob) -> void
+  def initialize: (VideoBlob blob) -> void
+
+  # : () -> void
+  def call: () -> void
+
+  private
+
+  # : () -> { id: Integer, poster_path: String }?
+  def match_movie: () -> { id: Integer, poster_path: String }?
+
+  # : () -> { id: Integer, poster_path: String }?
+  def match_tv: () -> { id: Integer, poster_path: String }?
+
+  # Returns the best-matching TMDB result as { id:, poster_path: }.
+  # Prefers an exact year match; falls back to the first result.
+  # : (::Array[::Hash[String, String | Integer | nil]] results, Integer? year, String date_key) -> { id: Integer, poster_path: String }?
+  def best_match: (::Array[::Hash[String, String | Integer | nil]] results, Integer? year, String date_key) -> { id: Integer, poster_path: String }?
+end

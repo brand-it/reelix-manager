@@ -29,8 +29,13 @@ end
 class ActiveRecord::Relation
   def newest: () -> ActiveRecord::Relation
   def oldest: () -> ActiveRecord::Relation
-  def by_media_type: (String? type) -> ActiveRecord::Relation
-  def search_title:  (String query) -> ActiveRecord::Relation
+end
+
+# VideoBlob-specific scopes live on the VideoBlob relation only,
+# not on every ActiveRecord::Relation in the app.
+class VideoBlob::ActiveRecord_Relation < ActiveRecord::Relation
+  def by_media_type: (String? type) -> VideoBlob::ActiveRecord_Relation
+  def search_title:  (String query) -> VideoBlob::ActiveRecord_Relation
 end
 
 # ActiveRecord's WhereChain supports .not(...) but the rbs_collection omits it.

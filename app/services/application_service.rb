@@ -15,6 +15,7 @@ class ApplicationService
     end
   end
 
+  #: () -> void
   def call
     raise NotImplementedError, "#{self.class}#call is not implemented"
   end

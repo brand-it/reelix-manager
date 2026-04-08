@@ -11,5 +11,6 @@
 class ApplicationService
   def self.call: () -> untyped
 
-  def call: () -> untyped
+  # : () -> void
+  def call: () -> void
 end

@@ -35,4 +35,3 @@ class TmdbMatcherJobTest < ActiveSupport::TestCase
     assert_nothing_raised { TmdbMatcherJob.perform_now(0) }
   end
 end
-

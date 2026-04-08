@@ -6,3 +6,6 @@ application.register("reveal", RevealController)
 
 import HelloController from "controllers/hello_controller"
 application.register("hello", HelloController)
+
+import SearchController from "controllers/search_controller"
+application.register("search", SearchController)

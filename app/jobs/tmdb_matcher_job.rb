@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Resolves the TMDB ID for a single VideoBlob by searching TMDB by title and year.
+# Resolves the TMDB ID and poster URL for a single VideoBlob by searching TMDB by title and year.
 # Enqueued by LibraryScanJob for every blob that is missing a tmdb_id.
 class TmdbMatcherJob < ApplicationJob
   queue_as :default
@@ -13,13 +13,17 @@ class TmdbMatcherJob < ApplicationJob
     return unless blob
     return if blob.tmdb_id.present?
 
-    tmdb_id = blob.movie? ? match_movie(blob) : match_tv(blob)
-    blob.update!(tmdb_id: tmdb_id) if tmdb_id
+    match = blob.movie? ? match_movie(blob) : match_tv(blob)
+    return unless match
+
+    attrs = { tmdb_id: match[:id] } #: Hash[Symbol, Integer | String]
+    attrs[:poster_url] = VideoBlob.poster_url_for(match[:poster_path].to_s) if match[:poster_path].present?
+    blob.update!(attrs)
   end
 
   private
 
-  #: (VideoBlob blob) -> Integer?
+  #: (VideoBlob blob) -> { id: Integer, poster_path: String }?
   def match_movie(blob)
     return nil if blob.title.blank?
 
@@ -31,7 +35,7 @@ class TmdbMatcherJob < ApplicationJob
     best_match(response["results"] || [], blob.year, "release_date")
   end
 
-  #: (VideoBlob blob) -> Integer?
+  #: (VideoBlob blob) -> { id: Integer, poster_path: String }?
   def match_tv(blob)
     return nil if blob.title.blank?
 
@@ -42,19 +46,22 @@ class TmdbMatcherJob < ApplicationJob
     best_match(response["results"] || [], blob.year, "first_air_date")
   end
 
-  # Returns the TMDB id of the best-matching result.
+  # Returns a hash with :id and :poster_path for the best-matching result.
   # Prefers an exact year match; falls back to the first result.
-  #: (::Array[::Hash[String, untyped]] results, Integer? year, String date_key) -> Integer?
+  #: (::Array[::Hash[String, String | Integer | nil]] results, Integer? year, String date_key) -> { id: Integer, poster_path: String }?
   def best_match(results, year, date_key)
     return nil if results.empty?
 
-    if year
-      year_match = results.find do |r|
-        r[date_key].to_s[0, 4].to_i == year
-      end
-      return year_match["id"] if year_match
+    result = if year
+      results.find { |r| r[date_key].to_s[0, 4].to_i == year } || results.first
+    else
+      results.first
     end
 
-    results.first["id"]
+    return nil unless result
+
+    id = result["id"].to_i           #: Integer
+    poster_path = result["poster_path"].to_s #: String
+    { id: id, poster_path: poster_path }
   end
 end

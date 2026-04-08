@@ -95,6 +95,46 @@ class TmdbMatcherJobTest < ActiveSupport::TestCase
     assert_nil blob.reload.tmdb_id
   end
 
+  # ---------------------------------------------------------------------------
+  # poster_url
+  # ---------------------------------------------------------------------------
+
+  test "sets poster_url when search result includes poster_path" do
+    blob = create(:video_blob, title: "Inception", year: 2010)
+
+    stub_movie_search([
+      { "id" => 27_205, "release_date" => "2010-07-16", "poster_path" => "/qmDpIHrmpJINaRKAfWQfftjCdyi.jpg" }
+    ]) do
+      TmdbMatcherJob.perform_now(blob.id)
+    end
+
+    assert_equal VideoBlob.poster_url_for("/qmDpIHrmpJINaRKAfWQfftjCdyi.jpg"), blob.reload.poster_url
+  end
+
+  test "leaves poster_url nil when search result has no poster_path" do
+    blob = create(:video_blob, title: "Obscure Movie", year: 2020)
+
+    stub_movie_search([
+      { "id" => 999, "release_date" => "2020-01-01", "poster_path" => nil }
+    ]) do
+      TmdbMatcherJob.perform_now(blob.id)
+    end
+
+    assert_nil blob.reload.poster_url
+  end
+
+  test "leaves poster_url nil when search result has blank poster_path" do
+    blob = create(:video_blob, title: "Silent Film", year: 2019)
+
+    stub_movie_search([
+      { "id" => 888, "release_date" => "2019-03-15", "poster_path" => "" }
+    ]) do
+      TmdbMatcherJob.perform_now(blob.id)
+    end
+
+    assert_nil blob.reload.poster_url
+  end
+
   private
 
   def stub_movie_search(results)

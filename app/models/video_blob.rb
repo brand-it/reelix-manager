@@ -17,6 +17,7 @@
 #  optimized           :boolean          default(FALSE), not null
 #  part                :integer
 #  plex_version        :boolean          default(FALSE), not null
+#  poster_url          :string
 #  season_number       :integer
 #  title               :string
 #  tmdb_id             :integer
@@ -54,8 +55,14 @@ class VideoBlob < ApplicationRecord
 
   scope :without_tmdb_id,  -> { where(tmdb_id: nil) }
   scope :with_tmdb_id,     -> { where.not(tmdb_id: nil) }
+  scope :with_poster,      -> { where.not(poster_url: nil) }
   scope :movies,           -> { where(media_type: :movie) }
   scope :tv_shows,         -> { where(media_type: :tv) }
   scope :plex_versions,    -> { where(plex_version: true) }
   scope :optimized_blobs,  -> { where(optimized: true) }
+
+  #: (String) -> String
+  def self.poster_url_for(poster_path)
+    "https://image.tmdb.org/t/p/w342#{poster_path}"
+  end
 end

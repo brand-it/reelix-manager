@@ -1,0 +1,74 @@
+<%# Library browser — searchable card grid of all VideoBlob records %>
+<turbo-frame id="blobs_grid">
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h1 class="h3 mb-0">Library</h1>
+    <span class="text-secondary small"><%= @video_blobs.count %> blobs</span>
+  </div>
+
+  <%# Search form — wraps both the input and the filter tabs so they submit together %>
+  <%= form_with url: video_blobs_path, method: :get,
+                data: { controller: "search", turbo_frame: "blobs_grid" },
+                class: "mb-4" do |f| %>
+    <div class="input-group mb-3">
+      <%= f.search_field :q, value: @query,
+            placeholder: "Search by title…",
+            class: "form-control form-control-lg",
+            autocomplete: "off",
+            data: { action: "input->search#search" } %>
+      <%= f.hidden_field :media_type, value: @media_type_filter %>
+      <%= f.submit "Search", class: "btn btn-primary" %>
+    </div>
+
+    <%# Media-type filter tabs %>
+    <ul class="nav nav-pills">
+      <% [["", "All"], ["movie", "Movies"], ["tv", "TV Shows"]].each do |value, label| %>
+        <li class="nav-item">
+          <%= link_to label, video_blobs_path(q: @query, media_type: value),
+                class: "nav-link #{"active" if @media_type_filter == value}",
+                data: { turbo_frame: "blobs_grid" } %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+  <% if @video_blobs.empty? %>
+    <div class="text-center text-secondary py-5">
+      <p class="fs-5">
+        No blobs found<% if @query.present? %> for &ldquo;<%= @query %>&rdquo;<% end %>.
+      </p>
+    </div>
+  <% else %>
+    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3">
+      <% @video_blobs.each do |blob| %>
+        <div class="col">
+          <div class="card h-100 bg-dark text-white border-secondary">
+            <% if blob.poster_url.present? %>
+              <%= image_tag blob.poster_url,
+                    class: "card-img-top",
+                    alt: "#{blob.title} poster",
+                    loading: "lazy",
+                    style: "aspect-ratio: 2/3; object-fit: cover;" %>
+            <% else %>
+              <div class="card-img-top d-flex align-items-center justify-content-center bg-secondary text-muted"
+                   style="aspect-ratio: 2/3; font-size: 0.65rem; word-break: break-all; padding: 0.5rem;">
+                <%= blob.filename %>
+              </div>
+            <% end %>
+            <div class="card-body p-2">
+              <p class="card-title mb-0 small fw-semibold text-truncate" title="<%= blob.title %>">
+                <%= blob.title.presence || blob.filename %>
+              </p>
+              <% if blob.year.present? %>
+                <p class="card-text text-secondary" style="font-size: 0.75rem;"><%= blob.year %></p>
+              <% end %>
+              <% if blob.tv? && blob.season_number.present? %>
+                <p class="card-text text-secondary" style="font-size: 0.7rem;">
+                  S<%= format("%02d", blob.season_number) %><% if blob.episode_number.present? %>E<%= format("%02d", blob.episode_number) %><% end %>
+                </p>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</turbo-frame>

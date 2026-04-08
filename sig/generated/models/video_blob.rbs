@@ -17,6 +17,7 @@
 #  optimized           :boolean          default(FALSE), not null
 #  part                :integer
 #  plex_version        :boolean          default(FALSE), not null
+#  poster_url          :string
 #  season_number       :integer
 #  title               :string
 #  tmdb_id             :integer
@@ -32,4 +33,7 @@
 class VideoBlob < ApplicationRecord
   # Sort order is important — matches plex_the_ripper convention.
   EXTRA_TYPES: untyped
+
+  # : (String) -> String
+  def self.poster_url_for: (String) -> String
 end

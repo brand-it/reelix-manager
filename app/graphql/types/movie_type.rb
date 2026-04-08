@@ -36,6 +36,9 @@ module Types
 
     field :genres, [ Types::GenreType ], null: false
 
+    field :video_blobs, [ Types::VideoBlobType ], null: false,
+      description: "Local video files matched to this movie"
+
     #: () -> Integer
     def id               = object["id"]
 
@@ -71,5 +74,8 @@ module Types
 
     #: () -> ::Array[::Hash[String, untyped]]
     def genres           = object["genres"] || []
+
+    #: () -> ::ActiveRecord::Relation
+    def video_blobs = ::VideoBlob.where(media_type: :movie, tmdb_id: object["id"])
   end
 end

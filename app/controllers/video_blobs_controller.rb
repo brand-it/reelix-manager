@@ -5,8 +5,7 @@ class VideoBlobsController < ApplicationController
   # @rbs @query: String
   # @rbs @media_type_filter: String
 
-  #: Array[String]
-  VALID_MEDIA_TYPES = %w[movie tv].freeze
+  VALID_MEDIA_TYPES = %w[movie tv].freeze #: Array[String]
 
   #: () -> void
   def index

@@ -7,8 +7,7 @@ class VideoBlobsController < ApplicationController
 
   @media_type_filter: String
 
-  # : Array[String]
-  VALID_MEDIA_TYPES: untyped
+  VALID_MEDIA_TYPES: Array[String]
 
   # : () -> void
   def index: () -> void

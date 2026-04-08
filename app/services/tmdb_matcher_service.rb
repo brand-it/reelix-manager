@@ -68,9 +68,9 @@ class TmdbMatcherService < ApplicationService
 
     raw_id = result["id"] #: String | Integer | nil
     id = case raw_id
-         when Integer then raw_id.positive? ? raw_id : nil
-         when String  then (raw_id.match?(/\A\d+\z/) ? raw_id.to_i : nil).then { |n| n&.positive? ? n : nil }
-         end #: Integer?
+    when Integer then raw_id.positive? ? raw_id : nil
+    when String  then (raw_id.match?(/\A\d+\z/) ? raw_id.to_i : nil).then { |n| n&.positive? ? n : nil }
+    end #: Integer?
     return unless id
 
     poster_path = result["poster_path"].to_s #: String

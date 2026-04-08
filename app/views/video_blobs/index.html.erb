@@ -6,18 +6,18 @@
   </div>
 
   <%# Search form — wraps both the input and the filter tabs so they submit together %>
-  <%= form_with url: video_blobs_path, method: :get,
-                data: { controller: "search", turbo_frame: "blobs_grid" },
-                class: "mb-4" do |f| %>
-    <div class="input-group mb-3">
-      <%= f.search_field :q, value: @query,
-            placeholder: "Search by title…",
-            class: "form-control form-control-lg",
-            autocomplete: "off",
-            data: { action: "input->search#search" } %>
-      <%= f.hidden_field :media_type, value: @media_type_filter %>
-      <%= f.submit "Search", class: "btn btn-primary" %>
-    </div>
+  <div data-controller="submit-on-keyup" class="mb-4">
+    <%= form_with url: video_blobs_path, method: :get,
+                  data: { "submit-on-keyup-target": "form", turbo_frame: "blobs_grid" } do |f| %>
+      <div class="input-group mb-3">
+        <%= f.search_field :q, value: @query,
+              placeholder: "Search by title…",
+              class: "form-control form-control-lg",
+              autocomplete: "off",
+              data: { "submit-on-keyup-target": "input", action: "input->submit-on-keyup#submit" } %>
+        <%= f.hidden_field :media_type, value: @media_type_filter %>
+        <%= f.submit "Search", class: "btn btn-primary" %>
+      </div>
 
     <%# Media-type filter tabs %>
     <ul class="nav nav-pills">
@@ -29,7 +29,9 @@
         </li>
       <% end %>
     </ul>
-  <% end %>
+    <% end %>
+  </div>
+
   <% if @video_blobs.empty? %>
     <div class="text-center text-secondary py-5">
       <p class="fs-5">

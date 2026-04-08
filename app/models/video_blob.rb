@@ -55,9 +55,11 @@ class VideoBlob < ApplicationRecord
 
   scope :without_tmdb_id,  -> { where(tmdb_id: nil) }
   scope :with_tmdb_id,     -> { where.not(tmdb_id: nil) }
-  scope :with_poster,      -> { where.not(poster_url: nil) }
+  scope :with_poster,      -> { where.not(poster_url: [nil, ""]) }
   scope :movies,           -> { where(media_type: :movie) }
   scope :tv_shows,         -> { where(media_type: :tv) }
   scope :plex_versions,    -> { where(plex_version: true) }
   scope :optimized_blobs,  -> { where(optimized: true) }
+  scope :by_media_type,    ->(type) { type.present? ? where(media_type: type) : all }
+  scope :search_title,     ->(query) { query.present? ? where("title LIKE ?", "%#{query}%") : all }
 end

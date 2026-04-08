@@ -29,6 +29,8 @@ end
 class ActiveRecord::Relation
   def newest: () -> ActiveRecord::Relation
   def oldest: () -> ActiveRecord::Relation
+  def by_media_type: (String? type) -> ActiveRecord::Relation
+  def search_title:  (String query) -> ActiveRecord::Relation
 end
 
 # ActiveRecord's WhereChain supports .not(...) but the rbs_collection omits it.

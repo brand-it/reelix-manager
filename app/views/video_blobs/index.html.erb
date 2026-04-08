@@ -44,7 +44,7 @@
             <% if blob.poster_url.present? %>
               <%= image_tag blob.poster_url,
                     class: "card-img-top",
-                    alt: "#{blob.title} poster",
+                    alt: "#{blob.title.presence || blob.filename} poster",
                     loading: "lazy",
                     style: "aspect-ratio: 2/3; object-fit: cover;" %>
             <% else %>
@@ -54,7 +54,7 @@
               </div>
             <% end %>
             <div class="card-body p-2">
-              <p class="card-title mb-0 small fw-semibold text-truncate" title="<%= blob.title %>">
+              <p class="card-title mb-0 small fw-semibold text-truncate" title="<%= blob.title.presence || blob.filename %>">
                 <%= blob.title.presence || blob.filename %>
               </p>
               <% if blob.year.present? %>

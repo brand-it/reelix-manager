@@ -49,10 +49,13 @@ class VideoBlob < ApplicationRecord
                      | (::String updates) -> Integer
   def self.without_tmdb_id: () -> ::ActiveRecord::Relation
   def self.with_tmdb_id:    () -> ::ActiveRecord::Relation
+  def self.with_poster:     () -> ::ActiveRecord::Relation
   def self.movies:          () -> ::ActiveRecord::Relation
   def self.tv_shows:        () -> ::ActiveRecord::Relation
   def self.plex_versions:   () -> ::ActiveRecord::Relation
   def self.optimized_blobs: () -> ::ActiveRecord::Relation
+  def self.by_media_type:   (String? type) -> ::ActiveRecord::Relation
+  def self.search_title:    (String query) -> ::ActiveRecord::Relation
 
   def key:                 () -> String
   def key=:                (String value) -> String

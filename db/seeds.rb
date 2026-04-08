@@ -19,7 +19,7 @@ puts "Doorkeeper application 'Reelix' ready (client_id: reelix-client)"
 if Rails.env.development?
 
   # ── Movies ────────────────────────────────────────────────────────────────
-  SEED_MOVIES = [
+  seed_movies = [
     { title: "Inception",               year: 2010, tmdb_id: 27205,  poster_url: "https://image.tmdb.org/t/p/w342/oYuLEt3zVCKq57qu2F8dT7NIa6f.jpg" },
     { title: "The Dark Knight",         year: 2008, tmdb_id: 155,    poster_url: "https://image.tmdb.org/t/p/w342/qJ2tW6WMUDux911r6m7haRef0WH.jpg" },
     { title: "Interstellar",            year: 2014, tmdb_id: 157336, poster_url: "https://image.tmdb.org/t/p/w342/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg" },
@@ -39,7 +39,7 @@ if Rails.env.development?
     { title: nil, year: nil, tmdb_id: nil, poster_url: nil, filename_override: "rip_disc_01_title_02.mkv" }
   ].freeze
 
-  SEED_MOVIES.each do |attrs|
+  seed_movies.each do |attrs|
     title    = attrs[:title]
     year     = attrs[:year]
     filename = attrs.fetch(:filename_override) { "#{title} (#{year}).mkv" }
@@ -57,10 +57,10 @@ if Rails.env.development?
     end
   end
 
-  puts "Seeded #{SEED_MOVIES.size} movie blobs"
+  puts "Seeded #{seed_movies.size} movie blobs"
 
   # ── TV shows ──────────────────────────────────────────────────────────────
-  SEED_TV = [
+  seed_tv = [
     {
       title: "Breaking Bad", year: 2008, tmdb_id: 1396,
       poster_url: "https://image.tmdb.org/t/p/w342/ggFHVNu6YYI5L9pCfOacjizRGt.jpg",
@@ -84,7 +84,7 @@ if Rails.env.development?
     }
   ].freeze
 
-  SEED_TV.each do |show|
+  seed_tv.each do |show|
     show[:seasons].each do |season_num, episode_count|
       (1..episode_count).each do |ep_num|
         filename = "#{show[:title]} (#{show[:year]}) - S%02dE%02d.mkv" % [ season_num, ep_num ]
@@ -106,6 +106,6 @@ if Rails.env.development?
     end
   end
 
-  episode_count = SEED_TV.sum { |s| s[:seasons].values.sum }
-  puts "Seeded #{episode_count} TV episode blobs (#{SEED_TV.size} shows)"
+  episode_count = seed_tv.sum { |s| s[:seasons].values.sum }
+  puts "Seeded #{episode_count} TV episode blobs (#{seed_tv.size} shows)"
 end

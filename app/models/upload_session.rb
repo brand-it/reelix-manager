@@ -30,7 +30,7 @@ class UploadSession < ApplicationRecord
   #: () -> String?
   def assembled_file_path
     path = destination_path
-    return nil if path.blank?
+    return if path.blank?
     File.join(path, filename)
   end
 

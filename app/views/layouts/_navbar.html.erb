@@ -8,6 +8,9 @@
       <ul class="navbar-nav ms-auto align-items-center">
         <% if user_signed_in? %>
           <li class="nav-item">
+            <%= link_to "Library", video_blobs_path, class: "nav-link" %>
+          </li>
+          <li class="nav-item">
             <%= link_to "GraphiQL", "/graphiql", class: "nav-link" %>
           </li>
           <li class="nav-item">

@@ -37,6 +37,8 @@ Rails.application.routes.draw do
     resource :video, only: %i[new create edit update]
   end
 
+  resources :video_blobs, only: %i[index]
+
   # Static API documentation (public — explains how to authenticate).
   get "docs/api", to: "docs#api", as: :api_docs
 

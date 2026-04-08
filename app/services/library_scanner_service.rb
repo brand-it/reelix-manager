@@ -12,12 +12,10 @@ require "find"
 #   result[:updated] # => 3
 #   result[:removed] # => 1
 #   result[:skipped] # => 0
-class LibraryScannerService
+class LibraryScannerService < ApplicationService
   class << self
     #: () -> ::Hash[Symbol, Integer]
-    def call
-      new.call
-    end
+    def call(...) = super
   end
 
   #: () -> ::Hash[Symbol, Integer]

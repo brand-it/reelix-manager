@@ -8,7 +8,7 @@
 #   result.movie?   # => true
 #   result.title    # => "Inception"
 #   result.year     # => 2010
-class KeyParserService
+class KeyParserService < ApplicationService
   VIDEO_FORMATS: untyped
 
   VIDEO_MIME_TYPES: untyped

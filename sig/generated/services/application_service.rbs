@@ -1,0 +1,16 @@
+# Generated from app/services/application_service.rb with RBS::Inline
+
+# Base class for all service objects.
+#
+# Subclasses must implement #call. Constructor arguments set up state; #call
+# executes the behaviour.
+#
+# Usage:
+#   MyService.call(arg)           # class-level shortcut
+#   MyService.new(arg).call       # equivalent long form
+class ApplicationService
+  def self.call: () -> untyped
+
+  # : () -> void
+  def call: () -> void
+end

@@ -1,0 +1,14 @@
+# Generated from app/controllers/video_blobs_controller.rb with RBS::Inline
+
+class VideoBlobsController < ApplicationController
+  @video_blobs: ActiveRecord::Relation
+
+  @query: String
+
+  @media_type_filter: String
+
+  VALID_MEDIA_TYPES: Array[String]
+
+  # : () -> void
+  def index: () -> void
+end

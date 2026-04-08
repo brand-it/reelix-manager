@@ -8,7 +8,7 @@
 #   result.movie?   # => true
 #   result.title    # => "Inception"
 #   result.year     # => 2010
-class KeyParserService
+class KeyParserService < ApplicationService
   VIDEO_FORMATS = %w[
     .avi .mp4 .mkv .mov .wmv .flv .webm .mpeg .mpg .3gp .m4v .swf .rm .vob
     .ogv .ts .f4v .divx .asf .mts .m2ts .dv .mxf .f4p .gxf .m2v .yuv .amv
@@ -100,9 +100,7 @@ class KeyParserService
 
   class << self
     #: (String key, ?movie_path: String?, ?tv_path: String?) -> BlobData?
-    def call(key, movie_path: nil, tv_path: nil)
-      new(key, movie_path:, tv_path:).call
-    end
+    def call(...) = super
   end
 
   # @rbs @key: String
@@ -280,7 +278,7 @@ class KeyParserService
 
   #: (String? raw) -> String?
   def coerce_title(raw)
-    return nil if raw.blank?
+    return if raw.blank?
 
     raw.strip.gsub(/ {2,}/, " ").gsub(/ (-\w)/, '\1')
   end

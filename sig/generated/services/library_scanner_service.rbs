@@ -10,7 +10,7 @@
 #   result[:updated] # => 3
 #   result[:removed] # => 1
 #   result[:skipped] # => 0
-class LibraryScannerService
+class LibraryScannerService < ApplicationService
   # : () -> ::Hash[Symbol, Integer]
   def self.call: () -> ::Hash[Symbol, Integer]
 

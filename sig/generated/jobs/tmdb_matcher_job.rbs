@@ -1,21 +1,8 @@
 # Generated from app/jobs/tmdb_matcher_job.rb with RBS::Inline
 
-# Resolves the TMDB ID for a single VideoBlob by searching TMDB by title and year.
 # Enqueued by LibraryScanJob for every blob that is missing a tmdb_id.
+# Delegates all matching logic to TmdbMatcherService.
 class TmdbMatcherJob < ApplicationJob
   # : (Integer video_blob_id) -> void
   def perform: (Integer video_blob_id) -> void
-
-  private
-
-  # : (VideoBlob blob) -> Integer?
-  def match_movie: (VideoBlob blob) -> Integer?
-
-  # : (VideoBlob blob) -> Integer?
-  def match_tv: (VideoBlob blob) -> Integer?
-
-  # Returns the TMDB id of the best-matching result.
-  # Prefers an exact year match; falls back to the first result.
-  # : (::Array[::Hash[String, untyped]] results, Integer? year, String date_key) -> Integer?
-  def best_match: (::Array[::Hash[String, untyped]] results, Integer? year, String date_key) -> Integer?
 end

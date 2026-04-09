@@ -21,6 +21,9 @@ end
 class ApplicationRecord < ActiveRecord::Base
   def to_gid_param: (?::Hash[::Symbol | ::String, untyped] options) -> String
   def to_sgid_param: (?::Hash[::Symbol | ::String, untyped] options) -> String
+
+  # Returns an empty relation; useful as a no-op base for conditional query chains.
+  def self.none: () -> ::ActiveRecord::Relation
 end
 
 # ApplicationRecord defines :newest and :oldest scopes, and these are also

@@ -47,7 +47,7 @@ module Types
 
     #: () -> ::Array[::VideoBlob]
     def video_blobs = dataloader.with(Sources::EpisodeVideoBlobs).load(
-      [ object["show_id"], object["season_number"], object["episode_number"] ]
+      [ show_id, season_number, episode_number ]
     )
   end
 end

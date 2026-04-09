@@ -4,13 +4,15 @@ module Sources
   # Batch-loads VideoBlobs by [media_type, tmdb_id] to avoid N+1 queries
   # when multiple movies or TV show results request their associated video blobs.
   class VideoBlobs < GraphQL::Dataloader::Source
-    #: (::Array[[String, Integer]] keys) -> ::Array[::Array[::VideoBlob]]
+    #: (::Array[[String, Integer?]] keys) -> ::Array[::Array[::VideoBlob]]
     def fetch(keys)
       media_types = keys.map(&:first).uniq
-      tmdb_ids    = keys.map(&:last).uniq
+      tmdb_ids    = keys.map(&:last).compact.uniq
       grouped = ::VideoBlob.where(media_type: media_types, tmdb_id: tmdb_ids)
                            .group_by { |b| [ b.media_type, b.tmdb_id ] }
-      keys.map { |key| grouped[key] || [] }
+      keys.map do |media_type, tmdb_id|
+        tmdb_id.nil? ? [] : (grouped[[ media_type, tmdb_id ]] || [])
+      end
     end
   end
 end

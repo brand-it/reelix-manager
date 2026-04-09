@@ -1,6 +1,16 @@
 # Supplements to the graphql-ruby RBS in .gem_rbs_collection — adds methods
 # that the collection ships without signatures.
 module GraphQL
+  class Dataloader
+    class Source
+      def load: (untyped key) -> untyped
+      def load_all: (::Array[untyped] keys) -> ::Array[untyped]
+      def fetch: (::Array[untyped] keys) -> ::Array[untyped]
+    end
+
+    def with: (singleton(::GraphQL::Dataloader::Source) source_class, *untyped args) -> ::GraphQL::Dataloader::Source
+  end
+
   class Query
     class Context
       # Returns the schema that is executing this query.
@@ -22,6 +32,10 @@ module GraphQL
 
     # Resolves a global ID to an object. Override in schema subclasses.
     def self.object_from_id: (String global_id, GraphQL::Query::Context query_ctx) -> ApplicationRecord?
+
+    class Object
+      def dataloader: () -> ::GraphQL::Dataloader
+    end
 
     module Interface
       def self.edge_type_class: (untyped klass) -> void

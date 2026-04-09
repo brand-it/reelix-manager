@@ -65,7 +65,7 @@ module Types
       object["title"] || object["name"] || "Unknown"
     end
 
-    #: () -> ::ActiveRecord::Relation
-    def video_blobs = ::VideoBlob.where(media_type: object["media_type"], tmdb_id: object["id"])
+    #: () -> ::Array[::VideoBlob]
+    def video_blobs = dataloader.with(Sources::VideoBlobs).load([object["media_type"], object["id"]])
   end
 end

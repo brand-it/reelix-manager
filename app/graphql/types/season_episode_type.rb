@@ -45,12 +45,9 @@ module Types
     #: () -> Integer
     def vote_count      = object["vote_count"] || 0
 
-    #: () -> ::ActiveRecord::Relation
-    def video_blobs = ::VideoBlob.where(
-      media_type: :tv,
-      tmdb_id: object["show_id"],
-      season_number: object["season_number"],
-      episode_number: object["episode_number"]
+    #: () -> ::Array[::VideoBlob]
+    def video_blobs = dataloader.with(Sources::EpisodeVideoBlobs).load(
+      [object["show_id"], object["season_number"], object["episode_number"]]
     )
   end
 end

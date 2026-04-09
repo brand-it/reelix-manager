@@ -75,7 +75,7 @@ module Types
     #: () -> ::Array[::Hash[String, untyped]]
     def genres           = object["genres"] || []
 
-    #: () -> ::ActiveRecord::Relation
-    def video_blobs = ::VideoBlob.where(media_type: :movie, tmdb_id: object["id"])
+    #: () -> ::Array[::VideoBlob]
+    def video_blobs = dataloader.with(Sources::VideoBlobs).load(["movie", object["id"]])
   end
 end

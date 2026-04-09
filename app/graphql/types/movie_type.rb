@@ -76,6 +76,6 @@ module Types
     def genres           = object["genres"] || []
 
     #: () -> ::Array[::VideoBlob]
-    def video_blobs = dataloader.with(Sources::VideoBlobs).load(["movie", object["id"]])
+    def video_blobs = dataloader.with(Sources::VideoBlobs).load([ "movie", object["id"] ])
   end
 end

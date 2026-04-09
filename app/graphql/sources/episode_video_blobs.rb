@@ -8,7 +8,7 @@ module Sources
     def fetch(keys)
       tmdb_ids = keys.map(&:first).uniq
       grouped = ::VideoBlob.where(media_type: :tv, tmdb_id: tmdb_ids)
-                           .group_by { |b| [b.tmdb_id, b.season_number, b.episode_number] }
+                           .group_by { |b| [ b.tmdb_id, b.season_number, b.episode_number ] }
       keys.map { |key| grouped[key] || [] }
     end
   end

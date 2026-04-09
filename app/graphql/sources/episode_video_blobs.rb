@@ -7,12 +7,8 @@ module Sources
     #: (::Array[[Integer?, Integer, Integer]] keys) -> ::Array[::Array[::VideoBlob]]
     def fetch(keys)
       tmdb_ids = keys.map(&:first).compact.uniq
-      blobs = if tmdb_ids.empty?
-                ::VideoBlob.none
-              else
-                ::VideoBlob.where(media_type: :tv, tmdb_id: tmdb_ids)
-              end
-      grouped = blobs.group_by { |b| [ b.tmdb_id, b.season_number, b.episode_number ] }
+      blobs    = tmdb_ids.empty? ? ::VideoBlob.none : ::VideoBlob.where(media_type: :tv, tmdb_id: tmdb_ids)
+      grouped  = blobs.group_by { |b| [ b.tmdb_id, b.season_number, b.episode_number ] }
       keys.map do |key|
         key.first.nil? ? [] : (grouped[key] || [])
       end

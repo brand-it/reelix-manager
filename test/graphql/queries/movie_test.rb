@@ -33,6 +33,20 @@ class MovieQueryTest < ActiveSupport::TestCase
     }
   GQL
 
+  MOVIE_WITH_VIDEO_BLOBS_QUERY = <<~GQL
+    query Movie($id: Int!) {
+      movie(id: $id) {
+        id
+        videoBlobs {
+          id
+          filename
+          mediaType
+          tmdbId
+        }
+      }
+    }
+  GQL
+
   # -- Fixtures --------------------------------------------------------------
 
   def movie_data
@@ -146,6 +160,32 @@ class MovieQueryTest < ActiveSupport::TestCase
       result = ReelixManagerSchema.execute(MOVIE_QUERY, variables: { id: 27205 },
                                                         context: graphql_context(scopes: "upload"))
       assert result["errors"].any? { |e| e["message"].include?("Forbidden") }
+    end
+  end
+
+  # -- videoBlobs field -------------------------------------------------------
+
+  test "returns matched video blobs for a movie" do
+    with_fake_movie(movie_data) do
+      result = ReelixManagerSchema.execute(MOVIE_WITH_VIDEO_BLOBS_QUERY, variables: { id: 27205 },
+                                                                          context: graphql_context)
+
+      assert_nil result["errors"], result["errors"].inspect
+      blobs = result.dig("data", "movie", "videoBlobs")
+      assert_equal 1, blobs.size
+      assert_equal video_blobs(:inception).filename, blobs.first["filename"]
+      assert_equal "movie",                          blobs.first["mediaType"]
+      assert_equal 27205,                            blobs.first["tmdbId"]
+    end
+  end
+
+  test "returns empty videoBlobs when no local file matches the movie" do
+    with_fake_movie(movie_data.merge("id" => 99_999)) do
+      result = ReelixManagerSchema.execute(MOVIE_WITH_VIDEO_BLOBS_QUERY, variables: { id: 99_999 },
+                                                                          context: graphql_context)
+
+      assert_nil result["errors"]
+      assert_empty result.dig("data", "movie", "videoBlobs")
     end
   end
 end

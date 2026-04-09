@@ -30,6 +30,22 @@ class SeasonQueryTest < ActiveSupport::TestCase
     }
   GQL
 
+  SEASON_WITH_VIDEO_BLOBS_QUERY = <<~GQL
+    query Season($tvId: Int!, $seasonNumber: Int!) {
+      season(tvId: $tvId, seasonNumber: $seasonNumber) {
+        episodes {
+          episodeNumber
+          videoBlobs {
+            id
+            filename
+            mediaType
+            tmdbId
+          }
+        }
+      }
+    }
+  GQL
+
   # -- Fixtures --------------------------------------------------------------
 
   def season_data
@@ -175,6 +191,60 @@ class SeasonQueryTest < ActiveSupport::TestCase
         context: graphql_context(scopes: "upload")
       )
       assert result["errors"].any? { |e| e["message"].include?("Forbidden") }
+    end
+  end
+
+  # -- videoBlobs field -------------------------------------------------------
+
+  test "returns matched video blobs for an episode" do
+    with_fake_season(season_data) do
+      result = ReelixManagerSchema.execute(
+        SEASON_WITH_VIDEO_BLOBS_QUERY,
+        variables: { tvId: 1396, seasonNumber: 1 },
+        context: graphql_context
+      )
+
+      assert_nil result["errors"], result["errors"].inspect
+      episodes = result.dig("data", "season", "episodes")
+      pilot    = episodes.find { |e| e["episodeNumber"] == 1 }
+
+      assert_equal 1, pilot["videoBlobs"].size
+      assert_equal video_blobs(:breaking_bad_s01e01).filename, pilot["videoBlobs"].first["filename"]
+      assert_equal "tv",  pilot["videoBlobs"].first["mediaType"]
+      assert_equal 1396,  pilot["videoBlobs"].first["tmdbId"]
+    end
+  end
+
+  test "returns empty videoBlobs for an episode without a local file" do
+    with_fake_season(season_data) do
+      result = ReelixManagerSchema.execute(
+        SEASON_WITH_VIDEO_BLOBS_QUERY,
+        variables: { tvId: 1396, seasonNumber: 1 },
+        context: graphql_context
+      )
+
+      assert_nil result["errors"]
+      episodes = result.dig("data", "season", "episodes")
+      ep2      = episodes.find { |e| e["episodeNumber"] == 2 }
+
+      assert_empty ep2["videoBlobs"]
+    end
+  end
+
+  test "batches episode blob lookups across all episodes in one season query" do
+    with_fake_season(season_data) do
+      query_count = 0
+      counter     = ->(*, **) { query_count += 1 }
+
+      ActiveSupport::Notifications.subscribed(counter, "sql.active_record") do
+        ReelixManagerSchema.execute(
+          SEASON_WITH_VIDEO_BLOBS_QUERY,
+          variables: { tvId: 1396, seasonNumber: 1 },
+          context: graphql_context
+        )
+      end
+
+      assert_equal 1, query_count, "expected one SQL query for all episode blobs in the season"
     end
   end
 end

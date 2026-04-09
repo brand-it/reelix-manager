@@ -1,0 +1,10 @@
+# Generated from app/graphql/sources/video_blobs.rb with RBS::Inline
+
+module Sources
+  # Batch-loads VideoBlobs by [media_type, tmdb_id] to avoid N+1 queries
+  # when multiple movies or TV show results request their associated video blobs.
+  class VideoBlobs < GraphQL::Dataloader::Source
+    # : (::Array[[String, (Integer | nil)]] keys) -> ::Array[::Array[::VideoBlob]]
+    def fetch: (::Array[[ String, Integer | nil ]] keys) -> ::Array[::Array[::VideoBlob]]
+  end
+end

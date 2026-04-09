@@ -28,6 +28,21 @@ module ActiveSupport
     teardown do
       TheMovieDb::Base.singleton_class.remove_method(:ping)
     end
+
+    # Counts the number of real SQL SELECT queries executed inside the block.
+    # Filters out SCHEMA introspection, cached queries, and transaction statements
+    # (BEGIN/COMMIT/ROLLBACK) to avoid flaky counts that depend on schema-cache warmup.
+    def count_sql_queries(&block)
+      count   = 0
+      counter = ->(_name, _start, _finish, _id, payload) {
+        next if payload[:name].in?(%w[ SCHEMA CACHE ])
+        next if payload[:cached]
+        next if payload[:sql].match?(/\A\s*(BEGIN|COMMIT|ROLLBACK|SAVEPOINT|RELEASE)/i)
+        count += 1
+      }
+      ActiveSupport::Notifications.subscribed(counter, "sql.active_record", &block)
+      count
+    end
   end
 end
 

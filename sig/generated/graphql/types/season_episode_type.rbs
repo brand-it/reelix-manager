@@ -26,7 +26,7 @@ module Types
     # : () -> Integer
     def vote_count: () -> Integer
 
-    # : () -> ::ActiveRecord::Relation
-    def video_blobs: () -> ::ActiveRecord::Relation
+    # : () -> ::Array[::VideoBlob]
+    def video_blobs: () -> ::Array[::VideoBlob]
   end
 end

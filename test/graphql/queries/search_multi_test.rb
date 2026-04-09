@@ -29,6 +29,23 @@ class SearchMultiQueryTest < ActiveSupport::TestCase
     }
   GQL
 
+  SEARCH_WITH_VIDEO_BLOBS_QUERY = <<~GQL
+    query SearchMulti($query: String!) {
+      searchMulti(query: $query) {
+        results {
+          id
+          mediaType
+          videoBlobs {
+            id
+            filename
+            mediaType
+            tmdbId
+          }
+        }
+      }
+    }
+  GQL
+
   # -- Fixtures --------------------------------------------------------------
 
   def movie_results
@@ -263,6 +280,64 @@ class SearchMultiQueryTest < ActiveSupport::TestCase
       data = result.dig("data", "searchMulti")
       assert_equal [], data["results"]
       assert_equal 0,  data["totalResults"]
+    end
+  end
+
+  # -- videoBlobs field -------------------------------------------------------
+
+  test "returns matched video blobs for a movie search result" do
+    movie_response = { "page" => 1, "results" => [ movie_results.first ], "total_pages" => 1, "total_results" => 1 }
+    with_fake_searches(movie_response: movie_response, tv_response: default_tv_response) do
+      result = ReelixManagerSchema.execute(SEARCH_WITH_VIDEO_BLOBS_QUERY, variables: { query: "inception" },
+                                                                           context: graphql_context)
+
+      assert_nil result["errors"], result["errors"].inspect
+      results      = result.dig("data", "searchMulti", "results")
+      inception    = results.find { |r| r["id"] == 27205 && r["mediaType"] == "movie" }
+
+      assert_equal 1, inception["videoBlobs"].size
+      assert_equal video_blobs(:inception).filename, inception["videoBlobs"].first["filename"]
+      assert_equal "movie", inception["videoBlobs"].first["mediaType"]
+    end
+  end
+
+  test "returns matched video blobs for a TV show search result" do
+    tv_response = { "page" => 1, "results" => [ tv_results.first.merge("media_type" => "tv") ], "total_pages" => 1, "total_results" => 1 }
+    with_fake_searches(movie_response: default_movie_response, tv_response: tv_response) do
+      result = ReelixManagerSchema.execute(SEARCH_WITH_VIDEO_BLOBS_QUERY, variables: { query: "breaking bad" },
+                                                                           context: graphql_context)
+
+      assert_nil result["errors"], result["errors"].inspect
+      results      = result.dig("data", "searchMulti", "results")
+      breaking_bad = results.find { |r| r["id"] == 1396 && r["mediaType"] == "tv" }
+
+      assert_equal 1, breaking_bad["videoBlobs"].size
+      assert_equal video_blobs(:breaking_bad_s01e01).filename, breaking_bad["videoBlobs"].first["filename"]
+    end
+  end
+
+  test "returns empty videoBlobs for a result with no local file" do
+    movie_response = { "page" => 1, "results" => [ movie_results.last ], "total_pages" => 1, "total_results" => 1 }
+    with_fake_searches(movie_response: movie_response, tv_response: { "page" => 1, "results" => [], "total_pages" => 0, "total_results" => 0 }) do
+      result = ReelixManagerSchema.execute(SEARCH_WITH_VIDEO_BLOBS_QUERY, variables: { query: "inception 2" },
+                                                                           context: graphql_context)
+
+      assert_nil result["errors"]
+      results    = result.dig("data", "searchMulti", "results")
+      inception2 = results.find { |r| r["id"] == 99_999 }
+
+      assert_empty inception2["videoBlobs"]
+    end
+  end
+
+  test "batches videoBlobs lookups for all search results in one query" do
+    with_fake_searches(movie_response: default_movie_response, tv_response: default_tv_response) do
+      query_count = count_sql_queries do
+        ReelixManagerSchema.execute(SEARCH_WITH_VIDEO_BLOBS_QUERY, variables: { query: "inception" },
+                                                                    context: graphql_context)
+      end
+
+      assert_equal 1, query_count, "expected one SQL query for all videoBlobs in the search results"
     end
   end
 end

@@ -1,0 +1,10 @@
+# Generated from app/graphql/sources/episode_video_blobs.rb with RBS::Inline
+
+module Sources
+  # Batch-loads VideoBlobs for TV episodes by [tmdb_id, season_number, episode_number].
+  # Loads all blobs for the requested show IDs in a single query, then groups in memory.
+  class EpisodeVideoBlobs < GraphQL::Dataloader::Source
+    # : (::Array[[(Integer | nil), Integer, Integer]] keys) -> ::Array[::Array[::VideoBlob]]
+    def fetch: (::Array[[ Integer | nil, Integer, Integer ]] keys) -> ::Array[::Array[::VideoBlob]]
+  end
+end

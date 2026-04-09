@@ -35,6 +35,9 @@ module Types
     field :display_title, String, null: false,
       description: "Best available title: uses 'title' for movies, 'name' for TV shows"
 
+    field :video_blobs, [ Types::VideoBlobType ], null: false,
+      description: "Local video files matched to this result"
+
     # Provide defaults for fields that TMDB omits on TV show results
     #: () -> bool
     def video           = object["video"] || false
@@ -61,5 +64,8 @@ module Types
     def display_title
       object["title"] || object["name"] || "Unknown"
     end
+
+    #: () -> ::Array[::VideoBlob]
+    def video_blobs = dataloader.with(Sources::VideoBlobs).load([ object["media_type"], object["id"] ])
   end
 end

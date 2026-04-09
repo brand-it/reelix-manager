@@ -233,10 +233,7 @@ class SeasonQueryTest < ActiveSupport::TestCase
 
   test "batches episode blob lookups across all episodes in one season query" do
     with_fake_season(season_data) do
-      query_count = 0
-      counter     = ->(*, **) { query_count += 1 }
-
-      ActiveSupport::Notifications.subscribed(counter, "sql.active_record") do
+      query_count = count_sql_queries do
         ReelixManagerSchema.execute(
           SEASON_WITH_VIDEO_BLOBS_QUERY,
           variables: { tvId: 1396, seasonNumber: 1 },

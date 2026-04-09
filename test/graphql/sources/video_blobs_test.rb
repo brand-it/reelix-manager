@@ -27,9 +27,7 @@ class Sources::VideoBlobsTest < ActiveSupport::TestCase
     source  = Sources::VideoBlobs.new
     keys    = [ [ "movie", 11_111 ], [ "movie", 22_222 ] ]
 
-    query_count = 0
-    counter     = ->(*, **) { query_count += 1 }
-    ActiveSupport::Notifications.subscribed(counter, "sql.active_record") do
+    query_count = count_sql_queries do
       results = source.fetch(keys)
       assert_equal 1, results[0].size
       assert_equal 1, results[1].size

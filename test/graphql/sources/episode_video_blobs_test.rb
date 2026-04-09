@@ -36,9 +36,7 @@ class Sources::EpisodeVideoBlobsTest < ActiveSupport::TestCase
       [ tmdb_id, ep2.season_number, ep2.episode_number ]
     ]
 
-    query_count = 0
-    counter     = ->(*, **) { query_count += 1 }
-    ActiveSupport::Notifications.subscribed(counter, "sql.active_record") do
+    query_count = count_sql_queries do
       results = source.fetch(keys)
       assert_equal 1, results[0].size
       assert_equal 1, results[1].size
@@ -58,9 +56,7 @@ class Sources::EpisodeVideoBlobsTest < ActiveSupport::TestCase
     source = Sources::EpisodeVideoBlobs.new
     keys   = [ [ show_a, 1, 1 ], [ show_b, 2, 3 ] ]
 
-    query_count = 0
-    counter     = ->(*, **) { query_count += 1 }
-    ActiveSupport::Notifications.subscribed(counter, "sql.active_record") do
+    query_count = count_sql_queries do
       results = source.fetch(keys)
       assert_equal 1, results[0].size
       assert_equal 1, results[1].size

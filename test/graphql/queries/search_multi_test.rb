@@ -332,10 +332,7 @@ class SearchMultiQueryTest < ActiveSupport::TestCase
 
   test "batches videoBlobs lookups for all search results in one query" do
     with_fake_searches(movie_response: default_movie_response, tv_response: default_tv_response) do
-      query_count = 0
-      counter     = ->(*, **) { query_count += 1 }
-
-      ActiveSupport::Notifications.subscribed(counter, "sql.active_record") do
+      query_count = count_sql_queries do
         ReelixManagerSchema.execute(SEARCH_WITH_VIDEO_BLOBS_QUERY, variables: { query: "inception" },
                                                                     context: graphql_context)
       end

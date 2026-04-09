@@ -66,6 +66,6 @@ module Types
     end
 
     #: () -> ::Array[::VideoBlob]
-    def video_blobs = dataloader.with(Sources::VideoBlobs).load([object["media_type"], object["id"]])
+    def video_blobs = dataloader.with(Sources::VideoBlobs).load([ object["media_type"], object["id"] ])
   end
 end

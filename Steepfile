@@ -3,19 +3,8 @@
 D = Steep::Diagnostic
 
 target :app do
-  signature "sig/stubs"
-  signature "sig/generated"
-
-  check "app/models"
-  check "app/clients"
-  check "app/tool_box"
-  check "app/jobs"
-  check "app/services" if Dir.exist?("app/services")
-  check "app/components" if Dir.exist?("app/components")
-  check "app/graphql"
-  check "app/controllers"
-  check "app/helpers"
-  check "app/mailers"
+  signature "sig"
+  check "app"
 
   library "json"
   library "digest"

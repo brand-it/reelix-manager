@@ -1,0 +1,470 @@
+# resolve-type-names: false
+
+module ::Doorkeeper
+  module ::Doorkeeper::DeviceAuthorizationGrant
+    class ::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant < ::ActiveRecord::Base
+      extend ::ActiveRecord::Base::ClassMethods[::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant, ::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant::ActiveRecord_Relation, ::Integer]
+
+      module ::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant::GeneratedAttributeMethods
+        def id: () -> ::Integer
+
+        def id=: (::Integer) -> ::Integer
+
+        def id?: () -> bool
+
+        def id_changed?: (?from: ::Integer?, ?to: ::Integer?) -> bool
+
+        def id_change: () -> [ ::Integer?, ::Integer? ]
+
+        def id_will_change!: () -> void
+
+        def id_was: () -> ::Integer?
+
+        def id_previously_changed?: (?from: ::Integer?, ?to: ::Integer?) -> bool
+
+        def id_previous_change: () -> ::Array[::Integer?]?
+
+        def id_previously_was: () -> ::Integer?
+
+        def id_before_last_save: () -> ::Integer?
+
+        def id_change_to_be_saved: () -> ::Array[::Integer?]?
+
+        def id_in_database: () -> ::Integer?
+
+        def saved_change_to_id: () -> ::Array[::Integer?]?
+
+        def saved_change_to_id?: () -> bool
+
+        def will_save_change_to_id?: () -> bool
+
+        def restore_id!: () -> void
+
+        def clear_id_change: () -> void
+
+        def id_before_type_cast: () -> ::Integer
+
+        def id_for_database: () -> ::Integer
+
+        def application_id: () -> ::Integer
+
+        def application_id=: (::Integer) -> ::Integer
+
+        def application_id?: () -> bool
+
+        def application_id_changed?: (?from: ::Integer?, ?to: ::Integer?) -> bool
+
+        def application_id_change: () -> [ ::Integer?, ::Integer? ]
+
+        def application_id_will_change!: () -> void
+
+        def application_id_was: () -> ::Integer?
+
+        def application_id_previously_changed?: (?from: ::Integer?, ?to: ::Integer?) -> bool
+
+        def application_id_previous_change: () -> ::Array[::Integer?]?
+
+        def application_id_previously_was: () -> ::Integer?
+
+        def application_id_before_last_save: () -> ::Integer?
+
+        def application_id_change_to_be_saved: () -> ::Array[::Integer?]?
+
+        def application_id_in_database: () -> ::Integer?
+
+        def saved_change_to_application_id: () -> ::Array[::Integer?]?
+
+        def saved_change_to_application_id?: () -> bool
+
+        def will_save_change_to_application_id?: () -> bool
+
+        def restore_application_id!: () -> void
+
+        def clear_application_id_change: () -> void
+
+        def application_id_before_type_cast: () -> ::Integer
+
+        def application_id_for_database: () -> ::Integer
+
+        def created_at: () -> ::ActiveSupport::TimeWithZone
+
+        def created_at=: (::ActiveSupport::TimeWithZone) -> ::ActiveSupport::TimeWithZone
+
+        def created_at?: () -> bool
+
+        def created_at_changed?: (?from: ::ActiveSupport::TimeWithZone?, ?to: ::ActiveSupport::TimeWithZone?) -> bool
+
+        def created_at_change: () -> [ ::ActiveSupport::TimeWithZone?, ::ActiveSupport::TimeWithZone? ]
+
+        def created_at_will_change!: () -> void
+
+        def created_at_was: () -> ::ActiveSupport::TimeWithZone?
+
+        def created_at_previously_changed?: (?from: ::ActiveSupport::TimeWithZone?, ?to: ::ActiveSupport::TimeWithZone?) -> bool
+
+        def created_at_previous_change: () -> ::Array[::ActiveSupport::TimeWithZone?]?
+
+        def created_at_previously_was: () -> ::ActiveSupport::TimeWithZone?
+
+        def created_at_before_last_save: () -> ::ActiveSupport::TimeWithZone?
+
+        def created_at_change_to_be_saved: () -> ::Array[::ActiveSupport::TimeWithZone?]?
+
+        def created_at_in_database: () -> ::ActiveSupport::TimeWithZone?
+
+        def saved_change_to_created_at: () -> ::Array[::ActiveSupport::TimeWithZone?]?
+
+        def saved_change_to_created_at?: () -> bool
+
+        def will_save_change_to_created_at?: () -> bool
+
+        def restore_created_at!: () -> void
+
+        def clear_created_at_change: () -> void
+
+        def created_at_before_type_cast: () -> ::Time
+
+        def created_at_for_database: () -> ::Time
+
+        def device_code: () -> ::String
+
+        def device_code=: (::String) -> ::String
+
+        def device_code?: () -> bool
+
+        def device_code_changed?: (?from: ::String?, ?to: ::String?) -> bool
+
+        def device_code_change: () -> [ ::String?, ::String? ]
+
+        def device_code_will_change!: () -> void
+
+        def device_code_was: () -> ::String?
+
+        def device_code_previously_changed?: (?from: ::String?, ?to: ::String?) -> bool
+
+        def device_code_previous_change: () -> ::Array[::String?]?
+
+        def device_code_previously_was: () -> ::String?
+
+        def device_code_before_last_save: () -> ::String?
+
+        def device_code_change_to_be_saved: () -> ::Array[::String?]?
+
+        def device_code_in_database: () -> ::String?
+
+        def saved_change_to_device_code: () -> ::Array[::String?]?
+
+        def saved_change_to_device_code?: () -> bool
+
+        def will_save_change_to_device_code?: () -> bool
+
+        def restore_device_code!: () -> void
+
+        def clear_device_code_change: () -> void
+
+        def device_code_before_type_cast: () -> ::String
+
+        def device_code_for_database: () -> ::String
+
+        def expires_in: () -> ::Integer
+
+        def expires_in=: (::Integer) -> ::Integer
+
+        def expires_in?: () -> bool
+
+        def expires_in_changed?: (?from: ::Integer?, ?to: ::Integer?) -> bool
+
+        def expires_in_change: () -> [ ::Integer?, ::Integer? ]
+
+        def expires_in_will_change!: () -> void
+
+        def expires_in_was: () -> ::Integer?
+
+        def expires_in_previously_changed?: (?from: ::Integer?, ?to: ::Integer?) -> bool
+
+        def expires_in_previous_change: () -> ::Array[::Integer?]?
+
+        def expires_in_previously_was: () -> ::Integer?
+
+        def expires_in_before_last_save: () -> ::Integer?
+
+        def expires_in_change_to_be_saved: () -> ::Array[::Integer?]?
+
+        def expires_in_in_database: () -> ::Integer?
+
+        def saved_change_to_expires_in: () -> ::Array[::Integer?]?
+
+        def saved_change_to_expires_in?: () -> bool
+
+        def will_save_change_to_expires_in?: () -> bool
+
+        def restore_expires_in!: () -> void
+
+        def clear_expires_in_change: () -> void
+
+        def expires_in_before_type_cast: () -> ::Integer
+
+        def expires_in_for_database: () -> ::Integer
+
+        def last_polling_at: () -> ::ActiveSupport::TimeWithZone?
+
+        def last_polling_at=: (::ActiveSupport::TimeWithZone?) -> ::ActiveSupport::TimeWithZone?
+
+        def last_polling_at?: () -> bool
+
+        def last_polling_at_changed?: (?from: ::ActiveSupport::TimeWithZone?, ?to: ::ActiveSupport::TimeWithZone?) -> bool
+
+        def last_polling_at_change: () -> [ ::ActiveSupport::TimeWithZone?, ::ActiveSupport::TimeWithZone? ]
+
+        def last_polling_at_will_change!: () -> void
+
+        def last_polling_at_was: () -> ::ActiveSupport::TimeWithZone?
+
+        def last_polling_at_previously_changed?: (?from: ::ActiveSupport::TimeWithZone?, ?to: ::ActiveSupport::TimeWithZone?) -> bool
+
+        def last_polling_at_previous_change: () -> ::Array[::ActiveSupport::TimeWithZone?]?
+
+        def last_polling_at_previously_was: () -> ::ActiveSupport::TimeWithZone?
+
+        def last_polling_at_before_last_save: () -> ::ActiveSupport::TimeWithZone?
+
+        def last_polling_at_change_to_be_saved: () -> ::Array[::ActiveSupport::TimeWithZone?]?
+
+        def last_polling_at_in_database: () -> ::ActiveSupport::TimeWithZone?
+
+        def saved_change_to_last_polling_at: () -> ::Array[::ActiveSupport::TimeWithZone?]?
+
+        def saved_change_to_last_polling_at?: () -> bool
+
+        def will_save_change_to_last_polling_at?: () -> bool
+
+        def restore_last_polling_at!: () -> void
+
+        def clear_last_polling_at_change: () -> void
+
+        def last_polling_at_before_type_cast: () -> ::Time?
+
+        def last_polling_at_for_database: () -> ::Time?
+
+        def resource_owner_id: () -> ::Integer?
+
+        def resource_owner_id=: (::Integer?) -> ::Integer?
+
+        def resource_owner_id?: () -> bool
+
+        def resource_owner_id_changed?: (?from: ::Integer?, ?to: ::Integer?) -> bool
+
+        def resource_owner_id_change: () -> [ ::Integer?, ::Integer? ]
+
+        def resource_owner_id_will_change!: () -> void
+
+        def resource_owner_id_was: () -> ::Integer?
+
+        def resource_owner_id_previously_changed?: (?from: ::Integer?, ?to: ::Integer?) -> bool
+
+        def resource_owner_id_previous_change: () -> ::Array[::Integer?]?
+
+        def resource_owner_id_previously_was: () -> ::Integer?
+
+        def resource_owner_id_before_last_save: () -> ::Integer?
+
+        def resource_owner_id_change_to_be_saved: () -> ::Array[::Integer?]?
+
+        def resource_owner_id_in_database: () -> ::Integer?
+
+        def saved_change_to_resource_owner_id: () -> ::Array[::Integer?]?
+
+        def saved_change_to_resource_owner_id?: () -> bool
+
+        def will_save_change_to_resource_owner_id?: () -> bool
+
+        def restore_resource_owner_id!: () -> void
+
+        def clear_resource_owner_id_change: () -> void
+
+        def resource_owner_id_before_type_cast: () -> ::Integer?
+
+        def resource_owner_id_for_database: () -> ::Integer?
+
+        def scopes: () -> ::String
+
+        def scopes=: (::String) -> ::String
+
+        def scopes?: () -> bool
+
+        def scopes_changed?: (?from: ::String?, ?to: ::String?) -> bool
+
+        def scopes_change: () -> [ ::String?, ::String? ]
+
+        def scopes_will_change!: () -> void
+
+        def scopes_was: () -> ::String?
+
+        def scopes_previously_changed?: (?from: ::String?, ?to: ::String?) -> bool
+
+        def scopes_previous_change: () -> ::Array[::String?]?
+
+        def scopes_previously_was: () -> ::String?
+
+        def scopes_before_last_save: () -> ::String?
+
+        def scopes_change_to_be_saved: () -> ::Array[::String?]?
+
+        def scopes_in_database: () -> ::String?
+
+        def saved_change_to_scopes: () -> ::Array[::String?]?
+
+        def saved_change_to_scopes?: () -> bool
+
+        def will_save_change_to_scopes?: () -> bool
+
+        def restore_scopes!: () -> void
+
+        def clear_scopes_change: () -> void
+
+        def scopes_before_type_cast: () -> ::String
+
+        def scopes_for_database: () -> ::String
+
+        def user_code: () -> ::String?
+
+        def user_code=: (::String?) -> ::String?
+
+        def user_code?: () -> bool
+
+        def user_code_changed?: (?from: ::String?, ?to: ::String?) -> bool
+
+        def user_code_change: () -> [ ::String?, ::String? ]
+
+        def user_code_will_change!: () -> void
+
+        def user_code_was: () -> ::String?
+
+        def user_code_previously_changed?: (?from: ::String?, ?to: ::String?) -> bool
+
+        def user_code_previous_change: () -> ::Array[::String?]?
+
+        def user_code_previously_was: () -> ::String?
+
+        def user_code_before_last_save: () -> ::String?
+
+        def user_code_change_to_be_saved: () -> ::Array[::String?]?
+
+        def user_code_in_database: () -> ::String?
+
+        def saved_change_to_user_code: () -> ::Array[::String?]?
+
+        def saved_change_to_user_code?: () -> bool
+
+        def will_save_change_to_user_code?: () -> bool
+
+        def restore_user_code!: () -> void
+
+        def clear_user_code_change: () -> void
+
+        def user_code_before_type_cast: () -> ::String?
+
+        def user_code_for_database: () -> ::String?
+      end
+      include ::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant::GeneratedAttributeMethods
+      module ::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant::GeneratedAliasAttributeMethods
+        include ::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant::GeneratedAttributeMethods
+
+        alias id_value id
+
+        alias id_value= id=
+
+        alias id_value? id?
+
+        alias id_value_changed? id_changed?
+
+        alias id_value_change id_change
+
+        alias id_value_will_change! id_will_change!
+
+        alias id_value_was id_was
+
+        alias id_value_previously_changed? id_previously_changed?
+
+        alias id_value_previous_change id_previous_change
+
+        alias id_value_previously_was id_previously_was
+
+        alias id_value_before_last_save id_before_last_save
+
+        alias id_value_change_to_be_saved id_change_to_be_saved
+
+        alias id_value_in_database id_in_database
+
+        alias saved_change_to_id_value saved_change_to_id
+
+        alias saved_change_to_id_value? saved_change_to_id?
+
+        alias will_save_change_to_id_value? will_save_change_to_id?
+
+        alias restore_id_value! restore_id!
+
+        alias clear_id_value_change clear_id_change
+
+        alias id_value_before_type_cast id_before_type_cast
+
+        alias id_value_for_database id_for_database
+      end
+      include ::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant::GeneratedAliasAttributeMethods
+
+      def reload_application: () -> ::Doorkeeper::Application?
+      def build_application: (untyped) -> ::Doorkeeper::Application
+      def create_application: (untyped) -> ::Doorkeeper::Application
+      def create_application!: (untyped) -> ::Doorkeeper::Application
+      def user: () -> ::User?
+      def user=: (::User?) -> ::User?
+      def reload_user: () -> ::User?
+      def build_user: (untyped) -> ::User
+      def create_user: (untyped) -> ::User
+      def create_user!: (untyped) -> ::User
+      module ::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant::GeneratedAssociationMethods
+      end
+      include ::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant::GeneratedAssociationMethods
+
+      module ::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant::GeneratedRelationMethods
+      end
+
+      class ::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant::ActiveRecord_Relation < ::ActiveRecord::Relation
+        include ::Enumerable[::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant]
+        include ::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant::GeneratedRelationMethods
+        include ::ActiveRecord::Relation::Methods[::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant, ::Integer]
+      end
+
+      class ::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant::ActiveRecord_Associations_CollectionProxy < ::ActiveRecord::Associations::CollectionProxy
+        include ::Enumerable[::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant]
+        include ::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant::GeneratedRelationMethods
+        include ::ActiveRecord::Relation::Methods[::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant, ::Integer]
+
+        def build: (?::ActiveRecord::Associations::CollectionProxy::_EachPair attributes) ?{ () -> untyped } -> ::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant
+                 | (::Array[::ActiveRecord::Associations::CollectionProxy::_EachPair] attributes) ?{ () -> untyped } -> ::Array[::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant]
+        def create: (?::ActiveRecord::Associations::CollectionProxy::_EachPair attributes) ?{ () -> untyped } -> ::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant
+                  | (::Array[::ActiveRecord::Associations::CollectionProxy::_EachPair] attributes) ?{ () -> untyped } -> ::Array[::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant]
+        def create!: (?::ActiveRecord::Associations::CollectionProxy::_EachPair attributes) ?{ () -> untyped } -> ::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant
+                   | (::Array[::ActiveRecord::Associations::CollectionProxy::_EachPair] attributes) ?{ () -> untyped } -> ::Array[::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant]
+        def reload: () -> ::Array[::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant]
+
+        def replace: (::Array[::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant]) -> void
+        def delete: (*::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant | ::Integer) -> ::Array[::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant]
+        def destroy: (*::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant | ::Integer) -> ::Array[::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant]
+        def <<: (*::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant | ::Array[::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant]) -> self
+        def prepend: (*::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant | ::Array[::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant]) -> self
+      end
+    end
+  end
+end
+
+module ::Doorkeeper::DeviceAuthorizationGrant
+end
+class ::Doorkeeper::Application < ::ActiveRecord::Base
+end
+class ::User < ::ApplicationRecord
+end
+module ::Doorkeeper
+end
+class ::ApplicationRecord < ::ActiveRecord::Base
+end

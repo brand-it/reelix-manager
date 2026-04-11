@@ -1,0 +1,10 @@
+# resolve-type-names: false
+
+module ::Doorkeeper
+end
+class ::Doorkeeper::Application < ::ActiveRecord::Base
+end
+class ::User < ::ApplicationRecord
+end
+class ::ApplicationRecord < ::ActiveRecord::Base
+end

@@ -7,6 +7,6 @@ class UploadsController < ApplicationController
   #: () -> void
   def index
     @active_uploads = Uploads::ActiveUploadsService.call #: Array[Uploads::SessionSnapshot]
-    @recent_video_blobs = VideoBlob.where({}).order(created_at: :desc).limit(12).load #: ActiveRecord::Relation
+    @recent_video_blobs = VideoBlob.where({}).order(created_at: :desc).limit(12) #: ActiveRecord::Relation
   end
 end

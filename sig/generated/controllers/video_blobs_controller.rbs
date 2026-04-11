@@ -12,6 +12,9 @@ class VideoBlobsController < ApplicationController
   # : () -> void
   def index: () -> void
 
+  # : () -> void
+  def reset_and_resync: () -> void
+
   private
 
   # : () -> Array[VideoBlob]

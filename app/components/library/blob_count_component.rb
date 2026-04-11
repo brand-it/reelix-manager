@@ -12,7 +12,7 @@ module Library
 
     #: () -> String
     def label
-      "#{count} blob#{'s' unless count == 1}"
+      "#{count} video#{'s' unless count == 1}"
     end
   end
 end

@@ -1,12 +1,20 @@
 <div class="d-flex align-items-center justify-content-between mb-3">
   <h1 class="h3 mb-0">Library</h1>
-  <div id="library_blob_count">
-    <%= render Library::BlobCountComponent.new(count: @video_blobs.size) %>
-  </div>
+  <%= link_to "Reset & Resync",
+  reset_and_resync_video_blobs_path,
+  class: "btn btn-danger",
+  confirmation: "Are you sure you want to reset and resync?" %>
 </div>
 
 <div id="library_controls" class="mb-4">
-  <%= render Library::ControlsComponent.new(query: @query, media_type_filter: @media_type_filter) %>
+  <%= render Library::ControlsComponent.new(
+    query: @query,
+    media_type_filter: @media_type_filter,
+  ) %>
+</div>
+
+<div id="library_blob_count">
+  <%= render Library::BlobCountComponent.new(count: @video_blobs.size) %>
 </div>
 
 <div id="library_results">

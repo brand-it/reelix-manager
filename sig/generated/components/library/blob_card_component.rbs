@@ -16,5 +16,7 @@ module Library
 
     # : () -> String?
     def season_episode_label: () -> String?
+
+    def blob_key: () -> untyped
   end
 end

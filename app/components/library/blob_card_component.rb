@@ -28,5 +28,9 @@ module Library
       label += "E#{format("%02d", blob.episode_number)}" if blob.episode_number.present?
       label
     end
+
+    def blob_key
+      blob.key
+    end
   end
 end

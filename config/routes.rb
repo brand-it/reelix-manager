@@ -37,7 +37,10 @@ Rails.application.routes.draw do
     resource :video, only: %i[new create edit update]
   end
 
-  resources :video_blobs, only: %i[index]
+  resources :video_blobs, only: %i[index] do
+    collection { get :reset_and_resync }
+  end
+
   resources :uploads, only: %i[index]
 
   # Static API documentation (public — explains how to authenticate).

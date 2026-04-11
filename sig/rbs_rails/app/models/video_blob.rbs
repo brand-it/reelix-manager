@@ -1,0 +1,1089 @@
+# resolve-type-names: false
+
+class ::VideoBlob < ::ApplicationRecord
+  extend ::ActiveRecord::Base::ClassMethods[::VideoBlob, ::VideoBlob::ActiveRecord_Relation, ::Integer]
+
+  module ::VideoBlob::GeneratedAttributeMethods
+    def id: () -> ::Integer
+
+    def id=: (::Integer) -> ::Integer
+
+    def id?: () -> bool
+
+    def id_changed?: (?from: ::Integer?, ?to: ::Integer?) -> bool
+
+    def id_change: () -> [ ::Integer?, ::Integer? ]
+
+    def id_will_change!: () -> void
+
+    def id_was: () -> ::Integer?
+
+    def id_previously_changed?: (?from: ::Integer?, ?to: ::Integer?) -> bool
+
+    def id_previous_change: () -> ::Array[::Integer?]?
+
+    def id_previously_was: () -> ::Integer?
+
+    def id_before_last_save: () -> ::Integer?
+
+    def id_change_to_be_saved: () -> ::Array[::Integer?]?
+
+    def id_in_database: () -> ::Integer?
+
+    def saved_change_to_id: () -> ::Array[::Integer?]?
+
+    def saved_change_to_id?: () -> bool
+
+    def will_save_change_to_id?: () -> bool
+
+    def restore_id!: () -> void
+
+    def clear_id_change: () -> void
+
+    def id_before_type_cast: () -> ::Integer
+
+    def id_for_database: () -> ::Integer
+
+    def content_type: () -> ::String?
+
+    def content_type=: (::String?) -> ::String?
+
+    def content_type?: () -> bool
+
+    def content_type_changed?: (?from: ::String?, ?to: ::String?) -> bool
+
+    def content_type_change: () -> [ ::String?, ::String? ]
+
+    def content_type_will_change!: () -> void
+
+    def content_type_was: () -> ::String?
+
+    def content_type_previously_changed?: (?from: ::String?, ?to: ::String?) -> bool
+
+    def content_type_previous_change: () -> ::Array[::String?]?
+
+    def content_type_previously_was: () -> ::String?
+
+    def content_type_before_last_save: () -> ::String?
+
+    def content_type_change_to_be_saved: () -> ::Array[::String?]?
+
+    def content_type_in_database: () -> ::String?
+
+    def saved_change_to_content_type: () -> ::Array[::String?]?
+
+    def saved_change_to_content_type?: () -> bool
+
+    def will_save_change_to_content_type?: () -> bool
+
+    def restore_content_type!: () -> void
+
+    def clear_content_type_change: () -> void
+
+    def content_type_before_type_cast: () -> ::String?
+
+    def content_type_for_database: () -> ::String?
+
+    def created_at: () -> ::ActiveSupport::TimeWithZone
+
+    def created_at=: (::ActiveSupport::TimeWithZone) -> ::ActiveSupport::TimeWithZone
+
+    def created_at?: () -> bool
+
+    def created_at_changed?: (?from: ::ActiveSupport::TimeWithZone?, ?to: ::ActiveSupport::TimeWithZone?) -> bool
+
+    def created_at_change: () -> [ ::ActiveSupport::TimeWithZone?, ::ActiveSupport::TimeWithZone? ]
+
+    def created_at_will_change!: () -> void
+
+    def created_at_was: () -> ::ActiveSupport::TimeWithZone?
+
+    def created_at_previously_changed?: (?from: ::ActiveSupport::TimeWithZone?, ?to: ::ActiveSupport::TimeWithZone?) -> bool
+
+    def created_at_previous_change: () -> ::Array[::ActiveSupport::TimeWithZone?]?
+
+    def created_at_previously_was: () -> ::ActiveSupport::TimeWithZone?
+
+    def created_at_before_last_save: () -> ::ActiveSupport::TimeWithZone?
+
+    def created_at_change_to_be_saved: () -> ::Array[::ActiveSupport::TimeWithZone?]?
+
+    def created_at_in_database: () -> ::ActiveSupport::TimeWithZone?
+
+    def saved_change_to_created_at: () -> ::Array[::ActiveSupport::TimeWithZone?]?
+
+    def saved_change_to_created_at?: () -> bool
+
+    def will_save_change_to_created_at?: () -> bool
+
+    def restore_created_at!: () -> void
+
+    def clear_created_at_change: () -> void
+
+    def created_at_before_type_cast: () -> ::Time
+
+    def created_at_for_database: () -> ::Time
+
+    def edition: () -> ::String?
+
+    def edition=: (::String?) -> ::String?
+
+    def edition?: () -> bool
+
+    def edition_changed?: (?from: ::String?, ?to: ::String?) -> bool
+
+    def edition_change: () -> [ ::String?, ::String? ]
+
+    def edition_will_change!: () -> void
+
+    def edition_was: () -> ::String?
+
+    def edition_previously_changed?: (?from: ::String?, ?to: ::String?) -> bool
+
+    def edition_previous_change: () -> ::Array[::String?]?
+
+    def edition_previously_was: () -> ::String?
+
+    def edition_before_last_save: () -> ::String?
+
+    def edition_change_to_be_saved: () -> ::Array[::String?]?
+
+    def edition_in_database: () -> ::String?
+
+    def saved_change_to_edition: () -> ::Array[::String?]?
+
+    def saved_change_to_edition?: () -> bool
+
+    def will_save_change_to_edition?: () -> bool
+
+    def restore_edition!: () -> void
+
+    def clear_edition_change: () -> void
+
+    def edition_before_type_cast: () -> ::String?
+
+    def edition_for_database: () -> ::String?
+
+    def episode_last_number: () -> ::Integer?
+
+    def episode_last_number=: (::Integer?) -> ::Integer?
+
+    def episode_last_number?: () -> bool
+
+    def episode_last_number_changed?: (?from: ::Integer?, ?to: ::Integer?) -> bool
+
+    def episode_last_number_change: () -> [ ::Integer?, ::Integer? ]
+
+    def episode_last_number_will_change!: () -> void
+
+    def episode_last_number_was: () -> ::Integer?
+
+    def episode_last_number_previously_changed?: (?from: ::Integer?, ?to: ::Integer?) -> bool
+
+    def episode_last_number_previous_change: () -> ::Array[::Integer?]?
+
+    def episode_last_number_previously_was: () -> ::Integer?
+
+    def episode_last_number_before_last_save: () -> ::Integer?
+
+    def episode_last_number_change_to_be_saved: () -> ::Array[::Integer?]?
+
+    def episode_last_number_in_database: () -> ::Integer?
+
+    def saved_change_to_episode_last_number: () -> ::Array[::Integer?]?
+
+    def saved_change_to_episode_last_number?: () -> bool
+
+    def will_save_change_to_episode_last_number?: () -> bool
+
+    def restore_episode_last_number!: () -> void
+
+    def clear_episode_last_number_change: () -> void
+
+    def episode_last_number_before_type_cast: () -> ::Integer?
+
+    def episode_last_number_for_database: () -> ::Integer?
+
+    def episode_number: () -> ::Integer?
+
+    def episode_number=: (::Integer?) -> ::Integer?
+
+    def episode_number?: () -> bool
+
+    def episode_number_changed?: (?from: ::Integer?, ?to: ::Integer?) -> bool
+
+    def episode_number_change: () -> [ ::Integer?, ::Integer? ]
+
+    def episode_number_will_change!: () -> void
+
+    def episode_number_was: () -> ::Integer?
+
+    def episode_number_previously_changed?: (?from: ::Integer?, ?to: ::Integer?) -> bool
+
+    def episode_number_previous_change: () -> ::Array[::Integer?]?
+
+    def episode_number_previously_was: () -> ::Integer?
+
+    def episode_number_before_last_save: () -> ::Integer?
+
+    def episode_number_change_to_be_saved: () -> ::Array[::Integer?]?
+
+    def episode_number_in_database: () -> ::Integer?
+
+    def saved_change_to_episode_number: () -> ::Array[::Integer?]?
+
+    def saved_change_to_episode_number?: () -> bool
+
+    def will_save_change_to_episode_number?: () -> bool
+
+    def restore_episode_number!: () -> void
+
+    def clear_episode_number_change: () -> void
+
+    def episode_number_before_type_cast: () -> ::Integer?
+
+    def episode_number_for_database: () -> ::Integer?
+
+    def extra_type: () -> ::String
+
+    def extra_type=: (::String) -> ::String
+
+    def extra_type?: () -> bool
+
+    def extra_type_changed?: (?from: ::String?, ?to: ::String?) -> bool
+
+    def extra_type_change: () -> [ ::String?, ::String? ]
+
+    def extra_type_will_change!: () -> void
+
+    def extra_type_was: () -> ::String?
+
+    def extra_type_previously_changed?: (?from: ::String?, ?to: ::String?) -> bool
+
+    def extra_type_previous_change: () -> ::Array[::String?]?
+
+    def extra_type_previously_was: () -> ::String?
+
+    def extra_type_before_last_save: () -> ::String?
+
+    def extra_type_change_to_be_saved: () -> ::Array[::String?]?
+
+    def extra_type_in_database: () -> ::String?
+
+    def saved_change_to_extra_type: () -> ::Array[::String?]?
+
+    def saved_change_to_extra_type?: () -> bool
+
+    def will_save_change_to_extra_type?: () -> bool
+
+    def restore_extra_type!: () -> void
+
+    def clear_extra_type_change: () -> void
+
+    def extra_type_before_type_cast: () -> ::Integer
+
+    def extra_type_for_database: () -> ::Integer
+
+    def extra_type_number: () -> ::Integer?
+
+    def extra_type_number=: (::Integer?) -> ::Integer?
+
+    def extra_type_number?: () -> bool
+
+    def extra_type_number_changed?: (?from: ::Integer?, ?to: ::Integer?) -> bool
+
+    def extra_type_number_change: () -> [ ::Integer?, ::Integer? ]
+
+    def extra_type_number_will_change!: () -> void
+
+    def extra_type_number_was: () -> ::Integer?
+
+    def extra_type_number_previously_changed?: (?from: ::Integer?, ?to: ::Integer?) -> bool
+
+    def extra_type_number_previous_change: () -> ::Array[::Integer?]?
+
+    def extra_type_number_previously_was: () -> ::Integer?
+
+    def extra_type_number_before_last_save: () -> ::Integer?
+
+    def extra_type_number_change_to_be_saved: () -> ::Array[::Integer?]?
+
+    def extra_type_number_in_database: () -> ::Integer?
+
+    def saved_change_to_extra_type_number: () -> ::Array[::Integer?]?
+
+    def saved_change_to_extra_type_number?: () -> bool
+
+    def will_save_change_to_extra_type_number?: () -> bool
+
+    def restore_extra_type_number!: () -> void
+
+    def clear_extra_type_number_change: () -> void
+
+    def extra_type_number_before_type_cast: () -> ::Integer?
+
+    def extra_type_number_for_database: () -> ::Integer?
+
+    def filename: () -> ::String
+
+    def filename=: (::String) -> ::String
+
+    def filename?: () -> bool
+
+    def filename_changed?: (?from: ::String?, ?to: ::String?) -> bool
+
+    def filename_change: () -> [ ::String?, ::String? ]
+
+    def filename_will_change!: () -> void
+
+    def filename_was: () -> ::String?
+
+    def filename_previously_changed?: (?from: ::String?, ?to: ::String?) -> bool
+
+    def filename_previous_change: () -> ::Array[::String?]?
+
+    def filename_previously_was: () -> ::String?
+
+    def filename_before_last_save: () -> ::String?
+
+    def filename_change_to_be_saved: () -> ::Array[::String?]?
+
+    def filename_in_database: () -> ::String?
+
+    def saved_change_to_filename: () -> ::Array[::String?]?
+
+    def saved_change_to_filename?: () -> bool
+
+    def will_save_change_to_filename?: () -> bool
+
+    def restore_filename!: () -> void
+
+    def clear_filename_change: () -> void
+
+    def filename_before_type_cast: () -> ::String
+
+    def filename_for_database: () -> ::String
+
+    def key: () -> ::String
+
+    def key=: (::String) -> ::String
+
+    def key?: () -> bool
+
+    def key_changed?: (?from: ::String?, ?to: ::String?) -> bool
+
+    def key_change: () -> [ ::String?, ::String? ]
+
+    def key_will_change!: () -> void
+
+    def key_was: () -> ::String?
+
+    def key_previously_changed?: (?from: ::String?, ?to: ::String?) -> bool
+
+    def key_previous_change: () -> ::Array[::String?]?
+
+    def key_previously_was: () -> ::String?
+
+    def key_before_last_save: () -> ::String?
+
+    def key_change_to_be_saved: () -> ::Array[::String?]?
+
+    def key_in_database: () -> ::String?
+
+    def saved_change_to_key: () -> ::Array[::String?]?
+
+    def saved_change_to_key?: () -> bool
+
+    def will_save_change_to_key?: () -> bool
+
+    def restore_key!: () -> void
+
+    def clear_key_change: () -> void
+
+    def key_before_type_cast: () -> ::String
+
+    def key_for_database: () -> ::String
+
+    def media_type: () -> ::String
+
+    def media_type=: (::String) -> ::String
+
+    def media_type?: () -> bool
+
+    def media_type_changed?: (?from: ::String?, ?to: ::String?) -> bool
+
+    def media_type_change: () -> [ ::String?, ::String? ]
+
+    def media_type_will_change!: () -> void
+
+    def media_type_was: () -> ::String?
+
+    def media_type_previously_changed?: (?from: ::String?, ?to: ::String?) -> bool
+
+    def media_type_previous_change: () -> ::Array[::String?]?
+
+    def media_type_previously_was: () -> ::String?
+
+    def media_type_before_last_save: () -> ::String?
+
+    def media_type_change_to_be_saved: () -> ::Array[::String?]?
+
+    def media_type_in_database: () -> ::String?
+
+    def saved_change_to_media_type: () -> ::Array[::String?]?
+
+    def saved_change_to_media_type?: () -> bool
+
+    def will_save_change_to_media_type?: () -> bool
+
+    def restore_media_type!: () -> void
+
+    def clear_media_type_change: () -> void
+
+    def media_type_before_type_cast: () -> ::Integer
+
+    def media_type_for_database: () -> ::Integer
+
+    def optimized: () -> bool
+
+    def optimized=: (bool) -> bool
+
+    def optimized?: () -> bool
+
+    def optimized_changed?: (?from: bool?, ?to: bool?) -> bool
+
+    def optimized_change: () -> [ bool?, bool? ]
+
+    def optimized_will_change!: () -> void
+
+    def optimized_was: () -> bool?
+
+    def optimized_previously_changed?: (?from: bool?, ?to: bool?) -> bool
+
+    def optimized_previous_change: () -> ::Array[bool?]?
+
+    def optimized_previously_was: () -> bool?
+
+    def optimized_before_last_save: () -> bool?
+
+    def optimized_change_to_be_saved: () -> ::Array[bool?]?
+
+    def optimized_in_database: () -> bool?
+
+    def saved_change_to_optimized: () -> ::Array[bool?]?
+
+    def saved_change_to_optimized?: () -> bool
+
+    def will_save_change_to_optimized?: () -> bool
+
+    def restore_optimized!: () -> void
+
+    def clear_optimized_change: () -> void
+
+    def optimized_before_type_cast: () -> bool
+
+    def optimized_for_database: () -> bool
+
+    def part: () -> ::Integer?
+
+    def part=: (::Integer?) -> ::Integer?
+
+    def part?: () -> bool
+
+    def part_changed?: (?from: ::Integer?, ?to: ::Integer?) -> bool
+
+    def part_change: () -> [ ::Integer?, ::Integer? ]
+
+    def part_will_change!: () -> void
+
+    def part_was: () -> ::Integer?
+
+    def part_previously_changed?: (?from: ::Integer?, ?to: ::Integer?) -> bool
+
+    def part_previous_change: () -> ::Array[::Integer?]?
+
+    def part_previously_was: () -> ::Integer?
+
+    def part_before_last_save: () -> ::Integer?
+
+    def part_change_to_be_saved: () -> ::Array[::Integer?]?
+
+    def part_in_database: () -> ::Integer?
+
+    def saved_change_to_part: () -> ::Array[::Integer?]?
+
+    def saved_change_to_part?: () -> bool
+
+    def will_save_change_to_part?: () -> bool
+
+    def restore_part!: () -> void
+
+    def clear_part_change: () -> void
+
+    def part_before_type_cast: () -> ::Integer?
+
+    def part_for_database: () -> ::Integer?
+
+    def plex_version: () -> bool
+
+    def plex_version=: (bool) -> bool
+
+    def plex_version?: () -> bool
+
+    def plex_version_changed?: (?from: bool?, ?to: bool?) -> bool
+
+    def plex_version_change: () -> [ bool?, bool? ]
+
+    def plex_version_will_change!: () -> void
+
+    def plex_version_was: () -> bool?
+
+    def plex_version_previously_changed?: (?from: bool?, ?to: bool?) -> bool
+
+    def plex_version_previous_change: () -> ::Array[bool?]?
+
+    def plex_version_previously_was: () -> bool?
+
+    def plex_version_before_last_save: () -> bool?
+
+    def plex_version_change_to_be_saved: () -> ::Array[bool?]?
+
+    def plex_version_in_database: () -> bool?
+
+    def saved_change_to_plex_version: () -> ::Array[bool?]?
+
+    def saved_change_to_plex_version?: () -> bool
+
+    def will_save_change_to_plex_version?: () -> bool
+
+    def restore_plex_version!: () -> void
+
+    def clear_plex_version_change: () -> void
+
+    def plex_version_before_type_cast: () -> bool
+
+    def plex_version_for_database: () -> bool
+
+    def poster_url: () -> ::String?
+
+    def poster_url=: (::String?) -> ::String?
+
+    def poster_url?: () -> bool
+
+    def poster_url_changed?: (?from: ::String?, ?to: ::String?) -> bool
+
+    def poster_url_change: () -> [ ::String?, ::String? ]
+
+    def poster_url_will_change!: () -> void
+
+    def poster_url_was: () -> ::String?
+
+    def poster_url_previously_changed?: (?from: ::String?, ?to: ::String?) -> bool
+
+    def poster_url_previous_change: () -> ::Array[::String?]?
+
+    def poster_url_previously_was: () -> ::String?
+
+    def poster_url_before_last_save: () -> ::String?
+
+    def poster_url_change_to_be_saved: () -> ::Array[::String?]?
+
+    def poster_url_in_database: () -> ::String?
+
+    def saved_change_to_poster_url: () -> ::Array[::String?]?
+
+    def saved_change_to_poster_url?: () -> bool
+
+    def will_save_change_to_poster_url?: () -> bool
+
+    def restore_poster_url!: () -> void
+
+    def clear_poster_url_change: () -> void
+
+    def poster_url_before_type_cast: () -> ::String?
+
+    def poster_url_for_database: () -> ::String?
+
+    def season_number: () -> ::Integer?
+
+    def season_number=: (::Integer?) -> ::Integer?
+
+    def season_number?: () -> bool
+
+    def season_number_changed?: (?from: ::Integer?, ?to: ::Integer?) -> bool
+
+    def season_number_change: () -> [ ::Integer?, ::Integer? ]
+
+    def season_number_will_change!: () -> void
+
+    def season_number_was: () -> ::Integer?
+
+    def season_number_previously_changed?: (?from: ::Integer?, ?to: ::Integer?) -> bool
+
+    def season_number_previous_change: () -> ::Array[::Integer?]?
+
+    def season_number_previously_was: () -> ::Integer?
+
+    def season_number_before_last_save: () -> ::Integer?
+
+    def season_number_change_to_be_saved: () -> ::Array[::Integer?]?
+
+    def season_number_in_database: () -> ::Integer?
+
+    def saved_change_to_season_number: () -> ::Array[::Integer?]?
+
+    def saved_change_to_season_number?: () -> bool
+
+    def will_save_change_to_season_number?: () -> bool
+
+    def restore_season_number!: () -> void
+
+    def clear_season_number_change: () -> void
+
+    def season_number_before_type_cast: () -> ::Integer?
+
+    def season_number_for_database: () -> ::Integer?
+
+    def title: () -> ::String?
+
+    def title=: (::String?) -> ::String?
+
+    def title?: () -> bool
+
+    def title_changed?: (?from: ::String?, ?to: ::String?) -> bool
+
+    def title_change: () -> [ ::String?, ::String? ]
+
+    def title_will_change!: () -> void
+
+    def title_was: () -> ::String?
+
+    def title_previously_changed?: (?from: ::String?, ?to: ::String?) -> bool
+
+    def title_previous_change: () -> ::Array[::String?]?
+
+    def title_previously_was: () -> ::String?
+
+    def title_before_last_save: () -> ::String?
+
+    def title_change_to_be_saved: () -> ::Array[::String?]?
+
+    def title_in_database: () -> ::String?
+
+    def saved_change_to_title: () -> ::Array[::String?]?
+
+    def saved_change_to_title?: () -> bool
+
+    def will_save_change_to_title?: () -> bool
+
+    def restore_title!: () -> void
+
+    def clear_title_change: () -> void
+
+    def title_before_type_cast: () -> ::String?
+
+    def title_for_database: () -> ::String?
+
+    def tmdb_id: () -> ::Integer?
+
+    def tmdb_id=: (::Integer?) -> ::Integer?
+
+    def tmdb_id?: () -> bool
+
+    def tmdb_id_changed?: (?from: ::Integer?, ?to: ::Integer?) -> bool
+
+    def tmdb_id_change: () -> [ ::Integer?, ::Integer? ]
+
+    def tmdb_id_will_change!: () -> void
+
+    def tmdb_id_was: () -> ::Integer?
+
+    def tmdb_id_previously_changed?: (?from: ::Integer?, ?to: ::Integer?) -> bool
+
+    def tmdb_id_previous_change: () -> ::Array[::Integer?]?
+
+    def tmdb_id_previously_was: () -> ::Integer?
+
+    def tmdb_id_before_last_save: () -> ::Integer?
+
+    def tmdb_id_change_to_be_saved: () -> ::Array[::Integer?]?
+
+    def tmdb_id_in_database: () -> ::Integer?
+
+    def saved_change_to_tmdb_id: () -> ::Array[::Integer?]?
+
+    def saved_change_to_tmdb_id?: () -> bool
+
+    def will_save_change_to_tmdb_id?: () -> bool
+
+    def restore_tmdb_id!: () -> void
+
+    def clear_tmdb_id_change: () -> void
+
+    def tmdb_id_before_type_cast: () -> ::Integer?
+
+    def tmdb_id_for_database: () -> ::Integer?
+
+    def updated_at: () -> ::ActiveSupport::TimeWithZone
+
+    def updated_at=: (::ActiveSupport::TimeWithZone) -> ::ActiveSupport::TimeWithZone
+
+    def updated_at?: () -> bool
+
+    def updated_at_changed?: (?from: ::ActiveSupport::TimeWithZone?, ?to: ::ActiveSupport::TimeWithZone?) -> bool
+
+    def updated_at_change: () -> [ ::ActiveSupport::TimeWithZone?, ::ActiveSupport::TimeWithZone? ]
+
+    def updated_at_will_change!: () -> void
+
+    def updated_at_was: () -> ::ActiveSupport::TimeWithZone?
+
+    def updated_at_previously_changed?: (?from: ::ActiveSupport::TimeWithZone?, ?to: ::ActiveSupport::TimeWithZone?) -> bool
+
+    def updated_at_previous_change: () -> ::Array[::ActiveSupport::TimeWithZone?]?
+
+    def updated_at_previously_was: () -> ::ActiveSupport::TimeWithZone?
+
+    def updated_at_before_last_save: () -> ::ActiveSupport::TimeWithZone?
+
+    def updated_at_change_to_be_saved: () -> ::Array[::ActiveSupport::TimeWithZone?]?
+
+    def updated_at_in_database: () -> ::ActiveSupport::TimeWithZone?
+
+    def saved_change_to_updated_at: () -> ::Array[::ActiveSupport::TimeWithZone?]?
+
+    def saved_change_to_updated_at?: () -> bool
+
+    def will_save_change_to_updated_at?: () -> bool
+
+    def restore_updated_at!: () -> void
+
+    def clear_updated_at_change: () -> void
+
+    def updated_at_before_type_cast: () -> ::Time
+
+    def updated_at_for_database: () -> ::Time
+
+    def year: () -> ::Integer?
+
+    def year=: (::Integer?) -> ::Integer?
+
+    def year?: () -> bool
+
+    def year_changed?: (?from: ::Integer?, ?to: ::Integer?) -> bool
+
+    def year_change: () -> [ ::Integer?, ::Integer? ]
+
+    def year_will_change!: () -> void
+
+    def year_was: () -> ::Integer?
+
+    def year_previously_changed?: (?from: ::Integer?, ?to: ::Integer?) -> bool
+
+    def year_previous_change: () -> ::Array[::Integer?]?
+
+    def year_previously_was: () -> ::Integer?
+
+    def year_before_last_save: () -> ::Integer?
+
+    def year_change_to_be_saved: () -> ::Array[::Integer?]?
+
+    def year_in_database: () -> ::Integer?
+
+    def saved_change_to_year: () -> ::Array[::Integer?]?
+
+    def saved_change_to_year?: () -> bool
+
+    def will_save_change_to_year?: () -> bool
+
+    def restore_year!: () -> void
+
+    def clear_year_change: () -> void
+
+    def year_before_type_cast: () -> ::Integer?
+
+    def year_for_database: () -> ::Integer?
+
+    def path_extension: () -> ::String?
+
+    def path_extension=: (::String?) -> ::String?
+
+    def path_extension?: () -> bool
+
+    def path_extension_changed?: (?from: ::String?, ?to: ::String?) -> bool
+
+    def path_extension_change: () -> [ ::String?, ::String? ]
+
+    def path_extension_will_change!: () -> void
+
+    def path_extension_was: () -> ::String?
+
+    def path_extension_previously_changed?: (?from: ::String?, ?to: ::String?) -> bool
+
+    def path_extension_previous_change: () -> ::Array[::String?]?
+
+    def path_extension_previously_was: () -> ::String?
+
+    def path_extension_before_last_save: () -> ::String?
+
+    def path_extension_change_to_be_saved: () -> ::Array[::String?]?
+
+    def path_extension_in_database: () -> ::String?
+
+    def saved_change_to_path_extension: () -> ::Array[::String?]?
+
+    def saved_change_to_path_extension?: () -> bool
+
+    def will_save_change_to_path_extension?: () -> bool
+
+    def restore_path_extension!: () -> void
+
+    def clear_path_extension_change: () -> void
+
+    def path_extension_before_type_cast: () -> ::String?
+
+    def path_extension_for_database: () -> ::String?
+
+    def episode_title: () -> ::String?
+
+    def episode_title=: (::String?) -> ::String?
+
+    def episode_title?: () -> bool
+
+    def episode_title_changed?: (?from: ::String?, ?to: ::String?) -> bool
+
+    def episode_title_change: () -> [ ::String?, ::String? ]
+
+    def episode_title_will_change!: () -> void
+
+    def episode_title_was: () -> ::String?
+
+    def episode_title_previously_changed?: (?from: ::String?, ?to: ::String?) -> bool
+
+    def episode_title_previous_change: () -> ::Array[::String?]?
+
+    def episode_title_previously_was: () -> ::String?
+
+    def episode_title_before_last_save: () -> ::String?
+
+    def episode_title_change_to_be_saved: () -> ::Array[::String?]?
+
+    def episode_title_in_database: () -> ::String?
+
+    def saved_change_to_episode_title: () -> ::Array[::String?]?
+
+    def saved_change_to_episode_title?: () -> bool
+
+    def will_save_change_to_episode_title?: () -> bool
+
+    def restore_episode_title!: () -> void
+
+    def clear_episode_title_change: () -> void
+
+    def episode_title_before_type_cast: () -> ::String?
+
+    def episode_title_for_database: () -> ::String?
+  end
+  include ::VideoBlob::GeneratedAttributeMethods
+  module ::VideoBlob::GeneratedAliasAttributeMethods
+    include ::VideoBlob::GeneratedAttributeMethods
+
+    alias id_value id
+
+    alias id_value= id=
+
+    alias id_value? id?
+
+    alias id_value_changed? id_changed?
+
+    alias id_value_change id_change
+
+    alias id_value_will_change! id_will_change!
+
+    alias id_value_was id_was
+
+    alias id_value_previously_changed? id_previously_changed?
+
+    alias id_value_previous_change id_previous_change
+
+    alias id_value_previously_was id_previously_was
+
+    alias id_value_before_last_save id_before_last_save
+
+    alias id_value_change_to_be_saved id_change_to_be_saved
+
+    alias id_value_in_database id_in_database
+
+    alias saved_change_to_id_value saved_change_to_id
+
+    alias saved_change_to_id_value? saved_change_to_id?
+
+    alias will_save_change_to_id_value? will_save_change_to_id?
+
+    alias restore_id_value! restore_id!
+
+    alias clear_id_value_change clear_id_change
+
+    alias id_value_before_type_cast id_before_type_cast
+
+    alias id_value_for_database id_for_database
+  end
+  include ::VideoBlob::GeneratedAliasAttributeMethods
+
+  module ::VideoBlob::GeneratedAssociationMethods
+  end
+  include ::VideoBlob::GeneratedAssociationMethods
+
+  def movie!: () -> bool
+  def movie?: () -> bool
+  def tv!: () -> bool
+  def tv?: () -> bool
+  def feature_films!: () -> bool
+  def feature_films?: () -> bool
+  def behind_the_scenes!: () -> bool
+  def behind_the_scenes?: () -> bool
+  def deleted_scenes!: () -> bool
+  def deleted_scenes?: () -> bool
+  def featurettes!: () -> bool
+  def featurettes?: () -> bool
+  def interviews!: () -> bool
+  def interviews?: () -> bool
+  def scenes!: () -> bool
+  def scenes?: () -> bool
+  def shorts!: () -> bool
+  def shorts?: () -> bool
+  def trailers!: () -> bool
+  def trailers?: () -> bool
+  def other!: () -> bool
+  def other?: () -> bool
+  def self.media_types: () -> ::ActiveSupport::HashWithIndifferentAccess[::String, ::Integer]
+  def self.extra_types: () -> ::ActiveSupport::HashWithIndifferentAccess[::String, ::Integer]
+  def self.movie: () -> ::VideoBlob::ActiveRecord_Relation
+  def self.not_movie: () -> ::VideoBlob::ActiveRecord_Relation
+  def self.tv: () -> ::VideoBlob::ActiveRecord_Relation
+  def self.not_tv: () -> ::VideoBlob::ActiveRecord_Relation
+  def self.feature_films: () -> ::VideoBlob::ActiveRecord_Relation
+  def self.not_feature_films: () -> ::VideoBlob::ActiveRecord_Relation
+  def self.behind_the_scenes: () -> ::VideoBlob::ActiveRecord_Relation
+  def self.not_behind_the_scenes: () -> ::VideoBlob::ActiveRecord_Relation
+  def self.deleted_scenes: () -> ::VideoBlob::ActiveRecord_Relation
+  def self.not_deleted_scenes: () -> ::VideoBlob::ActiveRecord_Relation
+  def self.featurettes: () -> ::VideoBlob::ActiveRecord_Relation
+  def self.not_featurettes: () -> ::VideoBlob::ActiveRecord_Relation
+  def self.interviews: () -> ::VideoBlob::ActiveRecord_Relation
+  def self.not_interviews: () -> ::VideoBlob::ActiveRecord_Relation
+  def self.scenes: () -> ::VideoBlob::ActiveRecord_Relation
+  def self.not_scenes: () -> ::VideoBlob::ActiveRecord_Relation
+  def self.shorts: () -> ::VideoBlob::ActiveRecord_Relation
+  def self.not_shorts: () -> ::VideoBlob::ActiveRecord_Relation
+  def self.trailers: () -> ::VideoBlob::ActiveRecord_Relation
+  def self.not_trailers: () -> ::VideoBlob::ActiveRecord_Relation
+  def self.other: () -> ::VideoBlob::ActiveRecord_Relation
+  def self.not_other: () -> ::VideoBlob::ActiveRecord_Relation
+  def self.without_tmdb_id: () -> ::VideoBlob::ActiveRecord_Relation
+  def self.with_tmdb_id: () -> ::VideoBlob::ActiveRecord_Relation
+  def self.with_poster: () -> ::VideoBlob::ActiveRecord_Relation
+  def self.movies: () -> ::VideoBlob::ActiveRecord_Relation
+  def self.tv_shows: () -> ::VideoBlob::ActiveRecord_Relation
+  def self.plex_versions: () -> ::VideoBlob::ActiveRecord_Relation
+  def self.optimized_blobs: () -> ::VideoBlob::ActiveRecord_Relation
+  def self.by_media_type: (untyped type) -> ::VideoBlob::ActiveRecord_Relation
+  def self.search_title: (untyped query) -> ::VideoBlob::ActiveRecord_Relation
+
+  module ::VideoBlob::GeneratedRelationMethods
+    def media_types: () -> ::ActiveSupport::HashWithIndifferentAccess[::String, ::Integer]
+
+    def extra_types: () -> ::ActiveSupport::HashWithIndifferentAccess[::String, ::Integer]
+
+    def movie: () -> ::VideoBlob::ActiveRecord_Relation
+
+    def not_movie: () -> ::VideoBlob::ActiveRecord_Relation
+
+    def tv: () -> ::VideoBlob::ActiveRecord_Relation
+
+    def not_tv: () -> ::VideoBlob::ActiveRecord_Relation
+
+    def feature_films: () -> ::VideoBlob::ActiveRecord_Relation
+
+    def not_feature_films: () -> ::VideoBlob::ActiveRecord_Relation
+
+    def behind_the_scenes: () -> ::VideoBlob::ActiveRecord_Relation
+
+    def not_behind_the_scenes: () -> ::VideoBlob::ActiveRecord_Relation
+
+    def deleted_scenes: () -> ::VideoBlob::ActiveRecord_Relation
+
+    def not_deleted_scenes: () -> ::VideoBlob::ActiveRecord_Relation
+
+    def featurettes: () -> ::VideoBlob::ActiveRecord_Relation
+
+    def not_featurettes: () -> ::VideoBlob::ActiveRecord_Relation
+
+    def interviews: () -> ::VideoBlob::ActiveRecord_Relation
+
+    def not_interviews: () -> ::VideoBlob::ActiveRecord_Relation
+
+    def scenes: () -> ::VideoBlob::ActiveRecord_Relation
+
+    def not_scenes: () -> ::VideoBlob::ActiveRecord_Relation
+
+    def shorts: () -> ::VideoBlob::ActiveRecord_Relation
+
+    def not_shorts: () -> ::VideoBlob::ActiveRecord_Relation
+
+    def trailers: () -> ::VideoBlob::ActiveRecord_Relation
+
+    def not_trailers: () -> ::VideoBlob::ActiveRecord_Relation
+
+    def other: () -> ::VideoBlob::ActiveRecord_Relation
+
+    def not_other: () -> ::VideoBlob::ActiveRecord_Relation
+
+    def without_tmdb_id: () -> ::VideoBlob::ActiveRecord_Relation
+
+    def with_tmdb_id: () -> ::VideoBlob::ActiveRecord_Relation
+
+    def with_poster: () -> ::VideoBlob::ActiveRecord_Relation
+
+    def movies: () -> ::VideoBlob::ActiveRecord_Relation
+
+    def tv_shows: () -> ::VideoBlob::ActiveRecord_Relation
+
+    def plex_versions: () -> ::VideoBlob::ActiveRecord_Relation
+
+    def optimized_blobs: () -> ::VideoBlob::ActiveRecord_Relation
+
+    def by_media_type: (untyped type) -> ::VideoBlob::ActiveRecord_Relation
+
+    def search_title: (untyped query) -> ::VideoBlob::ActiveRecord_Relation
+  end
+
+  class ::VideoBlob::ActiveRecord_Relation < ::ActiveRecord::Relation
+    include ::Enumerable[::VideoBlob]
+    include ::VideoBlob::GeneratedRelationMethods
+    include ::ActiveRecord::Relation::Methods[::VideoBlob, ::Integer]
+  end
+
+  class ::VideoBlob::ActiveRecord_Associations_CollectionProxy < ::ActiveRecord::Associations::CollectionProxy
+    include ::Enumerable[::VideoBlob]
+    include ::VideoBlob::GeneratedRelationMethods
+    include ::ActiveRecord::Relation::Methods[::VideoBlob, ::Integer]
+
+    def build: (?::ActiveRecord::Associations::CollectionProxy::_EachPair attributes) ?{ () -> untyped } -> ::VideoBlob
+             | (::Array[::ActiveRecord::Associations::CollectionProxy::_EachPair] attributes) ?{ () -> untyped } -> ::Array[::VideoBlob]
+    def create: (?::ActiveRecord::Associations::CollectionProxy::_EachPair attributes) ?{ () -> untyped } -> ::VideoBlob
+              | (::Array[::ActiveRecord::Associations::CollectionProxy::_EachPair] attributes) ?{ () -> untyped } -> ::Array[::VideoBlob]
+    def create!: (?::ActiveRecord::Associations::CollectionProxy::_EachPair attributes) ?{ () -> untyped } -> ::VideoBlob
+               | (::Array[::ActiveRecord::Associations::CollectionProxy::_EachPair] attributes) ?{ () -> untyped } -> ::Array[::VideoBlob]
+    def reload: () -> ::Array[::VideoBlob]
+
+    def replace: (::Array[::VideoBlob]) -> void
+    def delete: (*::VideoBlob | ::Integer) -> ::Array[::VideoBlob]
+    def destroy: (*::VideoBlob | ::Integer) -> ::Array[::VideoBlob]
+    def <<: (*::VideoBlob | ::Array[::VideoBlob]) -> self
+    def prepend: (*::VideoBlob | ::Array[::VideoBlob]) -> self
+  end
+end
+
+class ::ApplicationRecord < ::ActiveRecord::Base
+end

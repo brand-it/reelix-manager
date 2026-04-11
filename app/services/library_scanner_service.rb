@@ -88,7 +88,7 @@ class LibraryScannerService < ApplicationService
       episode_title:       blob_data.episode_title,
       episode_last_number: blob_data.episode_last,
       part:                blob_data.part,
-      path_extension:      blob_data.filename.split(".").last&.downcase,
+      path_extension:      File.extname(blob_data.filename).delete_prefix(".").downcase.presence,
       extra_type:          blob_data.extra_type,
       extra_type_number:   blob_data.extra_number,
       plex_version:        blob_data.plex_version,

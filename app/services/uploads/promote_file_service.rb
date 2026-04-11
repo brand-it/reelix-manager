@@ -25,10 +25,10 @@ module Uploads
     #: () -> void
     def call
       staging_path = move_to_staging
-      storage.delete_file(upload_id, info) # steep:ignore NoMethod
+      storage.delete_file(@upload_id, @info) # steep:ignore NoMethod
 
-      destination_dir = video_blob.directory
-      destination_path = video_blob.media_path
+      destination_dir = @video_blob.directory
+      destination_path = @video_blob.media_path
       raise ArgumentError, "Could not determine destination directory" unless destination_dir
       raise ArgumentError, "Could not determine destination path" unless destination_path
 
@@ -37,8 +37,6 @@ module Uploads
     end
 
     private
-
-    attr_reader :upload_id, :info, :extension, :video_blob
 
     #: () -> Object
     def storage
@@ -50,8 +48,8 @@ module Uploads
       staging_dir = Rails.root.join("tmp", "media_staging")
       FileUtils.mkdir_p(staging_dir)
 
-      staging_path = staging_dir.join("#{SecureRandom.uuid}.#{extension}").to_s
-      FileUtils.mv(File.join(storage.directory.to_s, upload_id), staging_path) # steep:ignore NoMethod
+      staging_path = staging_dir.join("#{SecureRandom.uuid}.#{@extension}").to_s
+      FileUtils.mv(File.join(storage.directory.to_s, @upload_id), staging_path) # steep:ignore NoMethod
       staging_path
     end
   end

@@ -71,6 +71,31 @@ class LibraryScannerServiceTest < ActiveSupport::TestCase
     assert_equal "mkv", blob.path_extension
   end
 
+  test "build_attrs stores nil path_extension when filename has no extension" do
+    blob_data = KeyParserService::BlobData.new(
+      content_type: nil,
+      edition: nil,
+      episode_last: nil,
+      episode: nil,
+      episode_title: nil,
+      extra_number: nil,
+      extra_type: nil,
+      extra: false,
+      filename: "Inception (2010)",
+      optimized: false,
+      part: nil,
+      plex_version: false,
+      season: nil,
+      title: "Inception",
+      type: "Movie",
+      year: 2010
+    )
+
+    attrs = LibraryScannerService.new.send(:build_attrs, blob_data)
+
+    assert_nil attrs[:path_extension]
+  end
+
   # ---------------------------------------------------------------------------
   # Updating existing blobs
   # ---------------------------------------------------------------------------

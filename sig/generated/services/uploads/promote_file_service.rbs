@@ -23,14 +23,6 @@ module Uploads
 
     private
 
-    attr_reader upload_id: untyped
-
-    attr_reader info: untyped
-
-    attr_reader extension: untyped
-
-    attr_reader video_blob: untyped
-
     # : () -> Object
     def storage: () -> Object
 

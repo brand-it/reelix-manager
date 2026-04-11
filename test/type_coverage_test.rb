@@ -12,6 +12,8 @@ class TypeCoverageTest < ActiveSupport::TestCase
     app/clients
     app/tool_box
     app/jobs
+    app/services
+    app/components
     app/graphql
     app/controllers
     app/helpers

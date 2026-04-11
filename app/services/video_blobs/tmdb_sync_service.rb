@@ -20,22 +20,19 @@ module VideoBlobs
 
     #: () -> void
     def call
-      return unless blob.tmdb_id.present?
+      tmdb_id = @blob.tmdb_id
+      return unless tmdb_id
 
-      data = blob.tv? ? TheMovieDb::Tv.new(id: blob.tmdb_id).results : TheMovieDb::Movie.new(id: blob.tmdb_id).results
-      title_key = blob.tv? ? "name" : "title"
-      date_key = blob.tv? ? "first_air_date" : "release_date"
+      data = @blob.tv? ? TheMovieDb::Tv.new(id: tmdb_id).results : TheMovieDb::Movie.new(id: tmdb_id).results
+      title_key = @blob.tv? ? "name" : "title"
+      date_key = @blob.tv? ? "first_air_date" : "release_date"
 
-      blob.update!(
-        title: fetched_title(data[title_key]) || blob.title,
-        year: fetched_year(data[date_key]) || blob.year,
+      @blob.update!(
+        title: fetched_title(data[title_key]) || @blob.title,
+        year: fetched_year(data[date_key]) || @blob.year,
         poster_url: build_poster_url(data["poster_path"])
       )
     end
-
-    private
-
-    attr_reader :blob
 
     #: (String?) -> String?
     def fetched_title(raw_title)

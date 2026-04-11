@@ -17,10 +17,6 @@ module VideoBlobs
     # : () -> void
     def call: () -> void
 
-    private
-
-    attr_reader blob: untyped
-
     # : (String?) -> String?
     def fetched_title: (String?) -> String?
 

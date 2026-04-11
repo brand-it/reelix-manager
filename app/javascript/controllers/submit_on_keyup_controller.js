@@ -61,7 +61,7 @@ export default class extends Controller {
   // click->submit-on-keyup#submitFilter on a <label>.
   submitFilter(event) {
     const input = event.currentTarget.control
-    return unless input
+    if (!input) return
 
     clearTimeout(this.timeout)
     this.timeout = null

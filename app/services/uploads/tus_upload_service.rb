@@ -36,8 +36,6 @@ module Uploads
 
     private
 
-    attr_reader :upload_id, :filename
-
     #: () -> Object
     def storage
       Tus::Server.opts[:storage]
@@ -45,9 +43,9 @@ module Uploads
 
     #: () -> ::Hash[String, String?]
     def read_upload_info
-      storage.read_info(upload_id) # steep:ignore NoMethod
+      storage.read_info(@upload_id) # steep:ignore NoMethod
     rescue Tus::NotFound
-      raise Error, "Upload not found: #{upload_id}"
+      raise Error, "Upload not found: #{@upload_id}"
     end
 
     #: (::Hash[String, String?]) -> void
@@ -64,7 +62,7 @@ module Uploads
     #: (String? header) -> String
     def resolved_filename(header)
       metadata = decode_tus_metadata(header)
-      filename || metadata["filename"] || "upload"
+      @filename || metadata["filename"] || "upload"
     end
 
     #: (String source_filename) -> String

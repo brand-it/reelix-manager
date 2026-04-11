@@ -13,9 +13,5 @@ module VideoBlobs
 
     # : () -> VideoBlob
     def call: () -> VideoBlob
-
-    private
-
-    attr_reader video_blob: untyped
   end
 end

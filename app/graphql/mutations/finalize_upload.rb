@@ -1,5 +1,7 @@
 module Mutations
   class FinalizeUpload < Mutations::BaseMutation
+    ALLOWED_MEDIA_TYPES = %w[movie tv].freeze #: Array[String]
+
     description "Promote a completed tus upload to its final destination. " \
                 "Call this after the tus client has finished uploading all bytes. " \
                 "Fetches metadata from TMDB, builds the correct media path, moves the file, " \
@@ -44,6 +46,7 @@ module Mutations
     #    ?episode_number: Integer?
     #  ) -> ::Hash[Symbol, VideoBlob | String | nil | ::Array[String]]
     def resolve(upload_id:, tmdb_id:, filename: nil, media_type: "movie", season_number: nil, episode_number: nil)
+      validate_media_type!(media_type)
       validate_tv_fields!(media_type:, season_number:, episode_number:)
 
       upload = Uploads::TusUploadService.call(upload_id:, filename:)
@@ -92,6 +95,13 @@ module Mutations
     #: (String message) -> ::Hash[Symbol, VideoBlob | String | nil | ::Array[String]]
     def err(message)
       { video_blob: nil, destination_path: nil, errors: [ message ] }
+    end
+
+    #: (String media_type) -> void
+    def validate_media_type!(media_type)
+      return if ALLOWED_MEDIA_TYPES.include?(media_type)
+
+      raise Uploads::TusUploadService::Error, "media_type must be one of: #{ALLOWED_MEDIA_TYPES.join(", ")}"
     end
 
     #: (media_type: String, season_number: Integer?, episode_number: Integer?) -> void

@@ -241,6 +241,15 @@ class FinalizeUploadMutationTest < ActiveSupport::TestCase
     end
   end
 
+  test "returns error when media_type is invalid" do
+    with_fake_tus_upload(uid: "uid-invalid-type") do
+      result = execute(uploadId: "uid-invalid-type", tmdbId: 272, mediaType: "nope")
+      data   = result.dig("data", "finalizeUpload")
+      refute_nil data, result.inspect
+      assert_includes data["errors"].first, "media_type must be one of: movie, tv"
+    end
+  end
+
   test "returns error when no Config::Video is configured" do
     Config::Video.delete_all
     with_fake_tus_upload(uid: "uid-noconfig") do

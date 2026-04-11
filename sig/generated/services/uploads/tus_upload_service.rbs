@@ -22,10 +22,6 @@ module Uploads
 
     private
 
-    attr_reader upload_id: untyped
-
-    attr_reader filename: untyped
-
     # : () -> Object
     def storage: () -> Object
 

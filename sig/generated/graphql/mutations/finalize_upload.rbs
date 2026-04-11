@@ -2,6 +2,8 @@
 
 module Mutations
   class FinalizeUpload < Mutations::BaseMutation
+    ALLOWED_MEDIA_TYPES: Array[String]
+
     # : (
     #     upload_id: String,
     #     tmdb_id: Integer,
@@ -26,6 +28,9 @@ module Mutations
 
     # : (String message) -> ::Hash[Symbol, VideoBlob | String | nil | ::Array[String]]
     def err: (String message) -> ::Hash[Symbol, VideoBlob | String | nil | ::Array[String]]
+
+    # : (String media_type) -> void
+    def validate_media_type!: (String media_type) -> void
 
     # : (media_type: String, season_number: Integer?, episode_number: Integer?) -> void
     def validate_tv_fields!: (media_type: String, season_number: Integer?, episode_number: Integer?) -> void

@@ -42,5 +42,8 @@ module Types
 
     field :video_blobs, resolver: Resolvers::VideoBlobsResolver,
       description: "List locally-indexed video files. Optionally filter by media_type or tmdb_id."
+
+    field :upload_sessions, resolver: Resolvers::UploadSessionsResolver,
+      description: "List active tus uploads and their current byte progress."
   end
 end

@@ -2,18 +2,37 @@
 
 module Mutations
   class FinalizeUpload < Mutations::BaseMutation
-    # : (upload_id: String, ?filename: String?, ?media_type: String) -> bool
-    def ready?: (upload_id: String, ?filename: String?, ?media_type: String) -> bool
+    ALLOWED_MEDIA_TYPES: Array[String]
 
-    # : (upload_id: String, ?filename: String?, ?media_type: String) -> ::Hash[Symbol, String? | ::Array[String]]
-    def resolve: (upload_id: String, ?filename: String?, ?media_type: String) -> ::Hash[Symbol, String? | ::Array[String]]
+    # : (
+    #     upload_id: String,
+    #     tmdb_id: Integer,
+    #     ?filename: String?,
+    #     ?media_type: String,
+    #     ?season_number: Integer?,
+    #     ?episode_number: Integer?
+    #   ) -> bool
+    def ready?: (upload_id: String, tmdb_id: Integer, ?filename: String?, ?media_type: String, ?season_number: Integer?, ?episode_number: Integer?) -> bool
+
+    # : (
+    #     upload_id: String,
+    #     tmdb_id: Integer,
+    #     ?filename: String?,
+    #     ?media_type: String,
+    #     ?season_number: Integer?,
+    #     ?episode_number: Integer?
+    #   ) -> ::Hash[Symbol, VideoBlob | String | nil | ::Array[String]]
+    def resolve: (upload_id: String, tmdb_id: Integer, ?filename: String?, ?media_type: String, ?season_number: Integer?, ?episode_number: Integer?) -> ::Hash[Symbol, VideoBlob | String | nil | ::Array[String]]
 
     private
 
-    # : (String path) -> void
-    def safe_mkdir_p: (String path) -> void
+    # : (String message) -> ::Hash[Symbol, VideoBlob | String | nil | ::Array[String]]
+    def err: (String message) -> ::Hash[Symbol, VideoBlob | String | nil | ::Array[String]]
 
-    # : (String? header) -> ::Hash[String, String?]
-    def decode_tus_metadata: (String? header) -> ::Hash[String, String?]
+    # : (String media_type) -> void
+    def validate_media_type!: (String media_type) -> void
+
+    # : (media_type: String, season_number: Integer?, episode_number: Integer?) -> void
+    def validate_tv_fields!: (media_type: String, season_number: Integer?, episode_number: Integer?) -> void
   end
 end

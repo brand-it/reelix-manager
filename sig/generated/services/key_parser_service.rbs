@@ -28,6 +28,8 @@ class KeyParserService < ApplicationService
 
     attr_reader episode(): untyped
 
+    attr_reader episode_title(): untyped
+
     attr_reader extra_number(): untyped
 
     attr_reader extra_type(): untyped
@@ -50,12 +52,12 @@ class KeyParserService < ApplicationService
 
     attr_reader year(): untyped
 
-    def self.new: (untyped content_type, untyped edition, untyped episode_last, untyped episode, untyped extra_number, untyped extra_type, untyped extra, untyped filename, untyped optimized, untyped part, untyped plex_version, untyped season, untyped title, untyped type, untyped year) -> instance
-                | (content_type: untyped, edition: untyped, episode_last: untyped, episode: untyped, extra_number: untyped, extra_type: untyped, extra: untyped, filename: untyped, optimized: untyped, part: untyped, plex_version: untyped, season: untyped, title: untyped, type: untyped, year: untyped) -> instance
+    def self.new: (untyped content_type, untyped edition, untyped episode_last, untyped episode, untyped episode_title, untyped extra_number, untyped extra_type, untyped extra, untyped filename, untyped optimized, untyped part, untyped plex_version, untyped season, untyped title, untyped type, untyped year) -> instance
+                | (content_type: untyped, edition: untyped, episode_last: untyped, episode: untyped, episode_title: untyped, extra_number: untyped, extra_type: untyped, extra: untyped, filename: untyped, optimized: untyped, part: untyped, plex_version: untyped, season: untyped, title: untyped, type: untyped, year: untyped) -> instance
 
-    def self.members: () -> [ :content_type, :edition, :episode_last, :episode, :extra_number, :extra_type, :extra, :filename, :optimized, :part, :plex_version, :season, :title, :type, :year ]
+    def self.members: () -> [ :content_type, :edition, :episode_last, :episode, :episode_title, :extra_number, :extra_type, :extra, :filename, :optimized, :part, :plex_version, :season, :title, :type, :year ]
 
-    def members: () -> [ :content_type, :edition, :episode_last, :episode, :extra_number, :extra_type, :extra, :filename, :optimized, :part, :plex_version, :season, :title, :type, :year ]
+    def members: () -> [ :content_type, :edition, :episode_last, :episode, :episode_title, :extra_number, :extra_type, :extra, :filename, :optimized, :part, :plex_version, :season, :title, :type, :year ]
   end
 
   class BlobData
@@ -171,6 +173,9 @@ class KeyParserService < ApplicationService
 
   # : () -> Integer?
   def episode_last: () -> Integer?
+
+  # : (String? raw) -> String?
+  def normalize_episode_title: (String? raw) -> String?
 
   # : (String? raw) -> String?
   def coerce_title: (String? raw) -> String?

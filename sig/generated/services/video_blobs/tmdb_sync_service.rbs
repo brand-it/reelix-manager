@@ -1,0 +1,32 @@
+# Generated from app/services/video_blobs/tmdb_sync_service.rb with RBS::Inline
+
+module VideoBlobs
+  # Refreshes TMDB-backed metadata for a blob when the tmdb_id is already known.
+  # This is intended for background enrichment after upload finalization.
+  class TmdbSyncService < ApplicationService
+    TMDB_IMAGE_BASE_URL: ::String
+
+    # : (VideoBlob blob) -> void
+    def self.call: (VideoBlob blob) -> void
+
+    @blob: VideoBlob
+
+    # : (VideoBlob blob) -> void
+    def initialize: (VideoBlob blob) -> void
+
+    # : () -> void
+    def call: () -> void
+
+    # : (String?) -> String?
+    def fetched_title: (String?) -> String?
+
+    # : (String?) -> Integer?
+    def fetched_year: (String?) -> Integer?
+
+    # : (String? raw_date) -> Integer?
+    def extract_year: (String? raw_date) -> Integer?
+
+    # : (String? poster_path) -> String?
+    def build_poster_url: (String? poster_path) -> String?
+  end
+end

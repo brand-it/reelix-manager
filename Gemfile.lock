@@ -471,6 +471,10 @@ GEM
     unicode-emoji (4.2.0)
     uri (1.1.1)
     useragent (0.16.11)
+    view_component (4.6.0)
+      actionview (>= 7.1.0)
+      activesupport (>= 7.1.0)
+      concurrent-ruby (~> 1)
     warden (1.2.9)
       rack (>= 2.0.9)
     web-console (4.3.0)
@@ -536,6 +540,7 @@ DEPENDENCIES
   turbo-rails
   tus-server (>= 2.0)
   tzinfo-data
+  view_component
   web-console
 
 BUNDLED WITH

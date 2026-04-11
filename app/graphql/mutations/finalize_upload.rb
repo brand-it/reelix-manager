@@ -1,96 +1,115 @@
 module Mutations
   class FinalizeUpload < Mutations::BaseMutation
+    ALLOWED_MEDIA_TYPES = %w[movie tv].freeze #: Array[String]
+
     description "Promote a completed tus upload to its final destination. " \
-                "Call this after the tus client has finished uploading all bytes."
+                "Call this after the tus client has finished uploading all bytes. " \
+                "Fetches metadata from TMDB, builds the correct media path, moves the file, " \
+                "and creates a VideoBlob record."
 
     argument :upload_id, String, required: true,
       description: "The tus upload UID returned in the Location header from POST /files"
+    argument :tmdb_id, Integer, required: true,
+      description: "TMDB ID for the movie or TV show"
     argument :filename, String, required: false,
       description: "Override the filename (defaults to the filename from tus Upload-Metadata)"
     argument :media_type, String, required: false, default_value: "movie",
       description: "Target media library: 'movie' or 'tv' (defaults to 'movie')"
+    argument :season_number, Integer, required: false,
+      description: "Season number (required when media_type is 'tv')"
+    argument :episode_number, Integer, required: false,
+      description: "Episode number (required when media_type is 'tv')"
 
-    field :destination_path, String, null: true
-    field :filename, String, null: true
-    field :errors, [ String ], null: false
+    field :video_blob,        Types::VideoBlobType, null: true
+    field :destination_path,  String,               null: true
+    field :errors,            [ String ],            null: false
 
-    #: (upload_id: String, ?filename: String?, ?media_type: String) -> bool
-    def ready?(upload_id:, filename: nil, media_type: "movie")
+    #: (
+    #    upload_id: String,
+    #    tmdb_id: Integer,
+    #    ?filename: String?,
+    #    ?media_type: String,
+    #    ?season_number: Integer?,
+    #    ?episode_number: Integer?
+    #  ) -> bool
+    def ready?(upload_id:, tmdb_id:, filename: nil, media_type: "movie", season_number: nil, episode_number: nil)
       require_upload!
       true
     end
 
-    #: (upload_id: String, ?filename: String?, ?media_type: String) -> ::Hash[Symbol, String? | ::Array[String]]
-    def resolve(upload_id:, filename: nil, media_type: "movie")
-      storage = Tus::Server.opts[:storage]
+    #: (
+    #    upload_id: String,
+    #    tmdb_id: Integer,
+    #    ?filename: String?,
+    #    ?media_type: String,
+    #    ?season_number: Integer?,
+    #    ?episode_number: Integer?
+    #  ) -> ::Hash[Symbol, VideoBlob | String | nil | ::Array[String]]
+    def resolve(upload_id:, tmdb_id:, filename: nil, media_type: "movie", season_number: nil, episode_number: nil)
+      validate_media_type!(media_type)
+      validate_tv_fields!(media_type:, season_number:, episode_number:)
 
-      begin
-        info = storage.read_info(upload_id)
-      rescue Tus::NotFound
-        return { destination_path: nil, filename: nil, errors: [ "Upload not found: #{upload_id}" ] }
-      end
-
-      upload_length = info["Upload-Length"].to_i
-      upload_offset = info["Upload-Offset"].to_i
-
-      unless upload_offset >= upload_length && upload_length > 0
-        remaining = upload_length - upload_offset
-        return { destination_path: nil, filename: nil, errors: [ "Upload incomplete: #{remaining} bytes remaining" ] }
-      end
-
-      metadata = decode_tus_metadata(info["Upload-Metadata"])
-      resolved_filename = filename || metadata["filename"] || upload_id
+      upload = Uploads::TusUploadService.call(upload_id:, filename:)
 
       config = Config::Video.newest
-      destination_dir = media_type.to_s == "tv" ? config&.settings_tv_path : config&.settings_movie_path
+      return err("No video configuration found. Configure settings first.") unless config.persisted?
 
-      if destination_dir.blank?
-        return { destination_path: nil, filename: nil, errors: [ "No destination path configured. Set the #{media_type} path in Config::Video settings." ] }
-      end
+      blob = VideoBlob.new(
+        tmdb_id:,
+        media_type:,
+        season_number:,
+        episode_number:,
+        path_extension: upload[:extension]
+      )
 
-      # Sanitize filename to prevent directory traversal
-      resolved_filename = File.basename(resolved_filename)
+      Uploads::TmdbMetadataService.call(video_blob: blob)
+      return err("Could not fetch title from TMDB (id: #{tmdb_id})") unless blob.title.present?
 
-      # Expand paths to resolve symlinks and .. references safely
-      destination_dir = File.expand_path(destination_dir)
-      dest_path = File.expand_path(File.join(destination_dir, resolved_filename))
+      generated_filename = blob.generated_filename
+      media_path = blob.media_path
+      raise Uploads::TusUploadService::Error, "Could not build media path" unless generated_filename.present? && media_path.present?
 
-      # Defense-in-depth: ensure the resolved destination path stays within the configured directory
-      unless dest_path.start_with?(destination_dir + File::SEPARATOR)
-        return {
-          destination_path: nil,
-          filename: nil,
-          errors: [ "Resolved path is outside the allowed upload directory." ]
-        }
-      end
+      blob.filename = generated_filename
+      blob.key = media_path
 
-      safe_mkdir_p(destination_dir)
-      FileUtils.mv(File.join(storage.directory, upload_id), dest_path)
-      storage.delete_file(upload_id, info)
+      Uploads::PromoteFileService.call(
+        upload_id:,
+        info: upload[:info],
+        extension: upload[:extension],
+        video_blob: blob
+      )
 
-      { destination_path: dest_path, filename: resolved_filename, errors: [] } #: ::Hash[Symbol, String? | ::Array[String]]
-    rescue => e
-      { destination_path: nil, filename: nil, errors: [ e.message ] }
+      blob = VideoBlobs::UpsertFromUploadService.call(
+        video_blob: blob
+      )
+
+      VideoBlobTmdbSyncJob.perform_later(blob.id)
+
+      { video_blob: blob, destination_path: blob.key, errors: [] }
+    rescue Uploads::TusUploadService::Error, TheMovieDb::Error, ActiveRecord::RecordInvalid, SystemCallError => e
+      err(e.message)
     end
 
     private
 
-    #: (String path) -> void
-    def safe_mkdir_p(path)
-      expanded_path = File.expand_path(path)
-      FileUtils.mkdir_p(expanded_path)
+    #: (String message) -> ::Hash[Symbol, VideoBlob | String | nil | ::Array[String]]
+    def err(message)
+      { video_blob: nil, destination_path: nil, errors: [ message ] }
     end
 
-    #: (String? header) -> ::Hash[String, String?]
-    def decode_tus_metadata(header)
-      return {} if header.blank?
+    #: (String media_type) -> void
+    def validate_media_type!(media_type)
+      return if ALLOWED_MEDIA_TYPES.include?(media_type)
 
-      acc = {} #: ::Hash[String, String?]
-      header.split(",").each_with_object(acc) do |pair, hash|
-        key, encoded_value = pair.strip.split(" ", 2) # steep:ignore NoMethod
-        next unless key
-        hash[key] = encoded_value ? Base64.decode64(encoded_value) : nil
-      end
+      raise Uploads::TusUploadService::Error, "media_type must be one of: #{ALLOWED_MEDIA_TYPES.join(", ")}"
+    end
+
+    #: (media_type: String, season_number: Integer?, episode_number: Integer?) -> void
+    def validate_tv_fields!(media_type:, season_number:, episode_number:)
+      return unless media_type == "tv"
+
+      raise Uploads::TusUploadService::Error, "season_number is required for TV uploads" if season_number.nil?
+      raise Uploads::TusUploadService::Error, "episode_number is required for TV uploads" if episode_number.nil?
     end
   end
 end

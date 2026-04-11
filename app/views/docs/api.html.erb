@@ -167,6 +167,232 @@
     </div>
   </div>
 
+  <%# ── Resumable uploads ── %>
+  <div class="card mb-4">
+    <div class="card-body">
+      <h4 class="card-title">Resumable media uploads with tus + finalizeUpload</h4>
+      <p>
+        Large media files are uploaded in <strong>two phases</strong>:
+        first the raw bytes are sent to the tus endpoint at <code>/files</code>,
+        then the client calls the GraphQL <code>finalizeUpload</code> mutation to move the
+        completed upload into the configured movie or TV library.
+      </p>
+      <p class="mb-0">
+        This split is important: the tus upload only stores the temporary file in
+        <code>tmp/tus_uploads</code>. Nothing is added to the media library until
+        <code>finalizeUpload</code> succeeds.
+      </p>
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Upload requirements</h5>
+      <div class="table-responsive">
+        <table class="table table-sm mb-0">
+          <thead>
+            <tr>
+              <th>Requirement</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>OAuth scope</td><td><code>upload</code> or <code>all</code></td></tr>
+            <tr><td>Upload endpoint</td><td><code>POST /files</code>, <code>PATCH /files/:uid</code>, <code>HEAD /files/:uid</code>, <code>DELETE /files/:uid</code></td></tr>
+            <tr><td>Protocol header</td><td><code>Tus-Resumable: 1.0.0</code> on tus requests</td></tr>
+            <tr><td>Maximum file size</td><td>100 GB</td></tr>
+            <tr><td>Incomplete upload expiry</td><td>48 hours of inactivity</td></tr>
+            <tr><td>Finalize step</td><td><code>POST /graphql</code> with the <code>finalizeUpload</code> mutation</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Step 4 — Create the tus upload</h5>
+      <p>
+        Start by creating an empty resumable upload resource. Send the total byte length in
+        <code>Upload-Length</code> and include the original filename in <code>Upload-Metadata</code>.
+        The filename must be base64 encoded per the tus spec.
+      </p>
+
+      <pre class="bg-dark text-light p-3 rounded"><code>FILENAME_B64=$(printf "Batman Begins.mkv" | base64 -w0)
+
+curl -i -X POST https://YOUR_HOST/files \
+  -H "Authorization: Bearer s6BhdRkqt3…" \
+  -H "Tus-Resumable: 1.0.0" \
+  -H "Upload-Length: 7340032000" \
+  -H "Upload-Metadata: filename ${FILENAME_B64}"</code></pre>
+
+      <p class="mb-1">Example response headers:</p>
+      <pre class="bg-dark text-light p-3 rounded"><code>HTTP/1.1 201 Created
+Location: /files/3b6f4d64-9240-4fb0-9d8d-d3df0562f1f1
+Tus-Resumable: 1.0.0</code></pre>
+
+      <p class="mb-0">
+        Save the upload UID from the <code>Location</code> header. In this example the
+        <code>upload_id</code> is <code>3b6f4d64-9240-4fb0-9d8d-d3df0562f1f1</code>.
+      </p>
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Step 5 — Send file chunks</h5>
+      <p>
+        Upload the file bytes with one or more <code>PATCH</code> requests. Each request must include
+        the current byte offset in <code>Upload-Offset</code>. The server responds with the new offset
+        after each successful chunk.
+      </p>
+
+      <pre class="bg-dark text-light p-3 rounded"><code>curl -i -X PATCH https://YOUR_HOST/files/3b6f4d64-9240-4fb0-9d8d-d3df0562f1f1 \
+  -H "Authorization: Bearer s6BhdRkqt3…" \
+  -H "Tus-Resumable: 1.0.0" \
+  -H "Content-Type: application/offset+octet-stream" \
+  -H "Upload-Offset: 0" \
+  --data-binary @Batman-Begins.part1</code></pre>
+
+      <p class="mb-1">Example response headers:</p>
+      <pre class="bg-dark text-light p-3 rounded"><code>HTTP/1.1 204 No Content
+Upload-Offset: 5242880
+Tus-Resumable: 1.0.0</code></pre>
+
+      <p class="mb-0">
+        Continue sending chunks until <code>Upload-Offset</code> matches the original
+        <code>Upload-Length</code>.
+      </p>
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Pausing, resuming, and aborting uploads</h5>
+      <p>
+        tus uploads are resumable by design. If the app crashes, the network drops, or the user
+        pauses the transfer, keep the upload UID and ask the server where to continue.
+      </p>
+
+      <p class="mb-1"><strong>Resume check:</strong> call <code>HEAD /files/:uid</code>.</p>
+      <pre class="bg-dark text-light p-3 rounded"><code>curl -i -X HEAD https://YOUR_HOST/files/3b6f4d64-9240-4fb0-9d8d-d3df0562f1f1 \
+  -H "Authorization: Bearer s6BhdRkqt3…" \
+  -H "Tus-Resumable: 1.0.0"</code></pre>
+
+      <p class="mb-1">Example response headers:</p>
+      <pre class="bg-dark text-light p-3 rounded"><code>HTTP/1.1 200 OK
+Upload-Length: 7340032000
+Upload-Offset: 5242880
+Tus-Resumable: 1.0.0</code></pre>
+
+      <p>
+        Resume by sending the next <code>PATCH</code> request with <code>Upload-Offset: 5242880</code>.
+        You do <strong>not</strong> need to restart from zero unless the upload has expired or was deleted.
+      </p>
+
+      <p class="mb-1"><strong>Abort:</strong> call <code>DELETE /files/:uid</code>.</p>
+      <pre class="bg-dark text-light p-3 rounded"><code>curl -i -X DELETE https://YOUR_HOST/files/3b6f4d64-9240-4fb0-9d8d-d3df0562f1f1 \
+  -H "Authorization: Bearer s6BhdRkqt3…" \
+  -H "Tus-Resumable: 1.0.0"</code></pre>
+
+      <p class="mb-0">
+        Once deleted, that upload UID is gone. To try again, create a new upload with
+        <code>POST /files</code>.
+      </p>
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Step 6 — Finalize the completed upload</h5>
+      <p>
+        After the tus upload reaches 100%, call <code>finalizeUpload</code>. This is the step that:
+      </p>
+      <ol class="mb-3">
+        <li>verifies the tus upload is complete</li>
+        <li>fetches TMDB naming metadata</li>
+        <li>builds the final movie or TV path</li>
+        <li>moves the file into the media library</li>
+        <li>creates or updates the <code>VideoBlob</code> record</li>
+        <li>queues background TMDB enrichment</li>
+      </ol>
+
+      <pre class="bg-dark text-light p-3 rounded"><code>curl -X POST https://YOUR_HOST/graphql \
+  -H "Authorization: Bearer s6BhdRkqt3…" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query": "mutation Finalize($input: FinalizeUploadInput!) { finalizeUpload(input: $input) { destinationPath errors videoBlob { id key filename title year tmdbId mediaType posterUrl } } }",
+    "variables": {
+      "input": {
+        "uploadId": "3b6f4d64-9240-4fb0-9d8d-d3df0562f1f1",
+        "tmdbId": 272,
+        "mediaType": "movie"
+      }
+    }
+  }'</code></pre>
+
+      <p class="mb-1">TV episodes require season and episode numbers:</p>
+      <pre class="bg-dark text-light p-3 rounded"><code>{
+  "input": {
+    "uploadId": "48f90d5d-6f39-4f4a-9f1b-0fba04a5199d",
+    "tmdbId": 1396,
+    "mediaType": "tv",
+    "seasonNumber": 1,
+    "episodeNumber": 1
+  }
+}</code></pre>
+
+      <p class="mb-1">Optional arguments:</p>
+      <div class="table-responsive">
+        <table class="table table-sm mb-0">
+          <thead>
+            <tr>
+              <th>Field</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>filename</code></td><td>Overrides the filename used to determine the final extension. If omitted, Reelix uses the tus <code>Upload-Metadata</code> filename.</td></tr>
+            <tr><td><code>mediaType</code></td><td><code>movie</code> (default) or <code>tv</code></td></tr>
+            <tr><td><code>seasonNumber</code></td><td>Required for TV uploads</td></tr>
+            <tr><td><code>episodeNumber</code></td><td>Required for TV uploads</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Finalize behavior and retry rules</h5>
+      <p>
+        <strong>Do not call <code>finalizeUpload</code> until the upload is fully complete.</strong>
+        The mutation checks that the current <code>Upload-Offset</code> is equal to
+        <code>Upload-Length</code>. If bytes are still missing, it returns an error and leaves the
+        tus upload in place so the client can resume and try again.
+      </p>
+
+      <div class="table-responsive">
+        <table class="table table-sm mb-0">
+          <thead>
+            <tr>
+              <th>Situation</th>
+              <th>What to do</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>Upload not found</code></td><td>The UID does not exist anymore. Start a new tus upload.</td></tr>
+            <tr><td><code>Upload incomplete</code></td><td>Resume with <code>HEAD</code> + <code>PATCH</code>, then call <code>finalizeUpload</code> again.</td></tr>
+            <tr><td>No video configuration found</td><td>Configure movie and TV library paths before trying again.</td></tr>
+            <tr><td>TMDB lookup fails before file promotion</td><td>The raw tus upload remains untouched; fix the issue and retry the same <code>uploadId</code>.</td></tr>
+            <tr><td>TV upload missing season/episode</td><td>Send both <code>seasonNumber</code> and <code>episodeNumber</code>.</td></tr>
+            <tr><td>Successful finalize</td><td>The raw tus upload is deleted, the file is moved into the library, and the same <code>uploadId</code> cannot be reused.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
   <%# ── GraphiQL ── %>
   <div class="card mb-4">
     <div class="card-body">

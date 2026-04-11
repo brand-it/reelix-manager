@@ -1,0 +1,13 @@
+<% if empty? %>
+  <div class="text-center text-secondary py-5">
+    <p class="fs-5">
+      No blobs found<% if query.present? %> for &ldquo;<%= query %>&rdquo;<% end %>.
+    </p>
+  </div>
+<% else %>
+  <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3">
+    <% video_blobs.each do |blob| %>
+      <%= render Library::BlobCardComponent.new(blob: blob) %>
+    <% end %>
+  </div>
+<% end %>

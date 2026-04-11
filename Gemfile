@@ -43,6 +43,7 @@ gem "image_processing", ">= 1.2"
 
 gem "cssbundling-rails"
 gem "simple_form"
+gem "view_component"
 
 # Authentication
 gem "devise"

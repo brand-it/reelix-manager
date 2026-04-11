@@ -1,0 +1,35 @@
+<div data-controller="submit-on-keyup">
+  <%= form_with url: video_blobs_path,
+                method: :get,
+                data: {
+                  turbo_stream: true,
+                  "submit-on-keyup-target": "form"
+                } do |f| %>
+    <div class="input-group mb-3">
+      <%= f.search_field :q, value: query,
+            placeholder: "Search by title...",
+            class: "form-control form-control-lg",
+            autocomplete: "off",
+            data: {
+              "submit-on-keyup-target": "input",
+              action: "input->submit-on-keyup#submit"
+            } %>
+      <%= f.submit "Search", class: "btn btn-primary" %>
+    </div>
+
+    <div class="d-flex flex-wrap gap-2">
+      <% media_types.each do |value, label| %>
+        <% input_id = "library_media_type_#{value.presence || 'all'}" %>
+        <%= radio_button_tag :media_type, value, media_type_filter == value,
+              id: input_id,
+              class: "btn-check",
+              autocomplete: "off",
+              data: {
+                "submit-on-keyup-target": "input",
+                action: "change->submit-on-keyup#submit"
+              } %>
+        <%= label_tag input_id, label, class: "btn btn-outline-primary rounded-pill" %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,17 @@
+# Generated from app/components/library/results_component.rb with RBS::Inline
+
+module Library
+  class ResultsComponent < ViewComponent::Base
+    # : (video_blobs: Array[VideoBlob], query: String) -> void
+    def initialize: (video_blobs: Array[VideoBlob], query: String) -> void
+
+    # : Array[VideoBlob]
+    attr_reader video_blobs: untyped
+
+    # : String
+    attr_reader query: untyped
+
+    # : () -> bool
+    def empty?: () -> bool
+  end
+end

@@ -1,0 +1,10 @@
+# Generated from app/controllers/uploads_controller.rb with RBS::Inline
+
+class UploadsController < ApplicationController
+  @active_uploads: Array[Uploads::SessionSnapshot]
+
+  @recent_video_blobs: ActiveRecord::Relation
+
+  # : () -> void
+  def index: () -> void
+end

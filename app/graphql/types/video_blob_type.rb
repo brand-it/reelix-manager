@@ -19,6 +19,7 @@ module Types
     field :part,                Integer, null: true
     field :extra_type,          String,  null: false
     field :extra_type_number,   Integer, null: true
+    field :poster_url,          String,  null: true
     field :plex_version,        Boolean, null: false
     field :optimized,           Boolean, null: false
     field :created_at,          String,  null: false

@@ -1,0 +1,20 @@
+# Generated from app/components/library/blob_card_component.rb with RBS::Inline
+
+module Library
+  class BlobCardComponent < ViewComponent::Base
+    # : (blob: VideoBlob) -> void
+    def initialize: (blob: VideoBlob) -> void
+
+    # : VideoBlob
+    attr_reader blob: untyped
+
+    # : () -> String
+    def title_text: () -> String
+
+    # : () -> String
+    def poster_alt: () -> String
+
+    # : () -> String?
+    def season_episode_label: () -> String?
+  end
+end

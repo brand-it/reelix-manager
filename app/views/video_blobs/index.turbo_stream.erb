@@ -1,0 +1,11 @@
+<%= turbo_stream.replace "library_blob_count" do %>
+  <div id="library_blob_count">
+    <%= render Library::BlobCountComponent.new(count: @video_blobs.size) %>
+  </div>
+<% end %>
+
+<%= turbo_stream.replace "library_results" do %>
+  <div id="library_results">
+    <%= render Library::ResultsComponent.new(video_blobs: @video_blobs, query: @query) %>
+  </div>
+<% end %>

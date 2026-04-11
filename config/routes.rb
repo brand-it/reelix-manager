@@ -38,6 +38,7 @@ Rails.application.routes.draw do
   end
 
   resources :video_blobs, only: %i[index]
+  resources :uploads, only: %i[index]
 
   # Static API documentation (public — explains how to authenticate).
   get "docs/api", to: "docs#api", as: :api_docs

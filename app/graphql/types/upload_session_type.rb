@@ -2,23 +2,26 @@ module Types
   class UploadSessionType < Types::BaseObject
     field :id, ID, null: false
     field :filename, String, null: false
-    field :file_size, Integer, null: true
-    field :mime_type, String, null: true
     field :status, String, null: false
-    field :total_chunks, Integer, null: false
-    field :received_chunks, Integer, null: false
-    field :missing_chunks, [ Integer ], null: false, description: "Chunk numbers (1-based) not yet received — use this to resume an interrupted upload"
+    field :upload_length, Integer, null: false, description: "Total expected bytes for the tus upload"
+    field :upload_offset, Integer, null: false, description: "Bytes currently stored on the server"
+    field :bytes_remaining, Integer, null: false
+    field :progress_percent, Integer, null: false
     field :upload_complete, Boolean, null: false
-    field :error_message, String, null: true, description: "Set when status is 'failed'"
-
-    #: () -> ::Array[Integer]
-    def missing_chunks
-      object.missing_chunks
-    end
+    field :created_at, String, null: false
+    field :updated_at, String, null: false
+    field :expires_at, String, null: false, description: "When the incomplete tus upload will expire if no more data is sent"
 
     #: () -> bool
-    def upload_complete
-      object.upload_complete?
-    end
+    def upload_complete = object.upload_complete
+
+    #: () -> String
+    def created_at = object.created_at.iso8601
+
+    #: () -> String
+    def updated_at = object.updated_at.iso8601
+
+    #: () -> String
+    def expires_at = object.expires_at.iso8601
   end
 end

@@ -1,0 +1,17 @@
+# Generated from app/services/video_blobs/upsert_from_upload_service.rb with RBS::Inline
+
+module VideoBlobs
+  # Creates or updates the VideoBlob record for a finalized upload.
+  class UpsertFromUploadService < ApplicationService
+    # : (video_blob: VideoBlob) -> VideoBlob
+    def self.call: (video_blob: VideoBlob) -> VideoBlob
+
+    @video_blob: VideoBlob
+
+    # : (video_blob: VideoBlob) -> void
+    def initialize: (video_blob: VideoBlob) -> void
+
+    # : () -> VideoBlob
+    def call: () -> VideoBlob
+  end
+end

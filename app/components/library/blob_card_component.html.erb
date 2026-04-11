@@ -1,0 +1,27 @@
+<div class="col">
+  <div class="card h-100 bg-dark text-white border-secondary">
+    <% if blob.poster_url.present? %>
+      <%= image_tag blob.poster_url,
+            class: "card-img-top",
+            alt: poster_alt,
+            loading: "lazy",
+            style: "aspect-ratio: 2/3; object-fit: cover;" %>
+    <% else %>
+      <div class="card-img-top d-flex align-items-center justify-content-center bg-secondary text-muted"
+           style="aspect-ratio: 2/3; font-size: 0.65rem; word-break: break-all; padding: 0.5rem;">
+        <%= blob.filename %>
+      </div>
+    <% end %>
+    <div class="card-body p-2">
+      <p class="card-title mb-0 small fw-semibold text-truncate" title="<%= title_text %>">
+        <%= title_text %>
+      </p>
+      <% if blob.year.present? %>
+        <p class="card-text text-secondary" style="font-size: 0.75rem;"><%= blob.year %></p>
+      <% end %>
+      <% if season_episode_label.present? %>
+        <p class="card-text text-secondary" style="font-size: 0.7rem;"><%= season_episode_label %></p>
+      <% end %>
+    </div>
+  </div>
+</div>

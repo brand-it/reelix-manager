@@ -1,7 +1,7 @@
 # Generated from app/controllers/video_blobs_controller.rb with RBS::Inline
 
 class VideoBlobsController < ApplicationController
-  @video_blobs: ActiveRecord::Relation
+  @video_blobs: Array[VideoBlob]
 
   @query: String
 
@@ -11,4 +11,9 @@ class VideoBlobsController < ApplicationController
 
   # : () -> void
   def index: () -> void
+
+  private
+
+  # : () -> Array[VideoBlob]
+  def load_video_blobs: () -> Array[VideoBlob]
 end

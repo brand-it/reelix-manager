@@ -57,6 +57,7 @@ class KeyParserService < ApplicationService
     :edition,
     :episode_last,
     :episode,
+    :episode_title,
     :extra_number,
     :extra_type,
     :extra,
@@ -157,14 +158,15 @@ class KeyParserService < ApplicationService
       directory_name.match(TITLE_MATCHER)
     )&.named_captures || {}
 
-    BlobData.new(
-      content_type:  content_type,
-      edition:       (dir_match["edition"].presence || match["edition"])&.strip,
-      episode:       nil,
-      episode_last:  nil,
-      extra_number:  extra_number,
-      extra_type:    extra_type_key,
-      extra:         extra,
+      BlobData.new(
+        content_type:  content_type,
+        edition:       (dir_match["edition"].presence || match["edition"])&.strip,
+        episode:       nil,
+        episode_last:  nil,
+        episode_title: nil,
+        extra_number:  extra_number,
+        extra_type:    extra_type_key,
+        extra:         extra,
       filename:      filename,
       optimized:     optimized?,
       part:          part,
@@ -192,14 +194,15 @@ class KeyParserService < ApplicationService
       directory_name.match(TITLE_MATCHER)
     )&.named_captures || {}
 
-    BlobData.new(
-      content_type:  content_type,
-      edition:       nil,
-      episode:       match["episode"]&.to_i,
-      episode_last:  episode_last,
-      extra_number:  nil,
-      extra_type:    :feature_films,
-      extra:         nil,
+      BlobData.new(
+        content_type:  content_type,
+        edition:       nil,
+        episode:       match["episode"]&.to_i,
+        episode_last:  episode_last,
+        episode_title: normalize_episode_title(match["episode_name"]),
+        extra_number:  nil,
+        extra_type:    :feature_films,
+        extra:         nil,
       filename:      filename,
       optimized:     optimized?,
       part:          part,
@@ -274,6 +277,13 @@ class KeyParserService < ApplicationService
   #: () -> Integer?
   def episode_last
     (filename.match(TV_SHOW_SEASON_EPISODE_LAST)&.named_captures || {})["episode_last"]&.to_i
+  end
+
+  #: (String? raw) -> String?
+  def normalize_episode_title(raw)
+    return if raw.blank?
+
+    raw.strip.sub(/\A\d{4}-\d{2}-\d{2}\s*-\s*/, "")
   end
 
   #: (String? raw) -> String?

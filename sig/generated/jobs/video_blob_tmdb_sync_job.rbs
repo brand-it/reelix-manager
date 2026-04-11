@@ -1,0 +1,6 @@
+# Generated from app/jobs/video_blob_tmdb_sync_job.rb with RBS::Inline
+
+class VideoBlobTmdbSyncJob < ApplicationJob
+  # : (Integer video_blob_id) -> void
+  def perform: (Integer video_blob_id) -> void
+end

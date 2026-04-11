@@ -8,6 +8,10 @@ class TusUploadMutationsTest < ActionDispatch::IntegrationTest
     Rails.root.join("tmp", "tus_test_uploads_#{Process.pid}")
   end
 
+  def finalized_storage_dir
+    Rails.root.join("tmp", "finalized_test_uploads_#{Process.pid}")
+  end
+
   setup do
     @original_storage = Tus::Server.opts[:storage]
     Tus::Server.opts[:storage] = Tus::Storage::Filesystem.new(tus_storage_dir)
@@ -32,7 +36,7 @@ class TusUploadMutationsTest < ActionDispatch::IntegrationTest
   teardown do
     Tus::Server.opts[:storage] = @original_storage
     FileUtils.rm_rf(tus_storage_dir)
-    FileUtils.rm_rf(Rails.root.join("tmp", "finalized_test_uploads"))
+    FileUtils.rm_rf(finalized_storage_dir)
   end
 
   # ---------------------------------------------------------------------------
@@ -40,13 +44,18 @@ class TusUploadMutationsTest < ActionDispatch::IntegrationTest
   # ---------------------------------------------------------------------------
 
   test "finalizeUpload moves a complete tus file to the destination" do
-    uid = create_tus_upload("movie.mkv", content: "FAKE VIDEO DATA")
+    uid        = create_tus_upload("movie.mkv", content: "FAKE VIDEO DATA")
+    movie_dir  = finalized_storage_dir.to_s
+    FileUtils.mkdir_p(movie_dir)
+    config     = create(:config_video, movie_dir: movie_dir)
+
+    fake_movie = { "title" => "Batman Begins", "release_date" => "2005-06-15", "poster_path" => nil }
+    TheMovieDb::Movie.define_singleton_method(:new) { |**| obj = Object.new; obj.define_singleton_method(:results) { fake_movie }; obj }
 
     mutation = <<~GQL
       mutation {
-        finalizeUpload(input: { uploadId: "#{uid}" }) {
+        finalizeUpload(input: { uploadId: "#{uid}", tmdbId: 272 }) {
           destinationPath
-          filename
           errors
         }
       }
@@ -57,14 +66,17 @@ class TusUploadMutationsTest < ActionDispatch::IntegrationTest
 
     result = JSON.parse(response.body).dig("data", "finalizeUpload")
     assert_empty result["errors"]
-    assert_equal "movie.mkv", result["filename"]
     assert File.exist?(result["destinationPath"]), "Expected finalized file to exist at destination"
+  ensure
+    TheMovieDb::Movie.singleton_class.remove_method(:new) rescue nil
+    config&.destroy
+    FileUtils.rm_rf(movie_dir)
   end
 
   test "finalizeUpload returns error for unknown upload id" do
     mutation = <<~GQL
       mutation {
-        finalizeUpload(input: { uploadId: "nonexistent-uid" }) {
+        finalizeUpload(input: { uploadId: "nonexistent-uid", tmdbId: 1 }) {
           destinationPath
           errors
         }
@@ -81,7 +93,7 @@ class TusUploadMutationsTest < ActionDispatch::IntegrationTest
 
     mutation = <<~GQL
       mutation {
-        finalizeUpload(input: { uploadId: "#{uid}" }) {
+        finalizeUpload(input: { uploadId: "#{uid}", tmdbId: 1 }) {
           destinationPath
           errors
         }
@@ -93,33 +105,19 @@ class TusUploadMutationsTest < ActionDispatch::IntegrationTest
     assert_includes result["errors"].first, "incomplete"
   end
 
-  test "finalizeUpload accepts a filename override" do
-    uid = create_tus_upload("original.mkv", content: "DATA")
+  test "finalizeUpload uses extension from filename override" do
+    uid        = create_tus_upload("original.mkv", content: "DATA")
+    movie_dir  = finalized_storage_dir.to_s
+    FileUtils.mkdir_p(movie_dir)
+    config     = create(:config_video, movie_dir: movie_dir)
+
+    fake_movie = { "title" => "Batman Begins", "release_date" => "2005-06-15", "poster_path" => nil }
+    TheMovieDb::Movie.define_singleton_method(:new) { |**| obj = Object.new; obj.define_singleton_method(:results) { fake_movie }; obj }
 
     mutation = <<~GQL
       mutation {
-        finalizeUpload(input: { uploadId: "#{uid}", filename: "renamed.mkv" }) {
-          filename
-          errors
-        }
-      }
-    GQL
-
-    post "/graphql", params: { query: mutation }, headers: @auth_headers, as: :json
-    result = JSON.parse(response.body).dig("data", "finalizeUpload")
-    assert_empty result["errors"]
-    assert_equal "renamed.mkv", result["filename"]
-  end
-
-  test "finalizeUpload sanitizes directory traversal attempts in filename" do
-    uid = create_tus_upload("movie.mkv", content: "FAKE VIDEO DATA")
-
-    # Attempt directory traversal with ../../etc/passwd style filename
-    mutation = <<~GQL
-      mutation {
-        finalizeUpload(input: { uploadId: "#{uid}", filename: "../../etc/passwd" }) {
+        finalizeUpload(input: { uploadId: "#{uid}", tmdbId: 272, filename: "renamed.avi" }) {
           destinationPath
-          filename
           errors
         }
       }
@@ -127,17 +125,12 @@ class TusUploadMutationsTest < ActionDispatch::IntegrationTest
 
     post "/graphql", params: { query: mutation }, headers: @auth_headers, as: :json
     result = JSON.parse(response.body).dig("data", "finalizeUpload")
-
-    # Should sanitize to just "passwd" via File.basename
     assert_empty result["errors"]
-    assert_equal "passwd", result["filename"]
-
-    # Verify file is in the configured upload directory, not outside it
-    destination_path = result["destinationPath"]
-    config = Config::Video.newest
-    upload_dir = File.expand_path(config.settings_movie_path)
-    assert destination_path.start_with?(upload_dir), "File should be in upload directory, not outside it"
-    assert File.exist?(destination_path), "Sanitized file should exist at the safe location"
+    assert result["destinationPath"].end_with?(".avi"), "Expected .avi extension in destination path"
+  ensure
+    TheMovieDb::Movie.singleton_class.remove_method(:new) rescue nil
+    config&.destroy
+    FileUtils.rm_rf(movie_dir)
   end
 
   private

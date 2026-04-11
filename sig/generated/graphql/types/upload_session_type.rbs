@@ -2,10 +2,16 @@
 
 module Types
   class UploadSessionType < Types::BaseObject
-    # : () -> ::Array[Integer]
-    def missing_chunks: () -> ::Array[Integer]
-
     # : () -> bool
     def upload_complete: () -> bool
+
+    # : () -> String
+    def created_at: () -> String
+
+    # : () -> String
+    def updated_at: () -> String
+
+    # : () -> String
+    def expires_at: () -> String
   end
 end

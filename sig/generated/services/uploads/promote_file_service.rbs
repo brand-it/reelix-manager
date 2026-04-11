@@ -1,0 +1,40 @@
+# Generated from app/services/uploads/promote_file_service.rb with RBS::Inline
+
+module Uploads
+  # Moves a completed tus upload into its final destination using a staging file
+  # within tmp/ so the promotion remains atomic on the local filesystem.
+  class PromoteFileService < ApplicationService
+    # : (upload_id: String, info: ::Hash[String, String?], extension: String, video_blob: VideoBlob) -> void
+    def self.call: (upload_id: String, info: ::Hash[String, String?], extension: String, video_blob: VideoBlob) -> void
+
+    @upload_id: String
+
+    @info: ::Hash[String, String?]
+
+    @extension: String
+
+    @video_blob: VideoBlob
+
+    # : (upload_id: String, info: ::Hash[String, String?], extension: String, video_blob: VideoBlob) -> void
+    def initialize: (upload_id: String, info: ::Hash[String, String?], extension: String, video_blob: VideoBlob) -> void
+
+    # : () -> void
+    def call: () -> void
+
+    private
+
+    attr_reader upload_id: untyped
+
+    attr_reader info: untyped
+
+    attr_reader extension: untyped
+
+    attr_reader video_blob: untyped
+
+    # : () -> Object
+    def storage: () -> Object
+
+    # : () -> String
+    def move_to_staging: () -> String
+  end
+end

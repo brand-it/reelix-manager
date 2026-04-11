@@ -9,6 +9,7 @@
 #  edition             :string
 #  episode_last_number :integer
 #  episode_number      :integer
+#  episode_title       :string
 #  extra_type          :integer          default("feature_films"), not null
 #  extra_type_number   :integer
 #  filename            :string           not null
@@ -16,6 +17,7 @@
 #  media_type          :integer          default("movie"), not null
 #  optimized           :boolean          default(FALSE), not null
 #  part                :integer
+#  path_extension      :string
 #  plex_version        :boolean          default(FALSE), not null
 #  poster_url          :string
 #  season_number       :integer
@@ -31,6 +33,62 @@
 #  index_video_blobs_on_media_type_and_tmdb_id     (media_type,tmdb_id)
 #  index_video_blobs_on_tmdb_id                    (tmdb_id)
 class VideoBlob < ApplicationRecord
+  @video_config: Config::Video?
+
   # Sort order is important — matches plex_the_ripper convention.
   EXTRA_TYPES: untyped
+
+  # Returns the canonical display name for this media item (no extension, no directory).
+  #
+  # Movie:  "Batman Begins (2005)"
+  # TV:     "Breaking Bad (2008) - s01e01"
+  # Returns nil when required fields (title) are missing,
+  # or when season/episode are missing for a TV blob.
+  # : () -> String?
+  def media_name: () -> String?
+
+  # Returns the filename derived from this blob's media attributes plus the
+  # virtual path fields used during upload-time path construction.
+  # Movie: "Batman Begins (2005).mkv"
+  # TV:    "Breaking Bad (2008) - s01e01 - Pilot.mkv"
+  # : () -> String?
+  def generated_filename: () -> String?
+
+  # Returns the absolute media path for this blob.
+  #
+  # Movie: "/media/movies/Batman Begins (2005)/Batman Begins (2005).mkv"
+  # TV:    "/media/tv/Breaking Bad (2008)/Season 01/Breaking Bad (2008) - s01e01 - Pilot.mkv"
+  #
+  # Returns nil when the media root, media name, or filename is unavailable.
+  # : () -> String?
+  def media_path: () -> String?
+
+  # : () -> String?
+  def directory: () -> String?
+
+  private
+
+  # : () -> String?
+  def relative_media_path: () -> String?
+
+  # : () -> String?
+  def show_name_for_path: () -> String?
+
+  # : () -> String?
+  def episode_code_for_path: () -> String?
+
+  # : (String name) -> String
+  def sanitize_path_component: (String name) -> String
+
+  # : () -> String?
+  def media_root_for_path: () -> String?
+
+  # : () -> String?
+  def movie_path: () -> String?
+
+  # : () -> String?
+  def tv_path: () -> String?
+
+  # : () -> Config::Video?
+  def video_config: () -> Config::Video?
 end

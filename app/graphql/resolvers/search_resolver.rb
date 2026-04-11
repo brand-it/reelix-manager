@@ -65,6 +65,8 @@ module Resolvers
             TheMovieDb::Search::Movie.new(query:, page:, language:).results(use_cache: false)
           end
         end
+      rescue StandardError => e
+        e
       end
       tv_thread = Thread.new do
         Rails.application.executor.wrap do
@@ -72,8 +74,17 @@ module Resolvers
             TheMovieDb::Search::Tv.new(query:, page:, language:).results(use_cache: false)
           end
         end
+      rescue StandardError => e
+        e
       end
-      [ movie_thread.value, tv_thread.value ]
+
+      movie_result = movie_thread.value
+      tv_result = tv_thread.value
+
+      raise movie_result, movie_result.message, movie_result.backtrace if movie_result.is_a?(StandardError)
+      raise tv_result, tv_result.message, tv_result.backtrace if tv_result.is_a?(StandardError)
+
+      [ movie_result, tv_result ]
     end
 
     # Ensure every result has an explicit media_type field.

@@ -1,0 +1,17 @@
+# Generated from app/components/library/controls_component.rb with RBS::Inline
+
+module Library
+  class ControlsComponent < ViewComponent::Base
+    # : (query: String, media_type_filter: String) -> void
+    def initialize: (query: String, media_type_filter: String) -> void
+
+    # : String
+    attr_reader query: untyped
+
+    # : String
+    attr_reader media_type_filter: untyped
+
+    # : () -> Array[Array[String]]
+    def media_types: () -> Array[Array[String]]
+  end
+end

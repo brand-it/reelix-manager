@@ -55,6 +55,12 @@ Rails.application.configure do
   # Highlight code that enqueued background job in logs.
   config.active_job.verbose_enqueue_logs = true
 
+  # When running Solid Queue inside Puma locally, switch Active Job to the
+  # Solid Queue adapter so Mission Control Jobs can see the real queue state.
+  if ENV["SOLID_QUEUE_IN_PUMA"]
+    config.active_job.queue_adapter = :solid_queue
+  end
+
   # Highlight code that triggered redirect in logs.
   config.action_dispatch.verbose_redirect_logs = true
 

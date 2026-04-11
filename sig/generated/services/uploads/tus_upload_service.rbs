@@ -1,0 +1,47 @@
+# Generated from app/services/uploads/tus_upload_service.rb with RBS::Inline
+
+module Uploads
+  # Loads and validates a completed tus upload, and resolves the source filename
+  # and normalized extension for later path construction.
+  class TusUploadService < ApplicationService
+    class Error < StandardError
+    end
+
+    # : (upload_id: String, ?filename: String?) -> { info: ::Hash[String, String?], source_filename: String, extension: String }
+    def self.call: (upload_id: String, ?filename: String?) -> { info: ::Hash[String, String?], source_filename: String, extension: String }
+
+    @upload_id: String
+
+    @filename: String?
+
+    # : (upload_id: String, ?filename: String?) -> void
+    def initialize: (upload_id: String, ?filename: String?) -> void
+
+    # : () -> { info: ::Hash[String, String?], source_filename: String, extension: String }
+    def call: () -> { info: ::Hash[String, String?], source_filename: String, extension: String }
+
+    private
+
+    attr_reader upload_id: untyped
+
+    attr_reader filename: untyped
+
+    # : () -> Object
+    def storage: () -> Object
+
+    # : () -> ::Hash[String, String?]
+    def read_upload_info: () -> ::Hash[String, String?]
+
+    # : (::Hash[String, String?]) -> void
+    def ensure_upload_complete!: (::Hash[String, String?]) -> void
+
+    # : (String? header) -> String
+    def resolved_filename: (String? header) -> String
+
+    # : (String source_filename) -> String
+    def resolved_extension: (String source_filename) -> String
+
+    # : (String? header) -> ::Hash[String, String?]
+    def decode_tus_metadata: (String? header) -> ::Hash[String, String?]
+  end
+end

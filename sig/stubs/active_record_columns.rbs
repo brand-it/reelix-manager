@@ -77,10 +77,14 @@ class VideoBlob < ApplicationRecord
   def season_number=:      (Integer? value) -> Integer?
   def episode_number:      () -> Integer?
   def episode_number=:     (Integer? value) -> Integer?
+  def episode_title:       () -> String?
+  def episode_title=:      (String? value) -> String?
   def episode_last_number: () -> Integer?
   def episode_last_number=: (Integer? value) -> Integer?
   def part:                () -> Integer?
   def part=:               (Integer? value) -> Integer?
+  def path_extension:      () -> String?
+  def path_extension=:     (String? value) -> String?
   def extra_type:          () -> String
   def extra_type=:         (untyped value) -> untyped
   def extra_type_number:   () -> Integer?

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_07_233106) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_11_210929) do
   create_table "configs", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "settings"
@@ -240,6 +240,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_07_233106) do
     t.string "edition"
     t.integer "episode_last_number"
     t.integer "episode_number"
+    t.string "episode_title"
     t.integer "extra_type", default: 0, null: false
     t.integer "extra_type_number"
     t.string "filename", null: false
@@ -247,6 +248,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_07_233106) do
     t.integer "media_type", default: 0, null: false
     t.boolean "optimized", default: false, null: false
     t.integer "part"
+    t.string "path_extension"
     t.boolean "plex_version", default: false, null: false
     t.string "poster_url"
     t.integer "season_number"

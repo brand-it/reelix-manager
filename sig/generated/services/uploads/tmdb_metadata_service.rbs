@@ -1,0 +1,35 @@
+# Generated from app/services/uploads/tmdb_metadata_service.rb with RBS::Inline
+
+module Uploads
+  # Fetches the minimum TMDB metadata required to build the final media path.
+  # This stays synchronous because the upload path depends on the canonical
+  # title/year (and TV episode title when applicable).
+  class TmdbMetadataService < ApplicationService
+    # : (video_blob: VideoBlob) -> VideoBlob
+    def self.call: (video_blob: VideoBlob) -> VideoBlob
+
+    @video_blob: VideoBlob
+
+    # : (video_blob: VideoBlob) -> void
+    def initialize: (video_blob: VideoBlob) -> void
+
+    # : () -> VideoBlob
+    def call: () -> VideoBlob
+
+    private
+
+    attr_reader video_blob: untyped
+
+    # : () -> void
+    def apply_movie_metadata: () -> void
+
+    # : () -> void
+    def apply_tv_metadata: () -> void
+
+    # : () -> String?
+    def fetch_episode_title: () -> String?
+
+    # : (String? raw_date) -> Integer?
+    def extract_year: (String? raw_date) -> Integer?
+  end
+end

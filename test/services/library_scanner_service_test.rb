@@ -52,6 +52,8 @@ class LibraryScannerServiceTest < ActiveSupport::TestCase
     assert_not_nil blob
     assert blob.movie?
     assert_equal 2010, blob.year
+    assert_equal "mkv", blob.path_extension
+    assert_nil blob.episode_title
     assert_equal "video/x-matroska", blob.content_type
   end
 
@@ -65,6 +67,8 @@ class LibraryScannerServiceTest < ActiveSupport::TestCase
     assert blob.tv?
     assert_equal 1, blob.season_number
     assert_equal 1, blob.episode_number
+    assert_equal "Pilot", blob.episode_title
+    assert_equal "mkv", blob.path_extension
   end
 
   # ---------------------------------------------------------------------------

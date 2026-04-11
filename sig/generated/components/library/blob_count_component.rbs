@@ -1,0 +1,14 @@
+# Generated from app/components/library/blob_count_component.rb with RBS::Inline
+
+module Library
+  class BlobCountComponent < ViewComponent::Base
+    # : (count: Integer) -> void
+    def initialize: (count: Integer) -> void
+
+    # : Integer
+    attr_reader count: untyped
+
+    # : () -> String
+    def label: () -> String
+  end
+end

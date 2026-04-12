@@ -22,7 +22,7 @@ class VideoBlobsController < ApplicationController
 
   #: () -> void
   def reset_and_resync
-    VideoBlob.in_batches.destroy_all
+    VideoBlob.in_batches.destroy_all # steep:ignore
     LibraryScanJob.perform_later
 
     respond_to do |format|

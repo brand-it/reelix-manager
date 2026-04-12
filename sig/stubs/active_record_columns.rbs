@@ -7,6 +7,8 @@
 class ActiveRecord::Relation
   def newest: () -> ActiveRecord::Relation
   def oldest: () -> ActiveRecord::Relation
+
+  def in_batches: (?of: Integer, ?start: Integer, ?finish: Integer, ?order: Symbol) -> ActiveRecord::Batches::BatchEnumerator
 end
 
 # GlobalID::Identification is included into ActiveRecord::Base by the globalid gem.

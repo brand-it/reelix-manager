@@ -22,8 +22,8 @@ class VideoBlobsController < ApplicationController
 
   #: () -> void
   def reset_and_resync
-    VideoBlob.delete_all
-    LibraryScanJob.perform_now
+    VideoBlob.in_batches.destroy_all
+    LibraryScanJob.perform_later
 
     respond_to do |format|
       format.html { redirect_to video_blobs_path }

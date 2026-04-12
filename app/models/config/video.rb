@@ -4,6 +4,7 @@ class Config::Video < Config
     s.attribute :tv_path
     s.attribute :tmdb_api_key, encrypted: true
     s.attribute :processed_path
+    s.attribute :scan_hidden_directories, default: -> { false }
   end
 
   #: () -> Config::Video

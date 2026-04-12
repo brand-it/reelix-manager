@@ -13,15 +13,31 @@ require "find"
 #   result[:removed] # => 1
 #   result[:skipped] # => 0
 class LibraryScannerService < ApplicationService
+  #:
+  # @config: Config::Video?
+  # Instance variable for config, set in initializer
+  #
+  # Methods:
+  #   scan_directories: () -> ::Array[::Hash[Symbol, untyped]]
+  #   scan_directory: (String, ::Hash[Symbol, Integer]) -> ::Array[String]
+  #
   class << self
     #: () -> ::Hash[Symbol, Integer]
     def call(...) = super
   end
 
+  #: () -> void
+  #: Config::Video?
+  attr_reader :config
+
+  #: () -> void
+  def initialize
+    @config = Config::Video.newest #: Config::Video?
+  end
+
   #: () -> ::Hash[Symbol, Integer]
   def call
-    config = Config::Video.newest
-    unless config
+    unless @config
       Rails.logger.warn("[LibraryScannerService] No Config::Video record found — aborting scan.")
       return empty_stats
     end
@@ -29,11 +45,9 @@ class LibraryScannerService < ApplicationService
     stats = empty_stats
     scanned_keys = [] #: Array[String]
 
-    [ { path: config.settings_movie_path, type: :movie },
-      { path: config.settings_tv_path,    type: :tv } ].each do |dir|
+    scan_directories.each do |dir|
       next if dir[:path].blank? || !Dir.exist?(dir[:path].to_s)
-
-      scan_directory(dir[:path].to_s, stats, scanned_keys)
+      scanned_keys += scan_directory(dir[:path].to_s, stats)
     end
 
     remove_stale(scanned_keys, stats)
@@ -44,17 +58,40 @@ class LibraryScannerService < ApplicationService
 
   private
 
-  #: (String directory, ::Hash[Symbol, Integer] stats, ::Array[String] scanned_keys) -> void
-  def scan_directory(directory, stats, scanned_keys)
+  #: () -> ::Array[::Hash[Symbol, untyped]]
+  def scan_directories
+    return [] unless @config
+    [
+      { path: @config.settings_movie_path, type: :movie },
+      { path: @config.settings_tv_path,    type: :tv }
+    ]
+  end
+
+  #: (String file_path) -> bool
+  def has_hidden_directories?(file_path)
+    return false unless @config.settings_scan_hidden_directories
+    file_path = file_path.gsub(@config.settings_movie_path.to_s, "").gsub(@config.settings_tv_path.to_s)
+    path = Pathname.new(file_path.to_s).expand_path
+    path.parent.split.any? { _1.to_s.start_with?(".") }
+  end
+
+  #: (String directory, ::Hash[Symbol, Integer] stats) -> ::Array[String]
+  def scan_directory(directory, stats)
+    scanned = [] #: Array[String]
     Find.find(directory) do |path| # steep:ignore NoMethod
       next unless File.file?(path)
+      next if has_hidden_directories?(path)
 
       blob_data = KeyParserService.call(path)
-      next stats[:skipped] += 1 if blob_data.nil?
+      if blob_data.nil?
+        stats[:skipped] += 1
+        next
+      end
 
-      scanned_keys << path
+      scanned << path
       upsert_blob(path, blob_data, stats)
     end
+    scanned
   end
 
   #: (String path, KeyParserService::BlobData blob_data, ::Hash[Symbol, Integer] stats) -> void

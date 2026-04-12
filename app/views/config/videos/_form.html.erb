@@ -41,6 +41,11 @@
           <%= f.input :settings_processed_path,
                       label: "Processed Path",
                       hint: "Output directory for post-processed and organized files" %>
+
+          <%= f.input :settings_scan_hidden_directories,
+                      as: :boolean,
+                      label: "Scan hidden directories",
+                      hint: "Include directories starting with a dot (.) when scanning the library" %>
         </div>
         <div class="card-footer">
           <%= f.button :submit, class: "btn btn-primary" %>

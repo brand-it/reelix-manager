@@ -14,13 +14,26 @@ class LibraryScannerService < ApplicationService
   # : () -> ::Hash[Symbol, Integer]
   def self.call: () -> ::Hash[Symbol, Integer]
 
+  # : () -> void
+  # : Config::Video?
+  attr_reader config: untyped
+
+  # : () -> void
+  def initialize: () -> void
+
   # : () -> ::Hash[Symbol, Integer]
   def call: () -> ::Hash[Symbol, Integer]
 
   private
 
-  # : (String directory, ::Hash[Symbol, Integer] stats, ::Array[String] scanned_keys) -> void
-  def scan_directory: (String directory, ::Hash[Symbol, Integer] stats, ::Array[String] scanned_keys) -> void
+  # : () -> ::Array[::Hash[Symbol, untyped]]
+  def scan_directories: () -> ::Array[::Hash[Symbol, untyped]]
+
+  # : (String file_path) -> bool
+  def has_hidden_directories?: (String file_path) -> bool
+
+  # : (String directory, ::Hash[Symbol, Integer] stats) -> ::Array[String]
+  def scan_directory: (String directory, ::Hash[Symbol, Integer] stats) -> ::Array[String]
 
   # : (String path, KeyParserService::BlobData blob_data, ::Hash[Symbol, Integer] stats) -> void
   def upsert_blob: (String path, KeyParserService::BlobData blob_data, ::Hash[Symbol, Integer] stats) -> void

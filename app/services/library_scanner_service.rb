@@ -72,7 +72,7 @@ class LibraryScannerService < ApplicationService
     return false unless @config.settings_scan_hidden_directories
     file_path = file_path.gsub(@config.settings_movie_path.to_s, "").gsub(@config.settings_tv_path.to_s)
     path = Pathname.new(file_path.to_s).expand_path
-    path.parent.split.any? { _1.to_s.start_with?(".") }
+    path.parent.split.any? { _1.to_s.start_with?("/.") || _1.to_s.start_with?(".") }
   end
 
   #: (String directory, ::Hash[Symbol, Integer] stats) -> ::Array[String]

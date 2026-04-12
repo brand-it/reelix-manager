@@ -158,6 +158,42 @@ class LibraryScannerServiceTest < ActiveSupport::TestCase
     assert_equal({ added: 0, updated: 0, removed: 0, skipped: 0 }, stats)
   end
 
+  test "skips files in hidden directories when scan_hidden_directories is false" do
+    # Add a visible and a hidden directory, each with a video file
+    visible_file = add_movie_file("VisibleMovie (2020)", "VisibleMovie (2020).mkv")
+    hidden_dir = File.join(@movie_dir, ".hiddenMovie (2021)")
+    FileUtils.mkdir_p(hidden_dir)
+    hidden_file = File.join(hidden_dir, "HiddenMovie (2021).mkv")
+    FileUtils.touch(hidden_file)
+
+
+    # Set config to NOT scan hidden directories
+    @config.settings_scan_hidden_directories = false
+    @config.save!(validate: false)
+    sleep 0.1 # ensure DB commit
+    @config = Config::Video.find(@config.id)
+
+    VideoBlob.delete_all
+    stats = LibraryScannerService.call
+
+    assert_equal 1, stats[:added], "Should only add visible file"
+    assert VideoBlob.exists?(key: visible_file), "Visible file should be present"
+    assert_not VideoBlob.exists?(key: hidden_file), "Hidden file should be skipped"
+
+    # Now enable scanning hidden directories
+    @config.settings_scan_hidden_directories = true
+    @config.save!(validate: false)
+    sleep 0.1 # ensure DB commit
+    @config = Config::Video.find(@config.id)
+
+    VideoBlob.delete_all
+    stats = LibraryScannerService.call
+
+    assert_equal 2, stats[:added], "Should add both files when scanning hidden dirs"
+    assert VideoBlob.exists?(key: visible_file), "Visible file should be present"
+    assert VideoBlob.exists?(key: hidden_file), "Hidden file should be present when scanning hidden dirs"
+  end
+
   private
 
   def add_movie_file(movie_dir, filename)

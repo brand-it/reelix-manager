@@ -42,3 +42,6 @@
 
 # RBS collection — downloaded gem signatures, regenerated via `rbs collection install`
 /.gem_rbs_collection
+
+# SQLite
+*.sqlite3

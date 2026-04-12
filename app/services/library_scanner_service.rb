@@ -69,10 +69,26 @@ class LibraryScannerService < ApplicationService
 
   #: (String file_path) -> bool
   def has_hidden_directories?(file_path)
-    return false unless @config.settings_scan_hidden_directories
-    file_path = file_path.gsub(@config.settings_movie_path.to_s, "").gsub(@config.settings_tv_path.to_s)
-    path = Pathname.new(file_path.to_s).expand_path
-    path.parent.split.any? { _1.to_s.start_with?("/.") || _1.to_s.start_with?(".") }
+    unless file_path.is_a?(String)
+      Rails.logger.error("[BUG] has_hidden_directories? called with non-String: #{file_path.inspect} (#{file_path.class})")
+      raise ArgumentError, "file_path must be a String, got #{file_path.class}"
+    end
+    scan_hidden = ActiveModel::Type::Boolean.new.cast(@config.settings_scan_hidden_directories)
+    return false if scan_hidden # If scanning hidden dirs, never exclude
+
+    file_path = file_path.dup
+    movie_path = @config.settings_movie_path.to_s
+    tv_path = @config.settings_tv_path.to_s
+    file_path = file_path.gsub(movie_path, "").gsub(tv_path, "")
+    # Remove any leading slashes so Pathname splits correctly
+    file_path = file_path.sub(%r{^/+}, "")
+    path = Pathname.new(file_path.to_s)
+    # Only check parent directories, not the file itself
+    segments = path.dirname.each_filename.to_a
+    # DEBUG: print segments and file_path
+    result = segments.any? { |segment| segment.start_with?(".") }
+
+    result
   end
 
   #: (String directory, ::Hash[Symbol, Integer] stats) -> ::Array[String]

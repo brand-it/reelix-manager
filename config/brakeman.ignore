@@ -1,6 +1,28 @@
 {
   "ignored_warnings": [
+    {
+      "warning_type": "File Access",
+      "warning_code": 16,
+      "fingerprint": "ba597105f74d000738cd64a8528130f7b567a596704ade74b38388ccb43a2b13",
+      "check_name": "FileAccess",
+      "message": "Model attribute used in file name",
+      "file": "app/services/library_scanner_service.rb",
+      "line": 85,
+      "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
+      "code": "Pathname.new(file_path.gsub(Config::Video.newest.settings_movie_path.to_s, \"\").gsub(Config::Video.newest.settings_tv_path.to_s, \"\").sub(/^\\/+/, \"\").to_s)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "LibraryScannerService",
+        "method": "has_hidden_directories?"
+      },
+      "user_input": "Config::Video.newest.settings_tv_path",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": "\"File Access\" warning: a model attribute is used in a file path (line 85 of library_scanner_service.rb). This is expected and safe in this context—file_path is sanitized and only used for"
+    }
   ],
-  "updated": "2026-04-11 10:53:00 +0000",
   "brakeman_version": "8.0.4"
 }

@@ -45,6 +45,6 @@ class Config::VideosController < ApplicationController
 
   #: () -> ActionController::Parameters
   def video_params
-    params.require(:config_video).permit(:settings_movie_path, :settings_tv_path, :settings_tmdb_api_key, :settings_processed_path)
+    params.require(:config_video).permit(:settings_movie_path, :settings_tv_path, :settings_tmdb_api_key, :settings_processed_path, :settings_scan_hidden_directories)
   end
 end

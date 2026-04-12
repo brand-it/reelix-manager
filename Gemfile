@@ -81,6 +81,7 @@ group :development do
   gem "rbs"
   gem "rbs-inline"
   gem "steep"
+  gem "rbs_rails"
 end
 
 group :test do

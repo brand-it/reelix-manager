@@ -20,6 +20,16 @@ class VideoBlobsController < ApplicationController
     end
   end
 
+  #: () -> void
+  def reset_and_resync
+    VideoBlob.delete_all
+    LibraryScanJob.perform_now
+
+    respond_to do |format|
+      format.html { redirect_to video_blobs_path }
+    end
+  end
+
   private
 
   #: () -> Array[VideoBlob]
@@ -28,7 +38,6 @@ class VideoBlobsController < ApplicationController
       .by_media_type(@media_type_filter)
       .search_title(@query)
       .order(:title, :season_number, :episode_number)
-      .load
       .to_a
   end
 end

@@ -1,0 +1,3 @@
+class VideoBlob < ApplicationRecord
+  def self.create!: (::Hash[::Symbol | ::String, untyped] attrs) -> ::VideoBlob
+end

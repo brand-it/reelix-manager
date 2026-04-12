@@ -20,6 +20,9 @@ bin/bundler-audit
 echo "==> Scanning for security vulnerabilities in JavaScript dependencies..."
 bin/importmap audit
 
+echo "==> Running Steep type checker..."
+bin/steep check --log-level=fatal
+
 echo "==> Running tests..."
 bin/rails db:test:prepare test
 

@@ -48,7 +48,6 @@ module Doorkeeper
       def self.find_by: (?id: Integer | String | nil, ?resource_owner_id: Integer | nil) -> Doorkeeper::DeviceAuthorizationGrant::DeviceGrant?
       def self.order: (**untyped kwargs) -> ActiveRecord::Relation
       def resource_owner_id: () -> (Integer | nil)
-      def user: () -> (::User | nil)
       def destroy: () -> (Doorkeeper::DeviceAuthorizationGrant::DeviceGrant | false)
       def application: () -> Doorkeeper::Application?
     end

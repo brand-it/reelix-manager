@@ -1,0 +1,7 @@
+class ActionController::Base
+  # Provided by Importmap::ImportmapTagsHelper.
+  def self.stale_when_importmap_changes: () -> void
+
+  # Standard Rails logger — already in ActionController::Base but missing from collection.
+  def logger: () -> ::Logger
+end

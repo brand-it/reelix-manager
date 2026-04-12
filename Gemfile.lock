@@ -337,6 +337,10 @@ GEM
     rbs-inline (0.13.0)
       prism (>= 0.29)
       rbs (>= 3.8.0)
+    rbs_rails (0.13.0)
+      parser
+      prism
+      rbs (>= 1)
     rdoc (7.2.0)
       erb
       psych (>= 4.0.0)
@@ -526,6 +530,7 @@ DEPENDENCIES
   rails (~> 8.1.3)
   rbs
   rbs-inline
+  rbs_rails
   rubocop-rails-omakase
   selenium-webdriver
   shoulda-matchers

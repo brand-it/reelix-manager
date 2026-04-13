@@ -82,12 +82,12 @@
         For GraphQL queries and uploads, request at least <code>search upload</code>.
       </p>
 
-      <pre class="bg-dark text-light p-3 rounded"><code>curl -X POST https://YOUR_HOST/oauth/authorize_device \
+      <pre data-controller="hostname" class="bg-dark text-light p-3 rounded"><code data-hostname-target="code">curl -X POST https://YOUR_HOST/oauth/authorize_device \
   -H "Content-Type: application/json" \
   -d '{"client_id": "<%= client_id %>", "scope": "search upload"}'</code></pre>
 
       <p class="mb-1">Example response:</p>
-      <pre class="bg-dark text-light p-3 rounded"><code>{
+      <pre data-controller="hostname" class="bg-dark text-light p-3 rounded"><code data-hostname-target="code">{
   "device_code": "GmRhmhcxhwAzkoEqiMEg_DnyEysG5",
   "user_code": "WDJB-MJHT",
   "verification_uri": "https://YOUR_HOST/oauth/device",
@@ -124,7 +124,7 @@
         every <code>interval</code> seconds (default 5 s) until it receives a token or an error.
       </p>
 
-      <pre class="bg-dark text-light p-3 rounded"><code>curl -X POST https://YOUR_HOST/oauth/token \
+      <pre data-controller="hostname" class="bg-dark text-light p-3 rounded"><code data-hostname-target="code">curl -X POST https://YOUR_HOST/oauth/token \
   -H "Content-Type: application/json" \
   -d '{
     "client_id":   "<%= client_id %>",
@@ -133,10 +133,10 @@
   }'</code></pre>
 
       <p class="mb-1">While waiting you will receive:</p>
-      <pre class="bg-dark text-light p-3 rounded"><code>{"error": "authorization_pending"}</code></pre>
+      <pre data-controller="hostname" class="bg-dark text-light p-3 rounded"><code data-hostname-target="code">{"error": "authorization_pending"}</code></pre>
 
       <p class="mb-1">Once approved:</p>
-      <pre class="bg-dark text-light p-3 rounded"><code>{
+      <pre data-controller="hostname" class="bg-dark text-light p-3 rounded"><code data-hostname-target="code">{
   "access_token": "s6BhdRkqt3…",
   "token_type":   "Bearer",
   "expires_in":   31536000
@@ -158,7 +158,7 @@
         <code>POST /graphql</code>.
       </p>
 
-      <pre class="bg-dark text-light p-3 rounded"><code>curl -X POST https://YOUR_HOST/graphql \
+      <pre data-controller="hostname" class="bg-dark text-light p-3 rounded"><code data-hostname-target="code">curl -X POST https://YOUR_HOST/graphql \
   -H "Authorization: Bearer s6BhdRkqt3…" \
   -H "Content-Type: application/json" \
   -d '{"query": "{ __typename }"}'</code></pre>
@@ -218,7 +218,7 @@
         The filename must be base64 encoded per the tus spec.
       </p>
 
-      <pre class="bg-dark text-light p-3 rounded"><code>FILENAME_B64=$(printf "Batman Begins.mkv" | base64 -w0)
+      <pre data-controller="hostname" class="bg-dark text-light p-3 rounded"><code data-hostname-target="code">FILENAME_B64=$(printf "Batman Begins.mkv" | base64 -w0)
 
 curl -i -X POST https://YOUR_HOST/files \
   -H "Authorization: Bearer s6BhdRkqt3…" \
@@ -227,7 +227,7 @@ curl -i -X POST https://YOUR_HOST/files \
   -H "Upload-Metadata: filename ${FILENAME_B64}"</code></pre>
 
       <p class="mb-1">Example response headers:</p>
-      <pre class="bg-dark text-light p-3 rounded"><code>HTTP/1.1 201 Created
+      <pre data-controller="hostname" class="bg-dark text-light p-3 rounded"><code data-hostname-target="code">HTTP/1.1 201 Created
 Location: /files/3b6f4d64-9240-4fb0-9d8d-d3df0562f1f1
 Tus-Resumable: 1.0.0</code></pre>
 
@@ -247,7 +247,7 @@ Tus-Resumable: 1.0.0</code></pre>
         after each successful chunk.
       </p>
 
-      <pre class="bg-dark text-light p-3 rounded"><code>curl -i -X PATCH https://YOUR_HOST/files/3b6f4d64-9240-4fb0-9d8d-d3df0562f1f1 \
+      <pre data-controller="hostname" class="bg-dark text-light p-3 rounded"><code data-hostname-target="code">curl -i -X PATCH https://YOUR_HOST/files/3b6f4d64-9240-4fb0-9d8d-d3df0562f1f1 \
   -H "Authorization: Bearer s6BhdRkqt3…" \
   -H "Tus-Resumable: 1.0.0" \
   -H "Content-Type: application/offset+octet-stream" \
@@ -255,7 +255,7 @@ Tus-Resumable: 1.0.0</code></pre>
   --data-binary @Batman-Begins.part1</code></pre>
 
       <p class="mb-1">Example response headers:</p>
-      <pre class="bg-dark text-light p-3 rounded"><code>HTTP/1.1 204 No Content
+      <pre data-controller="hostname" class="bg-dark text-light p-3 rounded"><code data-hostname-target="code">HTTP/1.1 204 No Content
 Upload-Offset: 5242880
 Tus-Resumable: 1.0.0</code></pre>
 
@@ -275,12 +275,12 @@ Tus-Resumable: 1.0.0</code></pre>
       </p>
 
       <p class="mb-1"><strong>Resume check:</strong> call <code>HEAD /files/:uid</code>.</p>
-      <pre class="bg-dark text-light p-3 rounded"><code>curl -i -X HEAD https://YOUR_HOST/files/3b6f4d64-9240-4fb0-9d8d-d3df0562f1f1 \
+      <pre data-controller="hostname" class="bg-dark text-light p-3 rounded"><code data-hostname-target="code">curl -i -X HEAD https://YOUR_HOST/files/3b6f4d64-9240-4fb0-9d8d-d3df0562f1f1 \
   -H "Authorization: Bearer s6BhdRkqt3…" \
   -H "Tus-Resumable: 1.0.0"</code></pre>
 
       <p class="mb-1">Example response headers:</p>
-      <pre class="bg-dark text-light p-3 rounded"><code>HTTP/1.1 200 OK
+      <pre data-controller="hostname" class="bg-dark text-light p-3 rounded"><code data-hostname-target="code">HTTP/1.1 200 OK
 Upload-Length: 7340032000
 Upload-Offset: 5242880
 Tus-Resumable: 1.0.0</code></pre>
@@ -291,7 +291,7 @@ Tus-Resumable: 1.0.0</code></pre>
       </p>
 
       <p class="mb-1"><strong>Abort:</strong> call <code>DELETE /files/:uid</code>.</p>
-      <pre class="bg-dark text-light p-3 rounded"><code>curl -i -X DELETE https://YOUR_HOST/files/3b6f4d64-9240-4fb0-9d8d-d3df0562f1f1 \
+      <pre data-controller="hostname" class="bg-dark text-light p-3 rounded"><code data-hostname-target="code">curl -i -X DELETE https://YOUR_HOST/files/3b6f4d64-9240-4fb0-9d8d-d3df0562f1f1 \
   -H "Authorization: Bearer s6BhdRkqt3…" \
   -H "Tus-Resumable: 1.0.0"</code></pre>
 
@@ -317,7 +317,7 @@ Tus-Resumable: 1.0.0</code></pre>
         <li>queues background TMDB enrichment</li>
       </ol>
 
-      <pre class="bg-dark text-light p-3 rounded"><code>curl -X POST https://YOUR_HOST/graphql \
+      <pre data-controller="hostname" class="bg-dark text-light p-3 rounded"><code data-hostname-target="code">curl -X POST https://YOUR_HOST/graphql \
   -H "Authorization: Bearer s6BhdRkqt3…" \
   -H "Content-Type: application/json" \
   -d '{
@@ -332,7 +332,7 @@ Tus-Resumable: 1.0.0</code></pre>
   }'</code></pre>
 
       <p class="mb-1">TV episodes require season and episode numbers:</p>
-      <pre class="bg-dark text-light p-3 rounded"><code>{
+      <pre data-controller="hostname" class="bg-dark text-light p-3 rounded"><code data-hostname-target="code">{
   "input": {
     "uploadId": "48f90d5d-6f39-4f4a-9f1b-0fba04a5199d",
     "tmdbId": 1396,
@@ -407,7 +407,7 @@ Tus-Resumable: 1.0.0</code></pre>
         queries as a specific user or token, open the <strong>Headers</strong> panel and add a
         Bearer token:
       </p>
-      <pre class="bg-dark text-light p-3 rounded"><code>{ "Authorization": "Bearer s6BhdRkqt3…" }</code></pre>
+      <pre data-controller="hostname" class="bg-dark text-light p-3 rounded"><code data-hostname-target="code">{ "Authorization": "Bearer s6BhdRkqt3…" }</code></pre>
       <p class="mb-0">
         The token is optional in GraphiQL when you are already signed in. Requests that require
         authentication will still return <code>401 Unauthorized</code> if neither a valid session

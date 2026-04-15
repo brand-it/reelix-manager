@@ -36,8 +36,16 @@ The app will be available at **http://localhost:3000**.
 
 ### Running tests
 
+Ruby tests:
+
 ```bash
 bin/rails test
+```
+
+JavaScript tests:
+
+```bash
+npm test
 ```
 
 ---

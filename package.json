@@ -3,7 +3,8 @@
   "type": "module",
   "private": "true",
   "scripts": {
-    "build:css": "sass ./app/assets/stylesheets/application.sass.scss:./app/assets/builds/application.css --no-source-map --load-path=node_modules --quiet-deps --silence-deprecation=import,global-builtin,color-functions,if-function"
+    "build:css": "sass ./app/assets/stylesheets/application.sass.scss:./app/assets/builds/application.css --no-source-map --load-path=node_modules --quiet-deps --silence-deprecation=import,global-builtin,color-functions,if-function",
+    "test": "vitest run"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",

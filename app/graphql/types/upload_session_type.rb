@@ -3,9 +3,9 @@ module Types
     field :id, ID, null: false
     field :filename, String, null: false
     field :status, String, null: false
-    field :upload_length, Integer, null: false, description: "Total expected bytes for the tus upload"
-    field :upload_offset, Integer, null: false, description: "Bytes currently stored on the server"
-    field :bytes_remaining, Integer, null: false
+    field :upload_length, GraphQL::Types::BigInt, null: false, description: "Total expected bytes for the tus upload"
+    field :upload_offset, GraphQL::Types::BigInt, null: false, description: "Bytes currently stored on the server"
+    field :bytes_remaining, GraphQL::Types::BigInt, null: false
     field :progress_percent, Integer, null: false
     field :upload_complete, Boolean, null: false
     field :created_at, String, null: false

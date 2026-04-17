@@ -45,6 +45,13 @@ module GraphQL
   end
 end
 
+module GraphQL
+  module Types
+    class BigInt
+    end
+  end
+end
+
 # GraphQL DSL methods are added as singleton methods on modules that include
 # GraphQL::Schema::Interface via graphql-ruby's `included` hook (which calls extend).
 module Types

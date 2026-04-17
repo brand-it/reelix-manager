@@ -45,5 +45,8 @@ module Types
 
     field :upload_sessions, resolver: Resolvers::UploadSessionsResolver,
       description: "List active tus uploads and their current byte progress."
+
+    field :upload_session, resolver: Resolvers::UploadSessionResolver,
+      description: "Fetch a specific tus upload session by ID."
   end
 end

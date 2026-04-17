@@ -1,0 +1,8 @@
+# Generated from app/graphql/resolvers/upload_session_resolver.rb with RBS::Inline
+
+module Resolvers
+  class UploadSessionResolver < Resolvers::BaseResolver
+    # : (id: String) -> Uploads::SessionSnapshot?
+    def resolve: (id: String) -> Uploads::SessionSnapshot?
+  end
+end

@@ -54,8 +54,8 @@ module Uploads
     # : () -> ::Array[Pathname]
     def info_paths: () -> ::Array[Pathname]
 
-    # : (Pathname info_path) -> SessionSnapshot
-    def build_snapshot: (Pathname info_path) -> SessionSnapshot
+    # : (Pathname info_path) -> SessionSnapshot?
+    def build_snapshot: (Pathname info_path) -> SessionSnapshot?
 
     # : (String? header, String uid) -> String
     def resolved_filename: (String? header, String uid) -> String

@@ -57,6 +57,21 @@ class UploadsActiveUploadsServiceTest < ActiveSupport::TestCase
     assert_equal %w[newer older], Uploads::ActiveUploadsService.call.map(&:id)
   end
 
+  test "gracefully skips uploads with malformed .info files" do
+    # Create a valid upload
+    create_upload(uid: "valid-upload", filename: "valid.mkv", length: 1000, offset: 250)
+
+    # Create a malformed .info file
+    File.binwrite(File.join(@storage_dir, "malformed.info"), "not valid json {{{")
+
+    # Service should not raise an error
+    result = Uploads::ActiveUploadsService.call
+
+    # Should only return the valid upload
+    assert_equal 1, result.size
+    assert_equal "valid-upload", result.first.id
+  end
+
   private
 
   def create_upload(uid:, filename:, length:, offset:)

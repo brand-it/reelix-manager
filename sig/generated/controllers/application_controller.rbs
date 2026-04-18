@@ -1,6 +1,9 @@
 # Generated from app/controllers/application_controller.rb with RBS::Inline
 
 class ApplicationController < ActionController::Base
+  # Type cast for Steep: authenticate_user! ensures current_user is not nil in protected actions
+  def current_user: () -> User
+
   private
 
   # Redirects to first-run setup when no users exist; otherwise delegates to

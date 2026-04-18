@@ -412,6 +412,8 @@ module ::Doorkeeper
       end
       include ::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant::GeneratedAliasAttributeMethods
 
+      def application: () -> ::Doorkeeper::Application?
+      def application=: (::Doorkeeper::Application?) -> ::Doorkeeper::Application?
       def reload_application: () -> ::Doorkeeper::Application?
       def build_application: (untyped) -> ::Doorkeeper::Application
       def create_application: (untyped) -> ::Doorkeeper::Application

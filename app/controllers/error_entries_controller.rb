@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
 class ErrorEntriesController < ApplicationController
-  # @rbs @error_classes: Array[ErrorEntry]
-  # @rbs @statuses: Array[Symbol]
-  # @rbs @error_entries: Array[ErrorEntry]
-  # @rbs @counts_by_status: Hash[Symbol, Integer]
-  # @rbs @error_entry: ErrorEntry
-  # @rbs @similar_errors: Array[ErrorEntry]
+  # Instance variable type declarations for Steep
+  # @rbs @error_classes: Array[::String]
+  # @rbs @statuses: Array[::Symbol]
+  # @rbs @error_entries: ::ActiveRecord::Relation[::ErrorEntry]
+  # @rbs @counts_by_status: ::Hash[::Symbol, ::Integer]
+  # @rbs @error_entry: ::ErrorEntry
+  # @rbs @similar_errors: ::ActiveRecord::Relation[::ErrorEntry]
   before_action :authenticate_user!
   before_action :require_admin
   before_action :set_error_entry, only: %i[show acknowledge resolve]

@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
-require "test_helper"
-require "tmpdir"
+require 'test_helper'
+require 'tmpdir'
 
 class LibraryScanJobTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
 
   setup do
     VideoBlob.delete_all
-    @movie_dir = Dir.mktmpdir("scan_job_movies")
-    @tv_dir    = Dir.mktmpdir("scan_job_tv")
+    @movie_dir = Dir.mktmpdir('scan_job_movies')
+    @tv_dir    = Dir.mktmpdir('scan_job_tv')
     @config    = Config::Video.new
     @config.settings = {
-      movie_path:     @movie_dir,
-      tv_path:        @tv_dir,
-      tmdb_api_key:   "test_key_123",
+      movie_path: @movie_dir,
+      tv_path: @tv_dir,
+      tmdb_api_key: 'test_key_123',
       processed_path: @movie_dir
     }
     @config.save!(validate: false)
@@ -27,20 +27,20 @@ class LibraryScanJobTest < ActiveSupport::TestCase
     Config::Video.delete_all
   end
 
-  test "runs without error on empty library" do
+  test 'runs without error on empty library' do
     assert_nothing_raised { LibraryScanJob.perform_now }
   end
 
-  test "enqueues TmdbMatcherJob for newly discovered file" do
-    add_mkv(@movie_dir, "Inception (2010)", "Inception (2010).mkv")
+  test 'enqueues TmdbMatcherJob for newly discovered file' do
+    add_mkv(@movie_dir, 'Inception (2010)', 'Inception (2010).mkv')
 
     assert_enqueued_jobs(1, only: TmdbMatcherJob) do
       LibraryScanJob.perform_now
     end
   end
 
-  test "does not enqueue TmdbMatcherJob when all blobs already have a tmdb_id" do
-    add_mkv(@movie_dir, "Inception (2010)", "Inception (2010).mkv")
+  test 'does not enqueue TmdbMatcherJob when all blobs already have a tmdb_id' do
+    add_mkv(@movie_dir, 'Inception (2010)', 'Inception (2010).mkv')
 
     # First run — creates the blob
     LibraryScanJob.perform_now

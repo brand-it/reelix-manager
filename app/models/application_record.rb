@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# steep:ignore MethodDefinitionMissing
 class ApplicationRecord < ActiveRecord::Base
   primary_abstract_class
 

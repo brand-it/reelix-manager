@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SetupsController < ApplicationController
   # @rbs @user: User?
 
@@ -18,7 +20,7 @@ class SetupsController < ApplicationController
   def create
     # Double-check server-side — guards against race conditions and direct POST attacks.
     if User.any?
-      redirect_to root_path, alert: "Setup is already complete."
+      redirect_to root_path, alert: 'Setup is already complete.'
       return
     end
 
@@ -27,7 +29,7 @@ class SetupsController < ApplicationController
 
     if user.save
       sign_in(:user, user)
-      redirect_to root_path, notice: "Admin account created. Welcome to Reelix Manager!"
+      redirect_to root_path, notice: 'Admin account created. Welcome to Reelix Manager!'
     else
       render :new, status: :unprocessable_entity
     end

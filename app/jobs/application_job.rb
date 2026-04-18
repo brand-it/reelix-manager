@@ -21,7 +21,7 @@ class ApplicationJob < ActiveJob::Base
   private
 
   #: (StandardError, Array[untyped]) -> void
-  def store_error(error, args)
+  def store_error(error, _args)
     # Pass self as context - ApplicationJob has job_class, job_id, queue_name, arguments
     ErrorEntry.log_error(error, self)
   end

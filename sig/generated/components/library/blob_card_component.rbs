@@ -1,11 +1,13 @@
 # Generated from app/components/library/blob_card_component.rb with RBS::Inline
 
 module Library
+  # steep:ignore MethodDefinitionMissing
   class BlobCardComponent < ViewComponent::Base
     # : (blob: VideoBlob) -> void
     def initialize: (blob: VideoBlob) -> void
 
     # : VideoBlob
+  # steep:ignore MethodDefinitionMissing
     attr_reader blob: untyped
 
     # : () -> String

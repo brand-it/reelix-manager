@@ -17,7 +17,7 @@ class ReelixManagerSchema < GraphQL::Schema
 
   # Union and Interface Resolution
   #: (Class abstract_type, ApplicationRecord obj, GraphQL::Query::Context ctx) -> Class
-  def self.resolve_type(abstract_type, obj, ctx)
+  def self.resolve_type(_abstract_type, _obj, _ctx)
     # TODO: Implement this method
     # to return the correct GraphQL object type for `obj`
     raise(GraphQL::RequiredImplementationMissingError)
@@ -33,14 +33,14 @@ class ReelixManagerSchema < GraphQL::Schema
 
   # Return a string UUID for `object`
   #: (ApplicationRecord object, Class type_definition, GraphQL::Query::Context query_ctx) -> String
-  def self.id_from_object(object, type_definition, query_ctx)
+  def self.id_from_object(object, _type_definition, _query_ctx)
     # For example, use Rails' GlobalID library (https://github.com/rails/globalid):
     object.to_gid_param
   end
 
   # Given a string UUID, find the object
   #: (String global_id, GraphQL::Query::Context query_ctx) -> ApplicationRecord?
-  def self.object_from_id(global_id, query_ctx)
+  def self.object_from_id(global_id, _query_ctx)
     # For example, use Rails' GlobalID library (https://github.com/rails/globalid):
     GlobalID.find(global_id)
   end

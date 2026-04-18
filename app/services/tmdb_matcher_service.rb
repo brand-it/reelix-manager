@@ -8,7 +8,9 @@
 class TmdbMatcherService < ApplicationService
   class << self
     #: (VideoBlob blob) -> void
-    def call(...) = super
+    def call(blob)
+      new(blob).call
+    end
   end
 
   # @rbs @blob: VideoBlob
@@ -26,7 +28,7 @@ class TmdbMatcherService < ApplicationService
     return unless match
 
     @blob.update!(
-      tmdb_id:    match[:id],
+      tmdb_id: match[:id],
       poster_url: match[:poster_path].present? ? poster_url(match[:poster_path]) : nil
     )
   end
@@ -37,10 +39,10 @@ class TmdbMatcherService < ApplicationService
   def match_movie
     response = TheMovieDb::Search::Movie.new(
       query: @blob.title.to_s,
-      year:  @blob.year
+      year: @blob.year
     ).results
 
-    best_match(response["results"] || [], @blob.year, "release_date")
+    best_match(response['results'] || [], @blob.year, 'release_date')
   end
 
   #: () -> { id: Integer, poster_path: String }?
@@ -49,7 +51,7 @@ class TmdbMatcherService < ApplicationService
       query: @blob.title.to_s
     ).results
 
-    best_match(response["results"] || [], @blob.year, "first_air_date")
+    best_match(response['results'] || [], @blob.year, 'first_air_date')
   end
 
   # Returns the best-matching TMDB result as { id:, poster_path: }.
@@ -59,28 +61,28 @@ class TmdbMatcherService < ApplicationService
     return if results.empty?
 
     result = if year
-      results.find { |r| r[date_key].to_s[0, 4].to_i == year } || results.first
-    else
-      results.first
-    end
+               results.find { |r| r[date_key].to_s[0, 4].to_i == year } || results.first
+             else
+               results.first
+             end
 
     return unless result
 
-    raw_id = result["id"] #: String | Integer | nil
+    raw_id = result['id'] #: String | Integer | nil
     id = case raw_id
-    when Integer then raw_id.positive? ? raw_id : nil
-    when String  then (raw_id.match?(/\A\d+\z/) ? raw_id.to_i : nil).then { |n| n&.positive? ? n : nil }
-    end #: Integer?
+         when Integer then raw_id.positive? ? raw_id : nil
+         when String  then (raw_id.match?(/\A\d+\z/) ? raw_id.to_i : nil).then { |n| n&.positive? ? n : nil }
+         end #: Integer?
     return unless id
 
-    poster_path = result["poster_path"].to_s #: String
+    poster_path = result['poster_path'].to_s #: String
     { id: id, poster_path: poster_path }
   end
 
-  TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p"
+  TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p'
 
   #: (String poster_path, ?size: String) -> String
-  def poster_url(poster_path, size: "w342")
+  def poster_url(poster_path, size: 'w342')
     "#{TMDB_IMAGE_BASE_URL}/#{size}#{poster_path}"
   end
 end

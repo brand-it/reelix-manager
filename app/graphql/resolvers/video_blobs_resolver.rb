@@ -4,12 +4,12 @@ module Resolvers
   # Returns VideoBlob records from the local library cache.
   # Optionally filter by media type and/or TMDB ID.
   class VideoBlobsResolver < Resolvers::BaseResolver
-    type [ Types::VideoBlobType ], null: false
+    type [Types::VideoBlobType], null: false
 
     argument :media_type, String,  required: false,
-      description: "Filter by media type: 'movie' or 'tv'"
+                                   description: "Filter by media type: 'movie' or 'tv'"
     argument :tmdb_id,    Integer, required: false,
-      description: "Filter by TMDB ID"
+                                   description: 'Filter by TMDB ID'
 
     #: (?media_type: String?, ?tmdb_id: Integer?) -> ::ActiveRecord::Relation
     def resolve(media_type: nil, tmdb_id: nil)

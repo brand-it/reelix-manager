@@ -1,17 +1,19 @@
 # Generated from app/models/config/video.rb with RBS::Inline
 
-class Config::Video < Config
-  # : () -> Config::Video
-  def self.newest: () -> Config::Video
+class Config
+  class Video < Config
+    # : () -> Config::Video
+    def self.newest: () -> Config::Video
 
-  private
+    private
 
-  # : () -> void
-  def movie_path_must_exist: () -> void
+    # : () -> void
+    def movie_path_must_exist: () -> void
 
-  # : () -> void
-  def tv_path_must_exist: () -> void
+    # : () -> void
+    def tv_path_must_exist: () -> void
 
-  # : () -> void
-  def tmdb_api_key_must_be_valid: () -> void
+    # : () -> void
+    def tmdb_api_key_must_be_valid: () -> void
+  end
 end

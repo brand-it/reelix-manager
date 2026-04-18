@@ -5,7 +5,40 @@ description: Generate a pull request with a conventional commit-style title and 
 
 When asked to generate or create a pull request, follow this process exactly.
 
-## Step 1 — Check the current branch
+## Step 1 — Check for errors
+
+Before creating a PR, verify the codebase is in a healthy state. Run these checks in order:
+
+**1. Test errors:**
+```bash
+bin/rails test
+```
+
+**2. Type errors:**
+```bash
+bin/rails type_check:check
+```
+
+**3. Linter errors:**
+```bash
+bin/rubocop
+```
+
+**If any errors are found:**
+
+- Stop immediately — do not continue with PR creation
+- Use the `ask` tool to present the errors to the user
+- Ask how they want to proceed with options like:
+  1. Fix the errors before creating the PR (recommended)
+  2. Create the PR anyway despite the errors
+  3. Ignore specific error types and proceed
+- Wait for user response before continuing
+
+**If no errors are found:**
+
+- Continue to the next step
+
+## Step 2 — Check the current branch
 
 ```bash
 git --no-pager branch --show-current
@@ -13,7 +46,7 @@ git --no-pager branch --show-current
 
 Note whether the current branch is `main` or `master` — if it is, a new feature branch must be created before the PR can be opened. Do **not** stop; continue to the next steps.
 
-## Step 2 — Ask which base branch to target
+## Step 3 — Ask which base branch to target
 
 Ask the user which branch this PR should be merged into. Offer `main` as the default alongside any other branches present in the remote.
 
@@ -23,7 +56,7 @@ git --no-pager branch -r --format="%(refname:short)" | sed 's|origin/||' | grep 
 
 Present the list to the user and ask them to pick a base branch (default: `main`). Remember this choice — it is used as `<base>` in every `git` and `gh` command below.
 
-## Step 3 — Inspect what has changed
+## Step 4 — Inspect what has changed
 
 Gather context from two sources using the chosen base branch:
 
@@ -41,7 +74,7 @@ git --no-pager diff origin/<base>...HEAD
 
 If there are no commits and no staged changes ahead of the base branch, tell the user and stop.
 
-## Step 4 — Determine the PR type and scope
+## Step 5 — Determine the PR type and scope
 
 Choose the type that best describes the primary nature of the changes:
 
@@ -59,7 +92,7 @@ Choose the type that best describes the primary nature of the changes:
 
 The optional scope should be the main area of the codebase affected (e.g. `auth`, `uploads`, `config`, `graphql`).
 
-## Step 5 — Compose the PR title
+## Step 6 — Compose the PR title
 
 Use this format:
 
@@ -72,7 +105,7 @@ Rules:
 - No trailing period
 - ≤ 72 characters total
 
-## Step 6 — Create a feature branch if needed
+## Step 7 — Create a feature branch if needed
 
 If the current branch is `main` or `master`, a feature branch must be created before pushing.
 
@@ -90,7 +123,7 @@ git checkout -b <branch-name>
 
 If the user is already on a non-`main` feature branch, skip this step entirely — do not rename or recreate the branch.
 
-## Step 7 — Write the PR description
+## Step 8 — Write the PR description
 
 Use this structure:
 
@@ -115,7 +148,7 @@ Rules:
 - Describe *what* changed and *why*, not *how*
 - Keep each bullet to one sentence
 
-## Step 8 — Present the title and description
+## Step 9 — Present the title and description
 
 Show the user the generated title and description. Then ask if they would like you to:
 

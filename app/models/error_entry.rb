@@ -4,129 +4,50 @@ class ErrorEntry < ApplicationRecord
   # Use 'unacknowledged' instead of 'new' to avoid conflict with ActiveRecord.new
   enum :status, { unacknowledged: 0, acknowledged: 1, resolved: 2 }
 
-  # Sensitive params to filter out
-  SENSITIVE_PARAMS = %w[password password_confirmation current_password new_password].freeze
-  #: Array[String]
-
-  # Generate a fingerprint for grouping similar errors
-  # Uses error class + first line of backtrace
-  # rubocop:disable Steep/UnusedMethodSignature
-  def self.generate_fingerprint(error_class, backtrace)
-    return "unknown" unless backtrace && !backtrace.blank?
-
-    first_line = backtrace.split("\n").first.to_s
-    # Hash the combination to create a short fingerprint
-    Digest::SHA256.hexdigest("#{error_class}|#{first_line}")[0..15]
-  end
-
-  # Sanitize params by removing sensitive values
-  #: (untyped) -> Hash[untyped, untyped]
+  # Sanitize params using Rails' built-in ParameterFilter
+  #: (untyped) -> untyped
   def self.sanitize_params(params)
     return {} unless params
 
+    filter = ActiveSupport::ParameterFilter.new(Rails.configuration.filter_parameters)
+    # ParameterFilter handles nested hashes but not arrays, so we handle arrays manually
     if params.is_a?(Hash)
-      params.reject { |k, _| SENSITIVE_PARAMS.include?(k.to_s) }.transform_values do |value|
-        if value.is_a?(Hash)
-          sanitize_params(value)
-        elsif value.is_a?(Array)
-          value.map { |v| v.is_a?(Hash) ? sanitize_params(v) : v }
-        else
-          value
-        end
-      end
+      filter.filter(params).with_indifferent_access.to_h.with_indifferent_access
+    elsif params.is_a?(Array)
+      params.map { |v| v.is_a?(Hash) ? filter.filter(v).with_indifferent_access.to_h.with_indifferent_access : v }
     else
       {}
     end
   end
 
-  # Unified error logging method
-  # Pass the error object and optional context (controller, job, or GraphQL context)
-  #: (StandardError, ?(ApplicationController | ActiveJob::Base | GraphQL::Query::Context)) -> ErrorEntry
+  # Unified error logging method - delegates to ErrorLoggerService
+  #: (StandardError, ?untyped) -> ErrorEntry
   def self.log_error(error, context = nil)
-    begin
-      # Generate fingerprint
-      fingerprint = generate_fingerprint(error.class.name, error.backtrace&.join("\n"))
-
-      # Extract user context
-      user_id = nil
-      user_email = nil
-      if context.respond_to?(:current_user)
-        user = context.current_user
-        user_id = user&.id if user.respond_to?(:id)
-        user_email = user&.email if user.respond_to?(:email)
-      elsif context.respond_to?(:[]) && context[:current_user]  # GraphQL context
-        user = context[:current_user]
-        user_id = user&.id if user.respond_to?(:id)
-        user_email = user&.email if user.respond_to?(:email)
-      end
-
-      # Build attributes based on context type
-      attributes = {
-        error_class: error.class.name,
-        error_message: error.message,
-        backtrace: error.backtrace&.join("\n") || "No backtrace",
-        fingerprint: fingerprint,
-        status: :unacknowledged,
-        user_id: user_id,
-        user_email: user_email,
-        environment: Rails.env
-      }
-
-      # Add request context if from controller
-      if context.respond_to?(:request) && context.respond_to?(:params)  # Controller
-        attributes[:request_url] = context.request.url
-        attributes[:request_method] = context.request.method
-        attributes[:request_path] = context.request.path
-        attributes[:request_params] = sanitize_params(context.params).to_json
-      elsif context.is_a?(ActiveJob::Base)  # Job
-        attributes[:job_class] = context.class.name
-        attributes[:job_id] = context.job_id
-        attributes[:job_queue] = context.queue_name
-        attributes[:job_arguments] = sanitize_params(context.arguments).to_json
-      elsif context.is_a?(GraphQL::Query::Context)  # GraphQL context
-        attributes[:request_path] = "/graphql"
-        query_obj = context.query
-        query_string = query_obj&.query_string || "Unknown"
-        variables = query_obj&.provided_variables || {}
-        attributes[:request_params] = {
-          query: query_string[0..500],
-          variables: sanitize_params(variables)
-        }.to_json
-      end
-
-      create!(attributes)
-    rescue => e
-      # If we can't store the error, log it but don't raise to avoid infinite loops
-      Rails.logger.error("ErrorEntry.log_error: Failed to store error: #{e.message}")
-      Rails.logger.error(e.backtrace.join("\n"))
-    end
+    ErrorLoggerService.call(error, context)
   end
-
-
-
   # Scopes for filtering
-  scope :unacknowledged, -> { where.not(status: [ :acknowledged, :resolved ]) }
+  # Note: unacknowledged scope is provided by the enum definition
   scope :recent_first, -> { order(created_at: :desc) }
   scope :by_error_class, ->(error_class) { where(error_class: error_class) }
   scope :by_status, ->(status) { where(status: status) }
   scope :by_fingerprint, ->(fingerprint) { where(fingerprint: fingerprint) }
 
   # Get latest error from each fingerprint group
-  scope :distinct_on_fingerprint, -> {
+  scope :distinct_on_fingerprint, lambda {
     # For PostgreSQL: SELECT DISTINCT ON (fingerprint) ... ORDER BY fingerprint, created_at DESC
     # For SQLite/MySQL: use subquery to get max(id) per fingerprint
-    if ActiveRecord::Base.connection.adapter_name == "PostgreSQL"
-      select("DISTINCT ON (fingerprint) *").order(:fingerprint, created_at: :desc)
+    if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+      select('DISTINCT ON (fingerprint) *').order(:fingerprint, created_at: :desc)
     else
       # Fallback for SQLite/MySQL: get latest id per fingerprint using Arel
       arel_table = self.arel_table
-      subquery = self.select(arel_table[:id].maximum).group(arel_table[:fingerprint])
+      subquery = self.select(arel_table[:id].maximum).group('fingerprint')
       where(id: subquery)
     end
   }
 
   # Get unique error classes for filter dropdown
-  #: -> Array[ErrorEntry]
+  #: -> ErrorEntry::ActiveRecord_Relation
   def self.unique_error_classes
     select(:error_class).distinct.order(:error_class)
   end
@@ -140,8 +61,9 @@ class ErrorEntry < ApplicationRecord
   # Parse JSON params back to hash
   #: -> Hash[untyped, untyped]
   def request_params_hash
-    return {} unless request_params
-    JSON.parse(request_params)
+    return {} unless request_params.present?
+
+    JSON.parse(request_params.to_s)
   rescue JSON::ParserError
     {}
   end
@@ -149,8 +71,9 @@ class ErrorEntry < ApplicationRecord
   # Parse JSON job arguments back to hash
   #: -> Hash[untyped, untyped]
   def job_arguments_hash
-    return {} unless job_arguments
-    JSON.parse(job_arguments)
+    return {} unless job_arguments.present?
+
+    JSON.parse(job_arguments.to_s)
   rescue JSON::ParserError
     {}
   end

@@ -8,10 +8,9 @@ class CleanupOldErrorsJob < ApplicationJob
   DAYS_TO_KEEP = 30
   #: Integer
 
-  # rubocop:disable Steep/UnusedMethodSignature
   def perform
     cutoff_date = DAYS_TO_KEEP.days.ago
-    deleted_count = ErrorEntry.where("created_at < ?", cutoff_date).delete_all
+    deleted_count = ErrorEntry.where('created_at < ?', cutoff_date).delete_all
 
     Rails.logger.info "[CleanupOldErrorsJob] Deleted #{deleted_count} error entries older than #{DAYS_TO_KEEP} days"
   end

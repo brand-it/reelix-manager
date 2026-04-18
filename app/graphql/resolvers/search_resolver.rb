@@ -18,11 +18,11 @@ module Resolvers
   class SearchResolver < Resolvers::BaseResolver
     type Types::SearchResponseType, null: false
 
-    argument :query, String, required: true, description: "Search term for movies and TV shows"
+    argument :query, String, required: true, description: 'Search term for movies and TV shows'
     argument :page, Integer, required: false, default_value: 1,
-      description: "Page number (1–500, default 1)"
-    argument :language, String, required: false, default_value: "en-US",
-      description: "BCP 47 language tag for results (default en-US)"
+                             description: 'Page number (1–500, default 1)'
+    argument :language, String, required: false, default_value: 'en-US',
+                                description: 'BCP 47 language tag for results (default en-US)'
 
     MAX_PAGE = 500
 
@@ -33,23 +33,23 @@ module Resolvers
 
       movie_response, tv_response = fetch_both(query, page, language)
 
-      movie_results = tag_media_type(movie_response["results"] || [], "movie")
-      tv_results    = tag_media_type(tv_response["results"] || [],    "tv")
+      movie_results = tag_media_type(movie_response['results'] || [], 'movie')
+      tv_results    = tag_media_type(tv_response['results'] || [],    'tv')
 
       merged = merge_and_rank(movie_results + tv_results, query)
 
       {
         results: merged,
         page: page,
-        total_pages: [ movie_response["total_pages"].to_i, tv_response["total_pages"].to_i ].max,
-        total_results: movie_response["total_results"].to_i + tv_response["total_results"].to_i
+        total_pages: [movie_response['total_pages'].to_i, tv_response['total_pages'].to_i].max,
+        total_results: movie_response['total_results'].to_i + tv_response['total_results'].to_i
       }
     rescue TheMovieDb::InvalidConfig => e
       Rails.logger.error("[TMDB InvalidConfig] #{sanitize_error_message(e.message)}")
-      raise GraphQL::ExecutionError, "TMDB authentication error. Please contact support."
+      raise GraphQL::ExecutionError, 'TMDB authentication error. Please contact support.'
     rescue TheMovieDb::Error => e
       Rails.logger.error("[TMDB Error] #{sanitize_error_message(e.message)}")
-      raise GraphQL::ExecutionError, "TMDB service error. Please try again later."
+      raise GraphQL::ExecutionError, 'TMDB service error. Please try again later.'
     end
 
     private
@@ -84,13 +84,13 @@ module Resolvers
       raise movie_result, movie_result.message, movie_result.backtrace if movie_result.is_a?(StandardError)
       raise tv_result, tv_result.message, tv_result.backtrace if tv_result.is_a?(StandardError)
 
-      [ movie_result, tv_result ]
+      [movie_result, tv_result]
     end
 
     # Ensure every result has an explicit media_type field.
     #: (::Array[::Hash[String, untyped]] results, String type) -> ::Array[::Hash[String, untyped]]
     def tag_media_type(results, type)
-      results.map { |r| r.merge("media_type" => type) }
+      results.map { |r| r.merge('media_type' => type) }
     end
 
     # Merge results and sort by composite relevance score (descending).
@@ -104,7 +104,7 @@ module Resolvers
     #: (::Hash[String, untyped] result, String query) -> Float
     def composite_score(result, query)
       kw_score  = keyword_score(result_title(result), query)
-      pop_score = popularity_score(result["popularity"].to_f)
+      pop_score = popularity_score(result['popularity'].to_f)
       (kw_score * 0.6) + (pop_score * 0.4)
     end
 
@@ -148,7 +148,7 @@ module Resolvers
 
     #: (::Hash[String, untyped] result) -> String
     def result_title(result)
-      result["title"] || result["name"] || ""
+      result['title'] || result['name'] || ''
     end
   end
 end

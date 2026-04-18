@@ -11,7 +11,7 @@ class VideoBlobsController < ApplicationController
   def index
     @query = params[:q].to_s.strip #: String
     requested_media_type = params[:media_type].to_s #: String
-    @media_type_filter = VALID_MEDIA_TYPES.include?(requested_media_type) ? requested_media_type : "" #: String
+    @media_type_filter = VALID_MEDIA_TYPES.include?(requested_media_type) ? requested_media_type : '' #: String
     @video_blobs = load_video_blobs #: Array[VideoBlob]
 
     respond_to do |format|

@@ -6,7 +6,9 @@ module Uploads
   class PromoteFileService < ApplicationService
     class << self
       #: (upload_id: String, info: ::Hash[String, String?], extension: String, video_blob: VideoBlob) -> void
-      def call(...) = super
+      def call(upload_id:, info:, extension:, video_blob:)
+        new(upload_id:, info:, extension:, video_blob:).call
+      end
     end
 
     # @rbs @upload_id: String
@@ -29,8 +31,8 @@ module Uploads
 
       destination_dir = @video_blob.directory
       destination_path = @video_blob.media_path
-      raise ArgumentError, "Could not determine destination directory" unless destination_dir
-      raise ArgumentError, "Could not determine destination path" unless destination_path
+      raise ArgumentError, 'Could not determine destination directory' unless destination_dir
+      raise ArgumentError, 'Could not determine destination path' unless destination_path
 
       FileUtils.mkdir_p(destination_dir)
       FileUtils.mv(staging_path, destination_path)
@@ -45,7 +47,7 @@ module Uploads
 
     #: () -> String
     def move_to_staging
-      staging_dir = Rails.root.join("tmp", "media_staging")
+      staging_dir = Rails.root.join('tmp', 'media_staging')
       FileUtils.mkdir_p(staging_dir)
 
       staging_path = staging_dir.join("#{SecureRandom.uuid}.#{@extension}").to_s

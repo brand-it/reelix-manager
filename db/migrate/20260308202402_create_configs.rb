@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 class CreateConfigs < ActiveRecord::Migration[8.1]
   def change
     create_table :configs do |t|
-      t.string :type, null: false, default: "Config"
+      t.string :type, null: false, default: 'Config'
       t.text :settings
       t.timestamps
     end

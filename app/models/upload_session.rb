@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UploadSession < ApplicationRecord
   STATUSES = %w[pending uploading assembling complete aborted failed].freeze #: Array[String]
 
@@ -9,7 +11,7 @@ class UploadSession < ApplicationRecord
 
   #: () -> Pathname
   def chunks_dir
-    Rails.root.join("tmp", "uploads", id.to_s)
+    Rails.root.join('tmp', 'uploads', id.to_s)
   end
 
   #: (Integer chunk_number) -> Pathname
@@ -31,6 +33,7 @@ class UploadSession < ApplicationRecord
   def assembled_file_path
     path = destination_path
     return if path.blank?
+
     File.join(path, filename)
   end
 

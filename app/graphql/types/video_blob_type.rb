@@ -2,14 +2,14 @@
 
 module Types
   class VideoBlobType < Types::BaseObject
-    description "A video file found in the movie or TV library"
+    description 'A video file found in the movie or TV library'
 
     field :id,                  Integer, null: false
-    field :key,                 String,  null: false,  description: "Full file path on disk"
+    field :key,                 String,  null: false, description: 'Full file path on disk'
     field :filename,            String,  null: false
     field :content_type,        String,  null: true
-    field :media_type,          String,  null: false,  description: "movie or tv"
-    field :tmdb_id,             Integer, null: true,   description: "TMDB ID (nil until matched)"
+    field :media_type,          String,  null: false,  description: 'movie or tv'
+    field :tmdb_id,             Integer, null: true,   description: 'TMDB ID (nil until matched)'
     field :title,               String,  null: true
     field :year,                Integer, null: true
     field :edition,             String,  null: true

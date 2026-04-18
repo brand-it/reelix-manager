@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DevicesController < ApplicationController
   # @rbs @tokens: ActiveRecord::Relation
   # @rbs @device_grants: ActiveRecord::Relation
@@ -8,22 +10,22 @@ class DevicesController < ApplicationController
     return unless user
 
     @tokens = if user.admin?
-      Doorkeeper::AccessToken.all.newest.includes(:application, :user)
-    else
-      user.access_tokens.newest.includes(:application)
-    end #: ActiveRecord::Relation
+                Doorkeeper::AccessToken.all.newest.includes(:application, :user)
+              else
+                user.access_tokens.newest.includes(:application)
+              end #: ActiveRecord::Relation
 
     @device_grants = if user.admin?
-      Doorkeeper::DeviceAuthorizationGrant::DeviceGrant
-        .where.not(resource_owner_id: nil)
-        .order(created_at: :desc)
-        .includes(:application, :user)
-    else
-      Doorkeeper::DeviceAuthorizationGrant::DeviceGrant
-        .where(resource_owner_id: user.id)
-        .order(created_at: :desc)
-        .includes(:application)
-    end #: ActiveRecord::Relation
+                       Doorkeeper::DeviceAuthorizationGrant::DeviceGrant
+                         .where.not(resource_owner_id: nil)
+                         .order(created_at: :desc)
+                         .includes(:application, :user)
+                     else
+                       Doorkeeper::DeviceAuthorizationGrant::DeviceGrant
+                         .where(resource_owner_id: user.id)
+                         .order(created_at: :desc)
+                         .includes(:application)
+                     end #: ActiveRecord::Relation
   end
 
   #: () -> void
@@ -31,9 +33,9 @@ class DevicesController < ApplicationController
     token = find_token
     if token
       token.revoke
-      redirect_to devices_path, notice: "Device access revoked."
+      redirect_to devices_path, notice: 'Device access revoked.'
     else
-      redirect_to devices_path, alert: "Device not found."
+      redirect_to devices_path, alert: 'Device not found.'
     end
   end
 
@@ -42,12 +44,12 @@ class DevicesController < ApplicationController
     grant = find_grant
     if grant
       if grant.destroy
-        redirect_to devices_path, notice: "Pending device authorization cancelled."
+        redirect_to devices_path, notice: 'Pending device authorization cancelled.'
       else
-        redirect_to devices_path, alert: "Failed to cancel pending device authorization."
+        redirect_to devices_path, alert: 'Failed to cancel pending device authorization.'
       end
     else
-      redirect_to devices_path, alert: "Pending device not found."
+      redirect_to devices_path, alert: 'Pending device not found.'
     end
   end
 

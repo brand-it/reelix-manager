@@ -20,8 +20,9 @@ module ScopeEnforceable
   #: () -> bool
   def can_search?
     return true if session_user?
+
     token = context[:doorkeeper_token]
-    token&.includes_scope?("all") || token&.includes_scope?("search")
+    token&.includes_scope?('all') || token&.includes_scope?('search')
   end
 
   #: () -> void
@@ -29,16 +30,17 @@ module ScopeEnforceable
     return if can_search?
 
     raise GraphQL::ExecutionError.new(
-      "Forbidden: search scope required",
-      extensions: { code: "FORBIDDEN" }
+      'Forbidden: search scope required',
+      extensions: { code: 'FORBIDDEN' }
     )
   end
 
   #: () -> bool
   def can_upload?
     return true if session_user?
+
     token = context[:doorkeeper_token]
-    token&.includes_scope?("all") || token&.includes_scope?("upload")
+    token&.includes_scope?('all') || token&.includes_scope?('upload')
   end
 
   #: () -> void
@@ -46,8 +48,8 @@ module ScopeEnforceable
     return if can_upload?
 
     raise GraphQL::ExecutionError.new(
-      "Forbidden: upload scope required",
-      extensions: { code: "FORBIDDEN" }
+      'Forbidden: upload scope required',
+      extensions: { code: 'FORBIDDEN' }
     )
   end
 

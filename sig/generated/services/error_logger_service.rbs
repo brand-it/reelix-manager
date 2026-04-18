@@ -1,0 +1,51 @@
+# Generated from app/services/error_logger_service.rb with RBS::Inline
+
+# @rbs class ErrorLoggerService < ApplicationService
+class ErrorLoggerService < ApplicationService
+  @error: StandardError
+
+  @context: untyped?
+
+  # : (StandardError, ?untyped?) -> ErrorEntry
+  # steep:ignore MethodDefinitionMissing
+  def self.call: (StandardError, ?untyped?) -> ErrorEntry
+
+  # : (StandardError, ?untyped?) -> void
+  # steep:ignore MethodDefinitionMissing
+  def initialize: (StandardError, ?untyped?) -> void
+
+  # : () -> ErrorEntry
+  def call: () -> ErrorEntry
+
+  private
+
+  # : (untyped?) -> { id: Integer?, email: String? }
+  def extract_user_info: (untyped?) -> { id: Integer?, email: String? }
+
+  # : (StandardError, String, { id: Integer?, email: String? }) -> untyped
+  def build_base_attributes: (StandardError, String, { id: Integer?, email: String? }) -> untyped
+
+  # : (untyped, untyped?) -> void
+  def add_context_attributes: (untyped, untyped?) -> void
+
+  # : (untyped?) -> bool
+  def controller_context?: (untyped?) -> bool
+
+  # : (untyped?) -> bool
+  def job_context?: (untyped?) -> bool
+
+  # : (untyped?) -> bool
+  def graphql_context?: (untyped?) -> bool
+
+  # : (untyped, untyped) -> void
+  def add_controller_context: (untyped, untyped) -> void
+
+  # : (untyped, ActiveJob::Base) -> void
+  def add_job_context: (untyped, ActiveJob::Base) -> void
+
+  # : (untyped, GraphQL::Query::Context) -> void
+  def add_graphql_context: (untyped, GraphQL::Query::Context) -> void
+
+  # : (String, String?) -> String
+  def generate_fingerprint: (String, String?) -> String
+end

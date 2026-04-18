@@ -1,0 +1,5 @@
+# Generated from app/services/error_tracking.rb with RBS::Inline
+
+# Error tracking services for logging and monitoring application errors
+module ErrorTracking
+end

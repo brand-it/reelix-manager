@@ -1,12 +1,17 @@
 # Generated from app/controllers/error_entries_controller.rb with RBS::Inline
 
 class ErrorEntriesController < ApplicationController
-  @error_classes: Array[::String]
-  @statuses: Array[::Symbol]
-  @error_entries: ::ActiveRecord::Relation[::ErrorEntry]
+  @error_classes: ActiveRecord::Relation
+
+  @statuses: Array[::String]
+
+  @error_entries: ErrorEntry::ActiveRecord_Relation
+
   @counts_by_status: ::Hash[::Symbol, ::Integer]
+
   @error_entry: ::ErrorEntry
-  @similar_errors: ::ActiveRecord::Relation[::ErrorEntry]
+
+  @similar_errors: ::ActiveRecord::Relation
 
   # : -> void
   def index: () -> void
@@ -21,6 +26,10 @@ class ErrorEntriesController < ApplicationController
   def resolve: () -> void
 
   private
+
+  # : -> void
   def require_admin: () -> void
+
+  # : -> void
   def set_error_entry: () -> void
 end

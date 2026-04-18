@@ -21,7 +21,7 @@
 # same time (e.g. Puma cluster mode or parallel container starts).
 Rails.application.config.after_initialize do
   server_boot  = Rails.const_defined?(:Server)
-  auto_migrate = ENV["AUTO_MIGRATE"] == "1"
+  auto_migrate = ENV['AUTO_MIGRATE'] == '1'
   db_task      = defined?(Rake) &&
                  Rake.respond_to?(:application) &&
                  Rake.application.respond_to?(:top_level_tasks) &&
@@ -29,7 +29,7 @@ Rails.application.config.after_initialize do
 
   next unless (server_boot || auto_migrate) && !db_task
 
-  lock_path = Rails.root.join("tmp/migrate.lock")
+  lock_path = Rails.root.join('tmp/migrate.lock')
 
   File.open(lock_path, File::RDWR | File::CREAT, 0o644) do |lock|
     lock.flock(File::LOCK_EX)
@@ -45,9 +45,9 @@ Rails.application.config.after_initialize do
       begin
         conn = ActiveRecord::Base.connection
 
-        if conn.table_exists?("schema_migrations")
+        if conn.table_exists?('schema_migrations')
           migrations_paths = Array(db_config.migrations_paths).presence ||
-                               ActiveRecord::Migrator.migrations_paths
+                             ActiveRecord::Migrator.migrations_paths
           ctx = ActiveRecord::MigrationContext.new(migrations_paths)
 
           if ctx.needs_migration?
@@ -72,8 +72,8 @@ Rails.application.config.after_initialize do
       conn = ActiveRecord::Base.connection
 
       {
-        "solid_queue_processes" => "db/queue_schema.rb",
-        "solid_cache_entries"   => "db/cache_schema.rb"
+        'solid_queue_processes' => 'db/queue_schema.rb',
+        'solid_cache_entries' => 'db/cache_schema.rb'
       }.each do |sentinel_table, schema_file|
         path = Rails.root.join(schema_file)
         next unless File.exist?(path)
@@ -84,11 +84,10 @@ Rails.application.config.after_initialize do
         Rails.logger.info "[boot] #{schema_file} loaded."
       end
     end
-
   ensure
     lock.flock(File::LOCK_UN)
   end
-rescue => e
+rescue StandardError => e
   Rails.logger.error "[boot] Database setup failed: #{e.message}"
   raise # Refuse to start with a broken schema.
 end

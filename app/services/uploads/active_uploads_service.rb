@@ -15,7 +15,7 @@ module Uploads
   class SessionSnapshot
     #: () -> Integer
     def bytes_remaining
-      [ upload_length - upload_offset, 0 ].max
+      [upload_length - upload_offset, 0].max
     end
 
     #: () -> Integer
@@ -36,16 +36,15 @@ module Uploads
   class ActiveUploadsService < ApplicationService
     class << self
       #: () -> ::Array[SessionSnapshot]
-      def call(...) = super
     end
 
-  #: () -> ::Array[SessionSnapshot]
-  def call
-    info_paths
-      .filter_map { |info_path| build_snapshot(info_path) }
-      .sort_by(&:updated_at)
-      .reverse
-  end
+    #: () -> ::Array[SessionSnapshot]
+    def call
+      info_paths
+        .filter_map { |info_path| build_snapshot(info_path) }
+        .sort_by(&:updated_at)
+        .reverse
+    end
 
     private
 
@@ -56,49 +55,49 @@ module Uploads
 
     #: () -> ::Array[Pathname]
     def info_paths
-      Dir.glob(storage_directory.join("*.info").to_s).map { |path| Pathname(path) }
+      Dir.glob(storage_directory.join('*.info').to_s).map { |path| Pathname(path) }
     end
 
-  #: (Pathname info_path) -> SessionSnapshot?
-  def build_snapshot(info_path)
-    uid = info_path.basename(".info").to_s
+    #: (Pathname info_path) -> SessionSnapshot?
+    def build_snapshot(info_path)
+      uid = info_path.basename('.info').to_s
 
-    # Parse and validate info file
-    info = begin
-      JSON.parse(info_path.binread)
-    rescue JSON::ParserError
-      Rails.logger.warn("[ActiveUploadsService] Skipping malformed .info file: #{info_path}")
-      return
+      # Parse and validate info file
+      info = begin
+        JSON.parse(info_path.binread)
+      rescue JSON::ParserError
+        Rails.logger.warn("[ActiveUploadsService] Skipping malformed .info file: #{info_path}")
+        return
+      end
+
+      # Validate required fields exist
+      unless info.is_a?(Hash) && info.key?('Upload-Length') && info.key?('Upload-Offset')
+        Rails.logger.warn("[ActiveUploadsService] Skipping .info file with missing required fields: #{info_path}")
+        return
+      end
+
+      data_path = storage_directory.join(uid)
+      updated_at = [info_path.mtime, data_path.exist? ? data_path.mtime : info_path.mtime].max
+
+      upload_length = info['Upload-Length'].to_i
+      upload_offset = info['Upload-Offset'].to_i
+
+      SessionSnapshot.new(
+        id: uid,
+        filename: resolved_filename(info['Upload-Metadata'], uid),
+        upload_length: upload_length,
+        upload_offset: upload_offset,
+        status: upload_status(upload_length, upload_offset),
+        created_at: data_path.exist? ? data_path.ctime : info_path.ctime,
+        updated_at: updated_at,
+        expires_at: updated_at + tus_expiration_time
+      )
     end
-
-    # Validate required fields exist
-    unless info.is_a?(Hash) && info.key?("Upload-Length") && info.key?("Upload-Offset")
-      Rails.logger.warn("[ActiveUploadsService] Skipping .info file with missing required fields: #{info_path}")
-      return
-    end
-
-    data_path = storage_directory.join(uid)
-    updated_at = [ info_path.mtime, data_path.exist? ? data_path.mtime : info_path.mtime ].max
-
-    upload_length = info["Upload-Length"].to_i
-    upload_offset = info["Upload-Offset"].to_i
-
-    SessionSnapshot.new(
-      id: uid,
-      filename: resolved_filename(info["Upload-Metadata"], uid),
-      upload_length: upload_length,
-      upload_offset: upload_offset,
-      status: upload_status(upload_length, upload_offset),
-      created_at: data_path.exist? ? data_path.ctime : info_path.ctime,
-      updated_at: updated_at,
-      expires_at: updated_at + tus_expiration_time
-    )
-  end
 
     #: (String? header, String uid) -> String
     def resolved_filename(header, uid)
       metadata = decode_tus_metadata(header)
-      metadata["filename"] || uid
+      metadata['filename'] || uid
     end
 
     #: (String? header) -> ::Hash[String, String?]
@@ -106,8 +105,8 @@ module Uploads
       return {} if header.blank?
 
       acc = {} #: ::Hash[String, String?]
-      header.split(",").each_with_object(acc) do |pair, hash|
-        key, encoded_value = pair.strip.split(" ", 2) # steep:ignore NoMethod
+      header.split(',').each_with_object(acc) do |pair, hash|
+        key, encoded_value = pair.strip.split(' ', 2) # steep:ignore NoMethod
         next unless key
 
         hash[key] = encoded_value ? Base64.decode64(encoded_value) : nil
@@ -116,10 +115,10 @@ module Uploads
 
     #: (Integer upload_length, Integer upload_offset) -> String
     def upload_status(upload_length, upload_offset)
-      return "pending" if upload_offset.zero?
-      return "ready_to_finalize" if upload_length.positive? && upload_offset >= upload_length
+      return 'pending' if upload_offset.zero?
+      return 'ready_to_finalize' if upload_length.positive? && upload_offset >= upload_length
 
-      "uploading"
+      'uploading'
     end
 
     #: () -> Integer

@@ -531,6 +531,7 @@ DEPENDENCIES
   rbs
   rbs-inline
   rbs_rails
+  rubocop-rails (~> 2.34)
   rubocop-rails-omakase
   selenium-webdriver
   shoulda-matchers

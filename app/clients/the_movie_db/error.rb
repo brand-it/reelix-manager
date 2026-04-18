@@ -29,10 +29,10 @@ module TheMovieDb
         if url.respond_to?(:path)
           url.path # steep:ignore NoMethod
         elsif url
-          url.to_s.split("?", 2).first
+          url.to_s.split('?', 2).first
         end
 
-      message = +"TheMovieDb API error"
+      message = +'TheMovieDb API error'
       message << " (status #{status})" if status
       message << " for #{path}" if path && !path.empty?
       message

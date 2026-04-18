@@ -22,12 +22,4 @@ class ApplicationRecord < ActiveRecord::Base
 end
 
 class ErrorEntry
-  def self.statuses: () -> Hash[Symbol, Integer]
-  def self.where: (untyped) -> ActiveRecord::Relation[ErrorEntry]
-  def self.order: (?::Hash[::Symbol | ::String, untyped] | ::Symbol) -> ActiveRecord::Relation[ErrorEntry]
-  def self.group: (untyped) -> ActiveRecord::Relation[ErrorEntry]
-  def self.select: (untyped) -> ActiveRecord::Relation[ErrorEntry]
-  def self.distinct: () -> ActiveRecord::Relation[ErrorEntry]
-  def self.create!: (untyped) -> ErrorEntry
-  def self.by_fingerprint: (String) -> ActiveRecord::Relation[ErrorEntry]
 end

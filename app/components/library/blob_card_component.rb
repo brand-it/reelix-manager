@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module Library
+  # steep:ignore MethodDefinitionMissing
   class BlobCardComponent < ViewComponent::Base
     #: (blob: VideoBlob) -> void
     def initialize(blob:)
@@ -24,8 +25,8 @@ module Library
     def season_episode_label
       return unless blob.tv? && blob.season_number.present?
 
-      label = "S#{format("%02d", blob.season_number)}" #: String
-      label += "E#{format("%02d", blob.episode_number)}" if blob.episode_number.present?
+      label = "S#{format('%02d', blob.season_number)}" #: String
+      label += "E#{format('%02d', blob.episode_number)}" if blob.episode_number.present?
       label
     end
 

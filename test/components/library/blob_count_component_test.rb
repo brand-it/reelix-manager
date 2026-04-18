@@ -1,21 +1,25 @@
-require "test_helper"
+# frozen_string_literal: true
 
-class Library::BlobCountComponentTest < ViewComponent::TestCase
-  test "renders plural count" do
-    render_inline(Library::BlobCountComponent.new(count: 2))
+require 'test_helper'
 
-    assert_text "2 videos"
-  end
+module Library
+  class BlobCountComponentTest < ViewComponent::TestCase
+    test 'renders plural count' do
+      render_inline(Library::BlobCountComponent.new(count: 2))
 
-  test "renders singular count" do
-    render_inline(Library::BlobCountComponent.new(count: 1))
+      assert_text '2 videos'
+    end
 
-    assert_text "1 video"
-  end
+    test 'renders singular count' do
+      render_inline(Library::BlobCountComponent.new(count: 1))
 
-  test "when there are zero videos" do
-    render_inline(Library::BlobCountComponent.new(count: 0))
+      assert_text '1 video'
+    end
 
-    assert_text "0 videos"
+    test 'when there are zero videos' do
+      render_inline(Library::BlobCountComponent.new(count: 0))
+
+      assert_text '0 videos'
+    end
   end
 end

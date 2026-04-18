@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# frozen_string_literal: true
+
+# Type-check script for the Reelix Manager project
+# Runs rbs_rails, regenerates RBS from inline annotations, then runs Steep
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+echo "Running rbs_rails..."
+bundle exec rbs_rails all
+
+echo "Regenerating RBS from inline annotations..."
+bundle exec rails type_check:gen
+
+echo "Running Steep type checker..."
+bundle exec steep check --verbose

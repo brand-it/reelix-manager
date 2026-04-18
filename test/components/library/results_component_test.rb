@@ -1,16 +1,20 @@
-require "test_helper"
+# frozen_string_literal: true
 
-class Library::ResultsComponentTest < ViewComponent::TestCase
-  test "renders empty state with query" do
-    render_inline(Library::ResultsComponent.new(video_blobs: [], query: "Missing"))
+require 'test_helper'
 
-    assert_text "No blobs found for “Missing”."
-  end
+module Library
+  class ResultsComponentTest < ViewComponent::TestCase
+    test 'renders empty state with query' do
+      render_inline(Library::ResultsComponent.new(video_blobs: [], query: 'Missing'))
 
-  test "renders blob cards" do
-    render_inline(Library::ResultsComponent.new(video_blobs: [ video_blobs(:inception) ], query: ""))
+      assert_text 'No blobs found for “Missing”.'
+    end
 
-    assert_text "Inception"
-    assert_selector ".card-title", text: "Inception"
+    test 'renders blob cards' do
+      render_inline(Library::ResultsComponent.new(video_blobs: [video_blobs(:inception)], query: ''))
+
+      assert_text 'Inception'
+      assert_selector '.card-title', text: 'Inception'
+    end
   end
 end

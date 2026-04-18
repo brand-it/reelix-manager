@@ -13,7 +13,7 @@ module TheMovieDb
     #: (tv_id: Integer, season_number: Integer, ?api_key: String?, ?language: String?) -> void
     def initialize(tv_id:, season_number:, api_key: nil, language: nil)
       super(api_key: api_key, language: language)
-      @tv_id = tv_id           #: Integer
+      @tv_id = tv_id #: Integer
       @season_number = season_number #: Integer
     end
 

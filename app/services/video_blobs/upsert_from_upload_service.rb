@@ -5,7 +5,9 @@ module VideoBlobs
   class UpsertFromUploadService < ApplicationService
     class << self
       #: (video_blob: VideoBlob) -> VideoBlob
-      def call(...) = super
+      def call(video_blob:)
+        new(video_blob:).call
+      end
     end
 
     # @rbs @video_blob: VideoBlob
@@ -19,8 +21,8 @@ module VideoBlobs
     def call
       destination_path = @video_blob.key.presence || @video_blob.media_path
       destination_filename = @video_blob.filename.presence || @video_blob.generated_filename
-      raise ArgumentError, "Could not determine blob destination path" unless destination_path
-      raise ArgumentError, "Could not determine blob filename" unless destination_filename
+      raise ArgumentError, 'Could not determine blob destination path' unless destination_path
+      raise ArgumentError, 'Could not determine blob filename' unless destination_filename
 
       blob = VideoBlob.find_or_initialize_by(key: destination_path)
       blob.assign_attributes(

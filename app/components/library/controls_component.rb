@@ -17,9 +17,9 @@ module Library
     #: () -> Array[Array[String]]
     def media_types
       [
-        [ "", "All" ],
-        [ "movie", "Movies" ],
-        [ "tv", "TV Shows" ]
+        ['', 'All'],
+        ['movie', 'Movies'],
+        ['tv', 'TV Shows']
       ]
     end
   end

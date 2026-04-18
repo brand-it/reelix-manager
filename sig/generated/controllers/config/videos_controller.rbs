@@ -1,22 +1,24 @@
 # Generated from app/controllers/config/videos_controller.rb with RBS::Inline
 
-class Config::VideosController < ApplicationController
-  @config_video: Config::Video
+class Config
+  class VideosController < ApplicationController
+    @config_video: Config::Video
 
-  # : () -> void
-  def new: () -> void
+    # : () -> void
+    def new: () -> void
 
-  # : () -> void
-  def create: () -> void
+    # : () -> void
+    def create: () -> void
 
-  # : () -> void
-  def edit: () -> void
+    # : () -> void
+    def edit: () -> void
 
-  # : () -> void
-  def update: () -> void
+    # : () -> void
+    def update: () -> void
 
-  private
+    private
 
-  # : () -> ActionController::Parameters
-  def video_params: () -> ActionController::Parameters
+    # : () -> ActionController::Parameters
+    def video_params: () -> ActionController::Parameters
+  end
 end

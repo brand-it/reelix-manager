@@ -827,7 +827,6 @@ class ::ErrorEntry < ::ApplicationRecord
   def self.not_acknowledged: () -> ::ErrorEntry::ActiveRecord_Relation
   def self.resolved: () -> ::ErrorEntry::ActiveRecord_Relation
   def self.not_resolved: () -> ::ErrorEntry::ActiveRecord_Relation
-  def self.unacknowledged: () -> ::ErrorEntry::ActiveRecord_Relation
   def self.recent_first: () -> ::ErrorEntry::ActiveRecord_Relation
   def self.by_error_class: (untyped error_class) -> ::ErrorEntry::ActiveRecord_Relation
   def self.by_status: (untyped status) -> ::ErrorEntry::ActiveRecord_Relation
@@ -848,8 +847,6 @@ class ::ErrorEntry < ::ApplicationRecord
     def resolved: () -> ::ErrorEntry::ActiveRecord_Relation
 
     def not_resolved: () -> ::ErrorEntry::ActiveRecord_Relation
-
-    def unacknowledged: () -> ::ErrorEntry::ActiveRecord_Relation
 
     def recent_first: () -> ::ErrorEntry::ActiveRecord_Relation
 

@@ -1,0 +1,182 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h4 class="mb-0">Error Details</h4>
+  <%= link_to "Back to Errors", error_entries_path, class: "btn btn-outline-secondary" %>
+</div>
+
+<!-- Error Summary -->
+<div class="card mb-4">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h5 class="mb-0"><%= @error_entry.error_class %></h5>
+    <% if @error_entry.unacknowledged? %>
+      <span class="badge bg-danger">unacknowledged</span>
+    <% elsif @error_entry.acknowledged? %>
+      <span class="badge bg-warning text-dark">Acknowledged</span>
+    <% else %>
+      <span class="badge bg-success">Resolved</span>
+    <% end %>
+  </div>
+  <div class="card-body">
+    <h2 class="mb-3"><%= @error_entry.error_message %></h2>
+    <p class="text-muted"><%= @error_entry.error_class %></p>
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="mb-3">
+          <strong>Status:</strong>
+          <p class="mt-1"><%= @error_entry.status.humanize %></p>
+        </div>
+        <div class="mb-3">
+          <strong>Fingerprint:</strong>
+          <p class="mt-1"><code><%= @error_entry.fingerprint %></code></p>
+        </div>
+        <div class="mb-3">
+          <strong>Environment:</strong>
+          <p class="mt-1"><%= @error_entry.environment %></p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <strong>First Seen:</strong>
+          <p class="mt-1"><%= l @error_entry.created_at, format: :usa_pretty %></p>
+        </div>
+        <div class="mb-3">
+          <strong>Similar Errors:</strong>
+          <p class="mt-1"><%= @similar_errors.count %> occurrences</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Request Context -->
+    <% if @error_entry.from_request? %>
+      <div class="mt-4 pt-3 border-top">
+        <h6>Request Context</h6>
+        <div class="row">
+          <div class="col-md-4">
+            <strong>URL:</strong>
+            <p class="mt-1"><%= @error_entry.request_url %></p>
+          </div>
+          <div class="col-md-4">
+            <strong>Method:</strong>
+            <p class="mt-1"><%= @error_entry.request_method %></p>
+          </div>
+          <div class="col-md-4">
+            <strong>Path:</strong>
+            <p class="mt-1"><%= @error_entry.request_path %></p>
+          </div>
+        </div>
+        <% if @error_entry.request_params.present? %>
+          <div class="mt-2">
+            <strong>Params:</strong>
+            <pre class="mt-1 bg-light p-2 rounded"><%= JSON.pretty_generate(@error_entry.request_params_hash) %></pre>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
+    <!-- Job Context -->
+    <% if @error_entry.from_job? %>
+      <div class="mt-4 pt-3 border-top">
+        <h6>Job Context</h6>
+        <div class="row">
+          <div class="col-md-4">
+            <strong>Job Class:</strong>
+            <p class="mt-1"><%= @error_entry.job_class %></p>
+          </div>
+          <div class="col-md-4">
+            <strong>Job ID:</strong>
+            <p class="mt-1"><%= @error_entry.job_id %></p>
+          </div>
+          <div class="col-md-4">
+            <strong>Queue:</strong>
+            <p class="mt-1"><%= @error_entry.job_queue %></p>
+          </div>
+        </div>
+        <% if @error_entry.job_arguments.present? %>
+          <div class="mt-2">
+            <strong>Arguments:</strong>
+            <pre class="mt-1 bg-light p-2 rounded"><%= JSON.pretty_generate(@error_entry.job_arguments_hash) %></pre>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
+    <!-- User Context -->
+    <% if @error_entry.user_id.present? || @error_entry.user_email.present? %>
+      <div class="mt-4 pt-3 border-top">
+        <h6>User Context</h6>
+        <div class="row">
+          <div class="col-md-6">
+            <strong>User ID:</strong>
+            <p class="mt-1"><%= @error_entry.user_id %></p>
+          </div>
+          <div class="col-md-6">
+            <strong>Email:</strong>
+            <p class="mt-1"><%= @error_entry.user_email %></p>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="card-footer">
+    <% if @error_entry.unacknowledged? %>
+      <%= button_to "Acknowledge", acknowledge_error_entry_path(@error_entry),
+                    method: :patch,
+                    class: "btn btn-warning me-2" %>
+    <% end %>
+    <%= button_to "Resolve", resolve_error_entry_path(@error_entry),
+                  method: :patch,
+                  class: "btn btn-success",
+                  data: { turbo_confirm: "Mark this error as resolved?" } %>
+  </div>
+</div>
+
+<!-- Backtrace -->
+<div class="card mb-4">
+  <div class="card-header">
+    <h5 class="mb-0">Backtrace</h5>
+  </div>
+  <div class="card-body p-0">
+    <pre class="p-3 mb-0" style="max-height: 500px; overflow-y: auto;"><%= @error_entry.backtrace %></pre>
+  </div>
+</div>
+
+<!-- Similar Errors -->
+<% if @similar_errors.count > 1 %>
+  <div class="card">
+    <div class="card-header">
+      <h5 class="mb-0">Similar Errors (<%= @similar_errors.count %>)</h5>
+    </div>
+    <div class="card-body p-0">
+      <table class="table table-striped mb-0">
+        <thead>
+          <tr>
+            <th>Timestamp</th>
+            <th>Message</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @similar_errors.each do |error| %>
+            <tr class="similar-error">
+              <td><%= l error.created_at, format: :usa_pretty %></td>
+              <td><%= truncate(error.error_message, length: 100) %></td>
+              <td>
+                <% if error.unacknowledged? %>
+                  <span class="badge bg-danger">unacknowledged</span>
+                <% elsif error.acknowledged? %>
+                  <span class="badge bg-warning text-dark">Acknowledged</span>
+                <% else %>
+                  <span class="badge bg-success">Resolved</span>
+                <% end %>
+              </td>
+              <td>
+                <%= link_to "View", error_entry_path(error), class: "btn btn-sm btn-outline-primary" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>

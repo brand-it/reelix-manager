@@ -1,5 +1,5 @@
 ---
-name: commit-message-generator
+id: commit-message-generator
 description: Generate a conventional commit message from staged git changes. Use this when asked to write, create, or generate a commit message from staged changes or the git diff.
 ---
 

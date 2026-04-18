@@ -4,6 +4,7 @@ D = Steep::Diagnostic
 
 target :app do
   signature "sig"
+  signature "sig/generated"
   check "app"
 
   library "json"

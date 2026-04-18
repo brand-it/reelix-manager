@@ -1,5 +1,5 @@
 ---
-name: pr-generator
+id: pr-generator
 description: Generate a pull request with a conventional commit-style title and structured description from the current branch. Use this when asked to generate a PR, create a pull request, or open a PR.
 ---
 

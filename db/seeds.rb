@@ -109,3 +109,81 @@ if Rails.env.development?
   episode_count = seed_tv.sum { |s| s[:seasons].values.sum }
   puts "Seeded #{episode_count} TV episode blobs (#{seed_tv.size} shows)"
 end
+
+
+# ---------------------------------------------------------------------------
+# Error tracking sample data (development only)
+# ---------------------------------------------------------------------------
+if Rails.env.development?
+  puts "", "Seeding error tracking examples..."
+
+  # Sample HTTP request error
+  ErrorEntry.find_or_create_by!(fingerprint: "http_error_001") do |e|
+    e.error_class = "ActiveRecord::RecordNotFound"
+    e.error_message = "Couldn't find VideoBlob with 'id'=999"
+    e.backtrace = "app/controllers/video_blobs_controller.rb:42:in `show'\napp/controllers/video_blobs_controller.rb:20:in `set_video_blob'\nlib/active_record/associations.rb:123:in `find'"
+    e.status = :unacknowledged
+    e.request_url = "http://localhost:3000/video_blobs/999"
+    e.request_method = "GET"
+    e.request_path = "/video_blobs/999"
+    e.request_params = "{\"id\": \"999\"}".to_json
+    e.environment = "development"
+    e.created_at = 1.day.ago
+  end
+
+  # Sample job error
+  ErrorEntry.find_or_create_by!(fingerprint: "job_error_001") do |e|
+    e.error_class = "StandardError"
+    e.error_message = "Failed to process video blob: Invalid format"
+    e.backtrace = "app/jobs/video_processing_job.rb:28:in `perform'\napp/jobs/video_processing_job.rb:15:in `process_video'\nlib/video_processor.rb:42:in `validate'"
+    e.status = :acknowledged
+    e.job_class = "VideoProcessingJob"
+    e.job_id = "12345"
+    e.job_queue = "default"
+    e.job_arguments = "{\"blob_id\": 42}".to_json
+    e.environment = "development"
+    e.created_at = 3.days.ago
+  end
+
+  # Sample GraphQL error
+  ErrorEntry.find_or_create_by!(fingerprint: "graphql_error_001") do |e|
+    e.error_class = "ArgumentError"
+    e.error_message = "unknown field 'invalidField'"
+    e.backtrace = "app/graphql/types/query_type.rb:15:in `resolve'\nlib/graphql/schema.rb:456:in `execute'"
+    e.status = :resolved
+    e.request_path = "/graphql"
+    e.request_params = "{\"query\": \"{ videos { invalidField } }\", \"variables\": {}}".to_json
+    e.environment = "development"
+    e.created_at = 7.days.ago
+  end
+
+  # Another HTTP error (similar to first one - same fingerprint group)
+  ErrorEntry.find_or_create_by!(fingerprint: "http_error_001") do |e|
+    e.error_class = "ActiveRecord::RecordNotFound"
+    e.error_message = "Couldn't find VideoBlob with 'id'=888"
+    e.backtrace = "app/controllers/video_blobs_controller.rb:42:in `show'\napp/controllers/video_blobs_controller.rb:20:in `set_video_blob'\nlib/active_record/associations.rb:123:in `find'"
+    e.status = :unacknowledged
+    e.request_url = "http://localhost:3000/video_blobs/888"
+    e.request_method = "GET"
+    e.request_path = "/video_blobs/888"
+    e.request_params = "{\"id\": \"888\"}".to_json
+    e.environment = "development"
+    e.created_at = 2.hours.ago
+  end
+
+  # Old error (for cleanup testing)
+  ErrorEntry.find_or_create_by!(fingerprint: "old_error_001") do |e|
+    e.error_class = "RuntimeError"
+    e.error_message = "Deprecated feature accessed"
+    e.backtrace = "app/controllers/legacy_controller.rb:10:in `index'"
+    e.status = :resolved
+    e.request_path = "/legacy/feature"
+    e.environment = "development"
+    e.created_at = 45.days.ago
+  end
+
+  puts "Seeded #{ErrorEntry.count} error entries"
+  puts "  - Unacknowledged: #{ErrorEntry.unacknowledged.count}"
+  puts "  - Acknowledged: #{ErrorEntry.acknowledged.count}"
+  puts "  - Resolved: #{ErrorEntry.resolved.count}"
+end

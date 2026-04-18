@@ -1,0 +1,8 @@
+# Generated from app/jobs/cleanup_old_errors_job.rb with RBS::Inline
+
+class CleanupOldErrorsJob < ApplicationJob
+  DAYS_TO_KEEP: Integer
+
+  # : -> void
+  def perform: () -> void
+end

@@ -1,0 +1,133 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h4 class="mb-0">Error Tracking</h4>
+</div>
+
+<!-- Summary Cards -->
+<div class="row mb-4">
+  <div class="col-md-3">
+    <div class="card bg-danger text-white">
+      <div class="card-body">
+        <h6 class="card-title mb-0">Unacknowledged Errors</h6>
+        <p class="card-text display-6"><%= @counts_by_status['unacknowledged'] || 0 %></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card bg-warning text-dark">
+      <div class="card-body">
+        <h6 class="card-title mb-0">Acknowledged</h6>
+        <p class="card-text display-6"><%= @counts_by_status['acknowledged'] || 0 %></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card bg-success text-white">
+      <div class="card-body">
+        <h6 class="card-title mb-0">Resolved</h6>
+        <p class="card-text display-6"><%= @counts_by_status['resolved'] || 0 %></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card bg-info text-white">
+      <div class="card-body">
+        <h6 class="card-title mb-0">Unique Errors</h6>
+        <p class="card-text display-6"><%= @error_entries.count %></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Filters -->
+<div class="card mb-4">
+  <div class="card-body">
+    <% form_tag(error_entries_path, method: :get) do %>
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label class="form-label">Error Class</label>
+          <select name="error_class" class="form-select">
+            <option value="">All</option>
+            <% @error_classes.each do |ec| %>
+              <option value="<%= ec.error_class %>" <%= "selected" if params[:error_class] == ec.error_class.to_s %>>
+                <%= ec.error_class %>
+              </option>
+            <% end %>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Status</label>
+          <select name="status" class="form-select">
+            <option value="">All</option>
+            <% @statuses.each do |status| %>
+              <option value="<%= status %>" <%= "selected" if params[:status] == status.to_s %>>
+                <%= status.humanize %>
+              </option>
+            <% end %>
+          </select>
+        </div>
+        <div class="col-md-4 d-flex align-items-end">
+          <button type="submit" class="btn btn-primary me-2">Filter</button>
+          <%= link_to "Clear", error_entries_path, class: "btn btn-outline-secondary" %>
+        </div>
+      </div>
+    <% end %>
+
+<!-- Error List -->
+<% if @error_entries.empty? %>
+  <div class="alert alert-info">No errors found.</div>
+<% else %>
+  <div class="table-responsive">
+    <table class="table table-bordered align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>Error Class</th>
+          <th>Message</th>
+          <th>Status</th>
+          <th>Source</th>
+          <th>First Seen</th>
+          <th>Last Seen</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @error_entries.each do |error| %>
+          <tr>
+            <td>
+              <strong><%= error.error_class %></strong>
+            </td>
+            <td>
+              <%= truncate(error.error_message, length: 100) %>
+            </td>
+            <td>
+              <% if error.unacknowledged? %>
+                <span class="badge bg-danger">unacknowledged</span>
+              <% elsif error.acknowledged? %>
+                <span class="badge bg-warning text-dark">Acknowledged</span>
+              <% else %>
+                <span class="badge bg-success">Resolved</span>
+              <% end %>
+            </td>
+            <td>
+              <% if error.from_request? %>
+                <small class="text-muted"><%= error.request_method %> <%= error.request_path %></small>
+              <% elsif error.from_job? %>
+                <small class="text-muted"><%= error.job_class %></small>
+              <% end %>
+            </td>
+            <td><%= l error.created_at, format: :usa_pretty %></td>
+            <td><%= l error.created_at, format: :usa_pretty %></td>
+            <td>
+              <%= link_to "View", error_entry_path(error), class: "btn btn-sm btn-outline-primary" %>
+              <% if error.unacknowledged? %>
+                <%= button_to "Acknowledge", acknowledge_error_entry_path(error),
+                              method: :patch,
+                              class: "btn btn-sm btn-outline-warning",
+                              form: { style: "display:inline;" } %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

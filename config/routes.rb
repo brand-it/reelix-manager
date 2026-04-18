@@ -4,6 +4,14 @@ Rails.application.routes.draw do
     mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql"
   end
 
+  # Error tracking - authentication handled in controller
+  resources :error_entries, only: %i[index show] do
+    member do
+      patch :acknowledge
+      patch :resolve
+    end
+  end
+
   post "/graphql", to: "graphql#execute"
 
   # tus resumable upload protocol endpoint.

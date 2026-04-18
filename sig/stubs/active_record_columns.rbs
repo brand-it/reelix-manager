@@ -20,3 +20,24 @@ class ApplicationRecord < ActiveRecord::Base
   # Returns an empty relation; useful as a no-op base for conditional query chains.
   def self.none: () -> ::ActiveRecord::Relation
 end
+
+class ErrorEntry
+  def self.statuses: () -> Hash[Symbol, Integer]
+  def self.where: (untyped) -> ActiveRecord::Relation
+  def self.order: (?::Hash[::Symbol | ::String, untyped] | ::Symbol) -> ActiveRecord::Relation
+  def self.group: (untyped) -> ActiveRecord::Relation
+  def self.select: (untyped) -> ActiveRecord::Relation
+  def self.distinct: () -> ActiveRecord::Relation
+  def self.create!: (untyped) -> ErrorEntry
+end
+
+module ErrorEntryRelationMethods
+  def where: (untyped) -> ActiveRecord::Relation
+  def order: (?::Hash[::Symbol | ::String, untyped] | ::Symbol) -> ActiveRecord::Relation
+  def group: (untyped) -> ActiveRecord::Relation
+  def select: (untyped) -> ActiveRecord::Relation
+  def distinct: () -> ActiveRecord::Relation
+  def not: (untyped) -> ActiveRecord::Relation
+  def count: () -> Hash[Symbol, Integer]
+  def maximum: (Symbol) -> Arel::Nodes::Max
+end

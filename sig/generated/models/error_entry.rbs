@@ -1,0 +1,32 @@
+# Generated from app/models/error_entry.rb with RBS::Inline
+
+class ErrorEntry < ApplicationRecord
+  SENSITIVE_PARAMS: Array[String]
+
+  # : (String, String | nil) -> String
+  def self.generate_fingerprint: (String, String | nil) -> String
+
+  # : (untyped) -> Hash[untyped, untyped]
+  def self.sanitize_params: (untyped) -> Hash[untyped, untyped]
+
+  # : (StandardError, ?untyped) -> ErrorEntry
+  def self.log_error: (StandardError, ?untyped) -> ErrorEntry
+
+  # : -> Array[String]
+  def self.unique_error_classes: () -> Array[String]
+
+  # : -> Hash[Symbol, Integer]
+  def self.counts_by_status: () -> Hash[Symbol, Integer]
+
+  # : -> Hash[untyped, untyped]
+  def request_params_hash: () -> Hash[untyped, untyped]
+
+  # : -> Hash[untyped, untyped]
+  def job_arguments_hash: () -> Hash[untyped, untyped]
+
+  # : -> bool
+  def from_request?: () -> bool
+
+  # : -> bool
+  def from_job?: () -> bool
+end

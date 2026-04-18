@@ -1,0 +1,15 @@
+# Generated from app/controllers/error_entries_controller.rb with RBS::Inline
+
+class ErrorEntriesController < ApplicationController
+  # : -> void
+  def index: () -> void
+
+  # : -> void
+  def show: () -> void
+
+  # : -> void
+  def acknowledge: () -> void
+
+  # : -> void
+  def resolve: () -> void
+end

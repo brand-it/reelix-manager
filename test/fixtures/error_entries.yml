@@ -1,0 +1,61 @@
+one:
+  error_class: ActiveRecord::RecordNotFound
+  error_message: Couldn't find User with id=999
+  backtrace: "app/controllers/users_controller.rb:42:in `show'\napp/controllers/application_controller.rb:10:in `authenticate_or_setup!'"
+  fingerprint: "abc123def456"
+  status: unacknowledged
+  user_id: 1
+  user_email: admin@example.com
+  environment: development
+  request_url: http://localhost:3000/users/999
+  request_method: GET
+  request_path: /users/999
+  request_params: '{"id": "999"}'
+
+two:
+  error_class: ArgumentError
+  error_message: Invalid parameter
+  backtrace: "app/graphql/mutations/create_video_blob.rb:15:in `resolve'"
+  fingerprint: "bcd234efg567"
+  status: acknowledged
+  user_id: 2
+  user_email: user@example.com
+  environment: production
+  request_path: /graphql
+  request_params: '{"query": "mutation { createVideoBlob(...) }", "variables": {}}'
+
+three:
+  error_class: StandardError
+  error_message: Job failed to process
+  backtrace: "app/jobs/video_processing_job.rb:25:in `perform'"
+  fingerprint: "cde345fgh678"
+  status: resolved
+  job_class: VideoProcessingJob
+  job_id: "12345"
+  job_queue: default
+  job_arguments: '{"video_blob_id": 42}'
+  environment: production
+
+four:
+  error_class: ActiveRecord::RecordNotFound
+  error_message: Couldn't find User with id=999
+  backtrace: "app/controllers/users_controller.rb:42:in `show'\napp/controllers/application_controller.rb:10:in `authenticate_or_setup!'"
+  fingerprint: "abc123def456"
+  status: unacknowledged
+  user_id: 2
+  user_email: user@example.com
+  environment: development
+  request_url: http://localhost:3000/users/999
+  request_method: GET
+  request_path: /users/999
+  request_params: '{"id": "999"}'
+
+five:
+  error_class: NoMethodError
+  error_message: undefined method `name' for nil:NilClass
+  backtrace: "app/models/video_blob.rb:30:in `display_name'"
+  fingerprint: "def456ghi789"
+  status: unacknowledged
+  environment: test
+  request_path: /videos/123
+  request_params: '{}'

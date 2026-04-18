@@ -10,10 +10,8 @@ class ReelixManagerSchema < GraphQL::Schema
   # GraphQL-Ruby calls this when something goes wrong while running a query:
   #: (GraphQL::Error err, GraphQL::Query::Context context) -> void
   def self.type_error(err, context)
-    # if err.is_a?(GraphQL::InvalidNullError)
-    #   # report to your bug tracker here
-    #   return nil
-    # end
+    # Pass the GraphQL context directly - log_error handles GraphQL::Query::Context
+    ErrorEntry.log_error(err, context)
     super
   end
 

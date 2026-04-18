@@ -1,4 +1,9 @@
 # Generated from app/jobs/application_job.rb with RBS::Inline
 
 class ApplicationJob < ActiveJob::Base
+  # : (*untyped) -> untyped
+  def perform_now: (*untyped) -> untyped
+
+  # : (StandardError, Array[untyped]) -> void
+  def store_error: (StandardError, Array[untyped]) -> void
 end

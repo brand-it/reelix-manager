@@ -10,12 +10,37 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_11_210929) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_18_080518) do
   create_table "configs", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "settings"
     t.string "type", default: "Config", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "error_entries", force: :cascade do |t|
+    t.text "backtrace", null: false
+    t.datetime "created_at", null: false
+    t.string "environment"
+    t.string "error_class", null: false
+    t.text "error_message", null: false
+    t.string "fingerprint", null: false
+    t.text "job_arguments"
+    t.string "job_class"
+    t.string "job_id"
+    t.string "job_queue"
+    t.string "request_method"
+    t.text "request_params"
+    t.string "request_path"
+    t.string "request_url"
+    t.integer "status", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.string "user_email"
+    t.integer "user_id"
+    t.index ["created_at"], name: "index_error_entries_on_created_at"
+    t.index ["error_class"], name: "index_error_entries_on_error_class"
+    t.index ["fingerprint"], name: "index_error_entries_on_fingerprint"
+    t.index ["status"], name: "index_error_entries_on_status"
   end
 
   create_table "oauth_access_grants", force: :cascade do |t|

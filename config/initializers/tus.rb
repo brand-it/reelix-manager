@@ -20,13 +20,11 @@ Tus::Server.before_create do |uid, info|
   # Remove this in production
   next if auth_header.blank?
 
-  # Extract token from "Bearer <token>"
+  # Use Doorkeeper's token introspection via the access token model
   token_string = auth_header.gsub(/^Bearer\s+/i, "")
+  token = Doorkeeper::AccessToken.by_token(token_string)
 
-  # Use Doorkeeper's token introspection
-  token = Doorkeeper::OAuth::Token.find_by_token(token_string)
-
-  if token.blank? || token.expired?
+  if token.blank? || !token.accessible?
     self.response.status = 401
     self.response.write("Unauthorized: Invalid or expired token")
     self.request.halt

@@ -27,6 +27,8 @@ Lint/MissingSuper:
     - 'app/components/library/blob_count_component.rb'
     - 'app/components/library/controls_component.rb'
     - 'app/components/library/results_component.rb'
+    - 'app/components/uploads/active_uploads_component.rb'
+    - 'app/components/uploads/recent_files_component.rb'
     - 'app/services/key_parser_service.rb'
     - 'app/services/library_scanner_service.rb'
     - 'app/services/tmdb_matcher_service.rb'

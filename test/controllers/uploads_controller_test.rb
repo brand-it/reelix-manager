@@ -42,6 +42,27 @@ class UploadsControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, 'Batman Begins'
   end
 
+  test 'index responds with turbo_stream format when Accept header is set' do
+    create_upload(uid: 'upload-1', filename: 'movie.mkv', length: 1000, offset: 250)
+
+    # NOTE: Accept header must not contain */* or Rails will treat it as browser-like
+    # and ignore the Accept header, defaulting to HTML
+    get uploads_path, headers: { 'Accept' => 'text/vnd.turbo-stream.html, text/html' }
+
+    assert_response :success
+    assert_includes response.content_type, 'text/vnd.turbo-stream.html'
+    assert_includes response.body, '<turbo-stream'
+  end
+
+  test 'index responds with html format by default' do
+    create_upload(uid: 'upload-1', filename: 'movie.mkv', length: 1000, offset: 250)
+
+    get uploads_path
+
+    assert_response :success
+    assert_includes response.content_type, 'text/html'
+  end
+
   private
 
   def create_upload(uid:, filename:, length:, offset:)

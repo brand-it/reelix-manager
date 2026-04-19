@@ -1,0 +1,11 @@
+# Generated from app/components/uploads/recent_files_component.rb with RBS::Inline
+
+module Uploads
+  class RecentFilesComponent < ViewComponent::Base
+    # : (recent_video_blobs: ActiveRecord::Relation) -> void
+    def initialize: (recent_video_blobs: ActiveRecord::Relation) -> void
+
+    # : ActiveRecord::Relation
+    attr_reader recent_video_blobs: ActiveRecord::Relation
+  end
+end

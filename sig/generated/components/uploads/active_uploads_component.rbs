@@ -1,0 +1,11 @@
+# Generated from app/components/uploads/active_uploads_component.rb with RBS::Inline
+
+module Uploads
+  class ActiveUploadsComponent < ViewComponent::Base
+    # : (active_uploads: Array[Uploads::SessionSnapshot]) -> void
+    def initialize: (active_uploads: ::Array[Uploads::SessionSnapshot]) -> void
+
+    # : Array[Uploads::SessionSnapshot]
+    attr_reader active_uploads: ::Array[Uploads::SessionSnapshot]
+  end
+end

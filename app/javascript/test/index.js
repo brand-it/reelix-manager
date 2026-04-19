@@ -34,7 +34,9 @@ export function createStimulusTestHelper(controller, controllerName) {
   return {
     start,
     stop,
-    application
+    get application() {
+      return application
+    }
   }
 }
 /**

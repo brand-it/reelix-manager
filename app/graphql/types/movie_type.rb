@@ -2,7 +2,7 @@
 
 module Types
   class MovieType < Types::BaseObject
-    description "Full movie details from TMDB /movie/{id}"
+    description 'Full movie details from TMDB /movie/{id}'
 
     field :id, Integer, null: false
     field :title, String, null: false
@@ -25,57 +25,57 @@ module Types
     field :vote_count, Integer, null: false
 
     field :runtime, Integer, null: true,
-      description: "Runtime in minutes"
+                             description: 'Runtime in minutes'
     field :budget, Integer, null: true,
-      description: "Production budget in USD"
+                            description: 'Production budget in USD'
     field :revenue, Integer, null: true,
-      description: "Box office revenue in USD"
+                             description: 'Box office revenue in USD'
 
     field :original_language, String, null: false
-    field :origin_country, [ String ], null: false
+    field :origin_country, [String], null: false
 
-    field :genres, [ Types::GenreType ], null: false
+    field :genres, [Types::GenreType], null: false
 
-    field :video_blobs, [ Types::VideoBlobType ], null: false,
-      description: "Local video files matched to this movie"
-
-    #: () -> Integer
-    def id               = object["id"]
-
-    #: () -> String
-    def title            = object["title"] || ""
-
-    #: () -> String
-    def original_title   = object["original_title"] || ""
-
-    #: () -> String
-    def overview         = object["overview"] || ""
-
-    #: () -> bool
-    def adult            = object["adult"] || false
-
-    #: () -> bool
-    def video            = object["video"] || false
-
-    #: () -> Float
-    def popularity       = object["popularity"] || 0.0
-
-    #: () -> Float
-    def vote_average     = object["vote_average"] || 0.0
+    field :video_blobs, [Types::VideoBlobType], null: false,
+                                                description: 'Local video files matched to this movie'
 
     #: () -> Integer
-    def vote_count       = object["vote_count"] || 0
+    def id               = object['id']
 
     #: () -> String
-    def original_language = object["original_language"] || ""
+    def title            = object['title'] || ''
+
+    #: () -> String
+    def original_title   = object['original_title'] || ''
+
+    #: () -> String
+    def overview         = object['overview'] || ''
+
+    #: () -> bool
+    def adult            = object['adult'] || false
+
+    #: () -> bool
+    def video            = object['video'] || false
+
+    #: () -> Float
+    def popularity       = object['popularity'] || 0.0
+
+    #: () -> Float
+    def vote_average     = object['vote_average'] || 0.0
+
+    #: () -> Integer
+    def vote_count       = object['vote_count'] || 0
+
+    #: () -> String
+    def original_language = object['original_language'] || ''
 
     #: () -> ::Array[String]
-    def origin_country   = object["origin_country"] || []
+    def origin_country   = object['origin_country'] || []
 
     #: () -> ::Array[::Hash[String, untyped]]
-    def genres           = object["genres"] || []
+    def genres           = object['genres'] || []
 
     #: () -> ::Array[::VideoBlob]
-    def video_blobs = dataloader.with(Sources::VideoBlobs).load([ "movie", object["id"] ])
+    def video_blobs = dataloader.with(Sources::VideoBlobs).load(['movie', object['id']])
   end
 end

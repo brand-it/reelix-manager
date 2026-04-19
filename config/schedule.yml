@@ -1,0 +1,5 @@
+# Schedule background jobs using solid_queue or good_job
+# Run cleanup job daily at 2:00 AM
+cleanup_old_errors:
+  cron: "0 2 * * *"
+  class: "CleanupOldErrorsJob"

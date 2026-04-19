@@ -1,21 +1,31 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
-  authenticate :user, ->(u) { u.admin? } do
-    mount MissionControl::Jobs::Engine, at: "/jobs"
-    mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql"
+  authenticate :user, lambda(&:admin?) do
+    mount MissionControl::Jobs::Engine, at: '/jobs'
+    mount GraphiQL::Rails::Engine, at: '/graphiql', graphql_path: '/graphql'
   end
 
-  post "/graphql", to: "graphql#execute"
+  # Error tracking - authentication handled in controller
+  resources :error_entries, only: %i[index show] do
+    member do
+      patch :acknowledge
+      patch :resolve
+    end
+  end
+
+  post '/graphql', to: 'graphql#execute'
 
   # tus resumable upload protocol endpoint.
   # Clients use POST /files to start, PATCH /files/:uid to send chunks,
   # HEAD /files/:uid to resume, DELETE /files/:uid to abort.
-  mount Tus::Server => "/files"
+  mount Tus::Server => '/files'
 
-  get "up" => "rails/health#show", as: :rails_health_check
+  get 'up' => 'rails/health#show', as: :rails_health_check
 
   # First-run setup — creates the initial admin account.
-  get  "setup", to: "setups#new",    as: :setup
-  post "setup", to: "setups#create"
+  get  'setup', to: 'setups#new', as: :setup
+  post 'setup', to: 'setups#create'
 
   # Devise authentication (sign in / sign out only; no registration).
   devise_for :users, skip: %i[registrations passwords confirmations]
@@ -29,7 +39,7 @@ Rails.application.routes.draw do
   # Devices management — list and revoke authorized Reelix clients.
   resources :devices, only: %i[index destroy] do
     collection do
-      delete "grant/:id", action: :destroy_grant, as: :grant
+      delete 'grant/:id', action: :destroy_grant, as: :grant
     end
   end
 
@@ -44,7 +54,7 @@ Rails.application.routes.draw do
   resources :uploads, only: %i[index]
 
   # Static API documentation (public — explains how to authenticate).
-  get "docs/api", to: "docs#api", as: :api_docs
+  get 'docs/api', to: 'docs#api', as: :api_docs
 
-  root "config/videos#new"
+  root 'config/videos#new'
 end

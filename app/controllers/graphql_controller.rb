@@ -30,6 +30,7 @@ class GraphqlController < ApplicationController
     render json: result
   rescue StandardError => e
     raise e unless Rails.env.development?
+
     handle_error_in_development(e)
   end
 
@@ -54,7 +55,7 @@ class GraphqlController < ApplicationController
       return
     end
 
-    render json: { errors: [ { message: "Unauthorized" } ] }, status: :unauthorized
+    render json: { errors: [{ message: 'Unauthorized' }] }, status: :unauthorized
   end
 
   # Handle variables in form data, JSON body, or a blank value
@@ -84,7 +85,7 @@ class GraphqlController < ApplicationController
     logger.error e.backtrace&.join("\n")
 
     data = {} #: ::Hash[Symbol, ::Array[::Hash[String, untyped]] | String | nil]
-    render json: { errors: [ { message: e.message, backtrace: e.backtrace } ], data: data }, status: 500
+    render json: { errors: [{ message: e.message, backtrace: e.backtrace }], data: data }, status: 500
   end
 
   # Returns a valid Doorkeeper token if one is present via any configured

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateUploadSessions < ActiveRecord::Migration[8.1]
   def change
     create_table :upload_sessions, id: false do |t|
@@ -5,7 +7,7 @@ class CreateUploadSessions < ActiveRecord::Migration[8.1]
       t.string :filename, null: false
       t.bigint :file_size
       t.string :mime_type
-      t.string :status, null: false, default: "pending"
+      t.string :status, null: false, default: 'pending'
       t.integer :total_chunks, null: false
       t.integer :received_chunks, null: false, default: 0
       t.string :destination_path

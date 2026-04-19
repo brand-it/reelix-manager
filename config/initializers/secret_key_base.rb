@@ -17,4 +17,4 @@ unless File.exist?(key_file)
   end
 end
 
-Rails.application.credentials.secret_key_base = ENV.fetch("SECRET_KEY_BASE") { File.binread(key_file) }
+Rails.application.credentials.secret_key_base = ENV.fetch('SECRET_KEY_BASE') { File.binread(key_file) }

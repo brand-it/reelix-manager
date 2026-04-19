@@ -23,8 +23,6 @@ module Doorkeeper
     def scopes: () -> ::Doorkeeper::OAuth::Scopes
     def includes_scope?: (*String scopes) -> bool
     def revoke: (?::Time clock) -> void
-    def application: () -> Doorkeeper::Application?
-    def user: () -> ::User?
   end
 
   module OAuth
@@ -49,7 +47,6 @@ module Doorkeeper
       def self.order: (**untyped kwargs) -> ActiveRecord::Relation
       def resource_owner_id: () -> (Integer | nil)
       def destroy: () -> (Doorkeeper::DeviceAuthorizationGrant::DeviceGrant | false)
-      def application: () -> Doorkeeper::Application?
     end
   end
 end

@@ -7,7 +7,9 @@ module Uploads
   class TmdbMetadataService < ApplicationService
     class << self
       #: (video_blob: VideoBlob) -> VideoBlob
-      def call(...) = super
+      def call(video_blob:)
+        new(video_blob:).call
+      end
     end
 
     # @rbs @video_blob: VideoBlob
@@ -28,22 +30,22 @@ module Uploads
     #: () -> void
     def apply_movie_metadata
       tmdb_id = @video_blob.tmdb_id
-      raise ArgumentError, "tmdb_id is required" unless tmdb_id
+      raise ArgumentError, 'tmdb_id is required' unless tmdb_id
 
       data = TheMovieDb::Movie.new(id: tmdb_id).results
-      @video_blob.title = data["title"].to_s.presence
-      @video_blob.year = extract_year(data["release_date"])
+      @video_blob.title = data['title'].to_s.presence
+      @video_blob.year = extract_year(data['release_date'])
       @video_blob.episode_title = nil
     end
 
     #: () -> void
     def apply_tv_metadata
       tmdb_id = @video_blob.tmdb_id
-      raise ArgumentError, "tmdb_id is required" unless tmdb_id
+      raise ArgumentError, 'tmdb_id is required' unless tmdb_id
 
       data = TheMovieDb::Tv.new(id: tmdb_id).results
-      @video_blob.title = data["name"].to_s.presence
-      @video_blob.year = extract_year(data["first_air_date"])
+      @video_blob.title = data['name'].to_s.presence
+      @video_blob.year = extract_year(data['first_air_date'])
       @video_blob.episode_title = fetch_episode_title
     end
 
@@ -55,9 +57,9 @@ module Uploads
       return unless tmdb_id && season_number && episode_number
 
       season_data = TheMovieDb::Season.new(tv_id: tmdb_id, season_number: season_number).results
-      season_data["episodes"]
-        &.find { |episode| episode["episode_number"] == episode_number }
-        &.dig("name")
+      season_data['episodes']
+        &.find { |episode| episode['episode_number'] == episode_number }
+        &.dig('name')
         &.to_s
         &.presence
     end

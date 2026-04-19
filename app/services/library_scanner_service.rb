@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "find"
+require 'find'
 
 # Walks the movie and TV library directories defined in Config::Video and
 # upserts a VideoBlob record for every video file found. Files that no longer
@@ -12,6 +12,7 @@ require "find"
 #   result[:updated] # => 3
 #   result[:removed] # => 1
 #   result[:skipped] # => 0
+# steep:ignore MethodDefinitionMissing
 class LibraryScannerService < ApplicationService
   #:
   # @config: Config::Video?
@@ -23,12 +24,9 @@ class LibraryScannerService < ApplicationService
   #
   class << self
     #: () -> ::Hash[Symbol, Integer]
-    def call(...) = super
   end
 
-  #: () -> void
-  #: Config::Video?
-  attr_reader :config
+  attr_reader :config #: Config::Video?
 
   #: () -> void
   def initialize
@@ -38,7 +36,7 @@ class LibraryScannerService < ApplicationService
   #: () -> ::Hash[Symbol, Integer]
   def call
     unless @config
-      Rails.logger.warn("[LibraryScannerService] No Config::Video record found — aborting scan.")
+      Rails.logger.warn('[LibraryScannerService] No Config::Video record found — aborting scan.')
       return empty_stats
     end
 
@@ -47,6 +45,7 @@ class LibraryScannerService < ApplicationService
 
     scan_directories.each do |dir|
       next if dir[:path].blank? || !Dir.exist?(dir[:path].to_s)
+
       scanned_keys += scan_directory(dir[:path].to_s, stats)
     end
 
@@ -60,35 +59,38 @@ class LibraryScannerService < ApplicationService
 
   #: () -> ::Array[::Hash[Symbol, untyped]]
   def scan_directories
-    return [] unless @config
+    config = @config
+    return [] unless config
+
     [
-      { path: @config.settings_movie_path, type: :movie },
-      { path: @config.settings_tv_path,    type: :tv }
+      { path: config.settings_movie_path, type: :movie },
+      { path: config.settings_tv_path,    type: :tv }
     ]
   end
 
   #: (String file_path) -> bool
   def has_hidden_directories?(file_path)
+    config = @config
+    return false unless config
+
     unless file_path.is_a?(String)
-      Rails.logger.error("[BUG] has_hidden_directories? called with non-String: #{file_path.inspect} (#{file_path.class})")
-      raise ArgumentError, "file_path must be a String, got #{file_path.class}"
+      Rails.logger.error("[BUG] has_hidden_directories? called with non-String: <#{file_path.inspect}> (<#{file_path.class}>)")
+      raise ArgumentError, "file_path must be a String, got <#{file_path.class}>"
     end
-    scan_hidden = ActiveModel::Type::Boolean.new.cast(@config.settings_scan_hidden_directories)
+    scan_hidden = ActiveModel::Type::Boolean.new.cast(config.settings_scan_hidden_directories)
     return false if scan_hidden # If scanning hidden dirs, never exclude
 
     file_path = file_path.dup
-    movie_path = @config.settings_movie_path.to_s
-    tv_path = @config.settings_tv_path.to_s
-    file_path = file_path.gsub(movie_path, "").gsub(tv_path, "")
+    movie_path = config.settings_movie_path.to_s
+    tv_path = config.settings_tv_path.to_s
+    file_path = file_path.gsub(movie_path, '').gsub(tv_path, '')
     # Remove any leading slashes so Pathname splits correctly
-    file_path = file_path.sub(%r{^/+}, "")
+    file_path = file_path.sub(%r{^/+}, '')
     path = Pathname.new(file_path.to_s)
     # Only check parent directories, not the file itself
     segments = path.dirname.each_filename.to_a
     # DEBUG: print segments and file_path
-    result = segments.any? { |segment| segment.start_with?(".") }
-
-    result
+    segments.any? { |segment| segment.start_with?('.') }
   end
 
   #: (String directory, ::Hash[Symbol, Integer] stats) -> ::Array[String]
@@ -130,22 +132,22 @@ class LibraryScannerService < ApplicationService
   #: (KeyParserService::BlobData blob_data) -> ::Hash[Symbol, untyped]
   def build_attrs(blob_data)
     {
-      filename:            blob_data.filename,
-      content_type:        blob_data.content_type,
-      media_type:          blob_data.movie? ? :movie : :tv,
-      title:               blob_data.title,
-      year:                blob_data.year,
-      edition:             blob_data.edition,
-      season_number:       blob_data.season,
-      episode_number:      blob_data.episode,
-      episode_title:       blob_data.episode_title,
+      filename: blob_data.filename,
+      content_type: blob_data.content_type,
+      media_type: blob_data.movie? ? :movie : :tv,
+      title: blob_data.title,
+      year: blob_data.year,
+      edition: blob_data.edition,
+      season_number: blob_data.season,
+      episode_number: blob_data.episode,
+      episode_title: blob_data.episode_title,
       episode_last_number: blob_data.episode_last,
-      part:                blob_data.part,
-      path_extension:      File.extname(blob_data.filename).delete_prefix(".").downcase.presence,
-      extra_type:          blob_data.extra_type,
-      extra_type_number:   blob_data.extra_number,
-      plex_version:        blob_data.plex_version,
-      optimized:           blob_data.optimized
+      part: blob_data.part,
+      path_extension: File.extname(blob_data.filename).delete_prefix('.').downcase.presence,
+      extra_type: blob_data.extra_type,
+      extra_type_number: blob_data.extra_number,
+      plex_version: blob_data.plex_version,
+      optimized: blob_data.optimized
     }
   end
 

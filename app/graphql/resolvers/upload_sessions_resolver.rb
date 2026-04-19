@@ -2,7 +2,7 @@
 
 module Resolvers
   class UploadSessionsResolver < Resolvers::BaseResolver
-    type [ Types::UploadSessionType ], null: false
+    type [Types::UploadSessionType], null: false
 
     #: () -> ::Array[Uploads::SessionSnapshot]
     def resolve

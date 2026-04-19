@@ -8,6 +8,7 @@
 #   result.movie?   # => true
 #   result.title    # => "Inception"
 #   result.year     # => 2010
+# steep:ignore MethodDefinitionMissing
 class KeyParserService < ApplicationService
   VIDEO_FORMATS: untyped
 
@@ -118,13 +119,17 @@ class KeyParserService < ApplicationService
   # : () -> BlobData?
   def call: () -> BlobData?
 
+  # Public reader accessors for instance variables
+  # steep:ignore MethodDefinitionMissing
+  attr_reader key: String
+
+  # steep:ignore MethodDefinitionMissing
+  attr_reader movie_path: String?
+
+  # steep:ignore MethodDefinitionMissing
+  attr_reader tv_path: String?
+
   private
-
-  attr_reader key: untyped
-
-  attr_reader movie_path: untyped
-
-  attr_reader tv_path: untyped
 
   # : () -> bool
   def video_file?: () -> bool

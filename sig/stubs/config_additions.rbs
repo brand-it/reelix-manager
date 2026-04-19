@@ -16,4 +16,7 @@ class Config::Video < Config
 
   def settings_processed_path: () -> String?
   def settings_processed_path=: (String? value) -> void
+
+  def settings_scan_hidden_directories: () -> bool
+  def settings_scan_hidden_directories=: (bool value) -> void
 end

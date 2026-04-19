@@ -1,5 +1,5 @@
 ---
-name: hostname-controller
+id: hostname-controller
 description: Replaces YOUR_HOST placeholders in code snippets with the current hostname. Use when displaying curl commands, API examples, or any code that needs localhost/hostname substitution.
 ---
 

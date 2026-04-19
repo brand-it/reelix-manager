@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Config
   class Serializer
     # @rbs @data: ::Hash[String | Symbol, untyped]

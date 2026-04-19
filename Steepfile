@@ -3,17 +3,17 @@
 D = Steep::Diagnostic
 
 target :app do
-  signature "sig"
-  check "app"
+  signature 'sig'
+  signature 'sig/rbs_rails'
+  signature 'sig/generated'
+  check 'app'
 
-  library "json"
-  library "digest"
-  library "openssl"
-  library "cgi"
-  library "base64"
+  library 'json'
+  library 'digest'
+  library 'openssl'
+  library 'cgi'
+  library 'base64'
 
-  # MethodDefinitionMissing fires for every method declared in sig/stubs/ that AR (or
-  # another framework) generates at runtime. These are all genuine Steep limitations —
-  # the methods exist but are not written in Ruby source. Suppress to keep LSP clean.
-  configure_code_diagnostics(D::Ruby.strict.merge(D::Ruby::MethodDefinitionMissing => nil))
+  # MethodDefinitionMissing warnings are Steep limitations with framework-generated methods.
+  # These are false positives - the methods exist at runtime but can't be verified statically.
 end

@@ -2,10 +2,10 @@
 
 module TheMovieDb
   class Base
-    HOST = "api.themoviedb.org"
-    VERSION = "3"
+    HOST = 'api.themoviedb.org'
+    VERSION = '3'
     CACHE_TTL = 7.days
-    CACHE_NAMESPACE = "the_movie_db"
+    CACHE_NAMESPACE = 'the_movie_db'
 
     # @rbs @api_key: String?
     # @rbs @language: String?
@@ -32,7 +32,7 @@ module TheMovieDb
     #: (?use_cache: bool, ?object_class: Class) -> ::Hash[String, untyped]
     def results(use_cache: true, object_class: Hash)
       @results ||= {} #: ::Hash[[bool, Class], ::Hash[String, untyped]]
-      key = [ use_cache, object_class ]
+      key = [use_cache, object_class]
       @results[key] ||= use_cache ? cache_get(object_class:) : get(object_class:) # steep:ignore
     end
 
@@ -54,9 +54,9 @@ module TheMovieDb
     #: (?object_class: Class) -> ::Hash[String, untyped]
     def cache_get(object_class: Hash)
       # Exclude the api_key from the cache key to avoid leaking secrets via cache key inspection.
-      safe_params = query_params.except(:api_key, "api_key")
+      safe_params = query_params.except(:api_key, 'api_key')
       Rails.cache.fetch(
-        [ uri, safe_params, object_class ],
+        [uri, safe_params, object_class],
         namespace: CACHE_NAMESPACE,
         expires_in: CACHE_TTL,
         force: Rails.env.test?
@@ -84,16 +84,16 @@ module TheMovieDb
 
     #: () -> URI::HTTPS
     def uri
-      URI::HTTPS.build(host: HOST, path: [ "/#{VERSION}", path ].compact.join("/"))
+      URI::HTTPS.build(host: HOST, path: ["/#{VERSION}", path].compact.join('/'))
     end
 
     #: () -> String
     def path
       self.class
           .name
-          .split("::")[1..] # steep:ignore NoMethod
-          &.join("::")
-          &.parameterize(separator: "/") || ""
+          .split('::')[1..] # steep:ignore NoMethod
+          &.join('::')
+          &.parameterize(separator: '/') || ''
     end
 
     #: () -> ::Hash[Symbol | String, String]
@@ -106,14 +106,15 @@ module TheMovieDb
     #: () -> String
     def api_key
       key = @api_key.presence || Config::Video.newest&.settings_tmdb_api_key
-      raise InvalidConfig, "TMDB API key is blank and is required" unless key
+      raise InvalidConfig, 'TMDB API key is blank and is required' unless key
+
       @api_key = key
     end
 
     # Pass an ISO 639-1 value to display translated data (e.g. "en-US").
     #: () -> String
     def language
-      @language || "en-US"
+      @language || 'en-US'
     end
   end
 end

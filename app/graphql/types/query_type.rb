@@ -4,8 +4,8 @@ module Types
   class QueryType < Types::BaseObject
     include ScopeEnforceable
 
-    field :node, Types::NodeType, null: true, description: "Fetches an object given its ID." do
-      argument :id, ID, required: true, description: "ID of the object."
+    field :node, Types::NodeType, null: true, description: 'Fetches an object given its ID.' do
+      argument :id, ID, required: true, description: 'ID of the object.'
     end
 
     #: (id: String) -> ApplicationRecord?
@@ -14,8 +14,9 @@ module Types
       context.schema.object_from_id(id, context)
     end
 
-    field :nodes, [ Types::NodeType, null: true ], null: true, description: "Fetches a list of objects given a list of IDs." do
-      argument :ids, [ ID ], required: true, description: "IDs of the objects."
+    field :nodes, [Types::NodeType, { null: true }], null: true,
+                                                     description: 'Fetches a list of objects given a list of IDs.' do
+      argument :ids, [ID], required: true, description: 'IDs of the objects.'
     end
 
     #: (ids: ::Array[String]) -> ::Array[ApplicationRecord?]
@@ -28,25 +29,25 @@ module Types
     # They will be entry points for queries on your schema.
 
     field :search_multi, resolver: Resolvers::SearchResolver,
-      description: "Search for both movies and TV shows. Results are ranked by " \
-                   "keyword relevance and popularity."
+                         description: 'Search for both movies and TV shows. Results are ranked by ' \
+                                      'keyword relevance and popularity.'
 
     field :movie, resolver: Resolvers::MovieResolver,
-      description: "Fetch full movie details from TMDB by ID."
+                  description: 'Fetch full movie details from TMDB by ID.'
 
     field :tv, resolver: Resolvers::TvResolver,
-      description: "Fetch full TV show details from TMDB by ID."
+               description: 'Fetch full TV show details from TMDB by ID.'
 
     field :season, resolver: Resolvers::SeasonResolver,
-      description: "Fetch full season details (with episodes) from TMDB."
+                   description: 'Fetch full season details (with episodes) from TMDB.'
 
     field :video_blobs, resolver: Resolvers::VideoBlobsResolver,
-      description: "List locally-indexed video files. Optionally filter by media_type or tmdb_id."
+                        description: 'List locally-indexed video files. Optionally filter by media_type or tmdb_id.'
 
     field :upload_sessions, resolver: Resolvers::UploadSessionsResolver,
-      description: "List active tus uploads and their current byte progress."
+                            description: 'List active tus uploads and their current byte progress.'
 
     field :upload_session, resolver: Resolvers::UploadSessionResolver,
-      description: "Fetch a specific tus upload session by ID."
+                           description: 'Fetch a specific tus upload session by ID.'
   end
 end

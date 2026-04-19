@@ -1,5 +1,5 @@
 ---
-name: pr-feedback-handler
+id: pr-feedback-handler
 description: Review pull request feedback, decide whether each thread needs a code change or an explanation, reply on GitHub, resolve the threads, and commit/push any required fixes.
 ---
 

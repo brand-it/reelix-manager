@@ -5,3 +5,8 @@ class ActionController::Base
   # Standard Rails logger — already in ActionController::Base but missing from collection.
   def logger: () -> ::Logger
 end
+
+class ErrorEntriesController < ApplicationController
+  def error_entries_path: (?::Hash[::Symbol | ::String, untyped] options) -> String
+  def error_entry_path: (::Integer id, ?::Hash[::Symbol | ::String, untyped] options) -> String
+end

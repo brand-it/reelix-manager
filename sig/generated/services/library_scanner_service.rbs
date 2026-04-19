@@ -10,13 +10,10 @@
 #   result[:updated] # => 3
 #   result[:removed] # => 1
 #   result[:skipped] # => 0
+# steep:ignore MethodDefinitionMissing
 class LibraryScannerService < ApplicationService
-  # : () -> ::Hash[Symbol, Integer]
-  def self.call: () -> ::Hash[Symbol, Integer]
-
-  # : () -> void
-  # : Config::Video?
-  attr_reader config: untyped
+  # steep:ignore MethodDefinitionMissing
+  attr_reader config: Config::Video?
 
   # : () -> void
   def initialize: () -> void

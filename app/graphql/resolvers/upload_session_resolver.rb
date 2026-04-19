@@ -4,7 +4,7 @@ module Resolvers
   class UploadSessionResolver < Resolvers::BaseResolver
     type Types::UploadSessionType, null: true
 
-    argument :id, ID, required: true, description: "Upload session ID"
+    argument :id, ID, required: true, description: 'Upload session ID'
 
     #: (id: String) -> Uploads::SessionSnapshot?
     def resolve(id:)

@@ -1,4 +1,12 @@
 # Generated from app/jobs/application_job.rb with RBS::Inline
 
 class ApplicationJob < ActiveJob::Base
+  # Override perform_now to capture errors
+  # : (*untyped) -> untyped
+  def perform_now: (*untyped) -> untyped
+
+  private
+
+  # : (StandardError, Array[untyped]) -> void
+  def store_error: (StandardError, Array[untyped]) -> void
 end

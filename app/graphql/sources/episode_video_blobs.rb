@@ -8,7 +8,7 @@ module Sources
     def fetch(keys)
       tmdb_ids = keys.map(&:first).compact.uniq
       blobs    = tmdb_ids.empty? ? ::VideoBlob.none : ::VideoBlob.where(media_type: :tv, tmdb_id: tmdb_ids)
-      grouped  = blobs.group_by { |b| [ b.tmdb_id, b.season_number, b.episode_number ] }
+      grouped  = blobs.group_by { |b| [b.tmdb_id, b.season_number, b.episode_number] }
       keys.map do |key|
         key.first.nil? ? [] : (grouped[key] || [])
       end

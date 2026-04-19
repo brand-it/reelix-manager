@@ -28,7 +28,7 @@ Doorkeeper.configure do
   # Restrict access to Doorkeeper's own OAuth application management UI to admins.
   admin_authenticator do
     if current_user
-      current_user.admin? || redirect_to(root_url, alert: "You are not authorized to access this area.")
+      current_user.admin? || redirect_to(root_url, alert: 'You are not authorized to access this area.')
     else
       redirect_to(new_user_session_url)
     end

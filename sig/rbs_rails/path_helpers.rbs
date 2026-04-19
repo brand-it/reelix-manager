@@ -10,6 +10,10 @@ interface ::_RbsRailsPathHelpers
   def rails_info_path: (*untyped) -> ::String
   def mission_control_jobs_path: (*untyped) -> ::String
   def graphiql_rails_path: (*untyped) -> ::String
+  def acknowledge_error_entry_path: (*untyped) -> ::String
+  def resolve_error_entry_path: (*untyped) -> ::String
+  def error_entries_path: (*untyped) -> ::String
+  def error_entry_path: (*untyped) -> ::String
   def graphql_path: (*untyped) -> ::String
   def tus_server_path: (*untyped) -> ::String
   def rails_health_check_path: (*untyped) -> ::String
@@ -77,6 +81,10 @@ interface ::_RbsRailsPathHelpers
   def rails_info_url: (*untyped) -> ::String
   def mission_control_jobs_url: (*untyped) -> ::String
   def graphiql_rails_url: (*untyped) -> ::String
+  def acknowledge_error_entry_url: (*untyped) -> ::String
+  def resolve_error_entry_url: (*untyped) -> ::String
+  def error_entries_url: (*untyped) -> ::String
+  def error_entry_url: (*untyped) -> ::String
   def graphql_url: (*untyped) -> ::String
   def tus_server_url: (*untyped) -> ::String
   def rails_health_check_url: (*untyped) -> ::String

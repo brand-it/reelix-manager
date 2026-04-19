@@ -1,0 +1,35 @@
+# Generated from app/models/error_entry.rb with RBS::Inline
+
+class ErrorEntry < ApplicationRecord
+  # Sanitize params using Rails' built-in ParameterFilter
+  # : (untyped) -> untyped
+  def self.sanitize_params: (untyped) -> untyped
+
+  # Unified error logging method - delegates to ErrorLoggerService
+  # : (StandardError, ?untyped) -> ErrorEntry
+  def self.log_error: (StandardError, ?untyped) -> ErrorEntry
+
+  # Get unique error classes for filter dropdown
+  # : -> ErrorEntry::ActiveRecord_Relation
+  def self.unique_error_classes: () -> ErrorEntry::ActiveRecord_Relation
+
+  # Get count by status
+  # : -> Hash[Symbol, Integer]
+  def self.counts_by_status: () -> Hash[Symbol, Integer]
+
+  # Parse JSON params back to hash
+  # : -> Hash[untyped, untyped]
+  def request_params_hash: () -> Hash[untyped, untyped]
+
+  # Parse JSON job arguments back to hash
+  # : -> Hash[untyped, untyped]
+  def job_arguments_hash: () -> Hash[untyped, untyped]
+
+  # Check if this error is from a request
+  # : -> bool
+  def from_request?: () -> bool
+
+  # Check if this error is from a job
+  # : -> bool
+  def from_job?: () -> bool
+end

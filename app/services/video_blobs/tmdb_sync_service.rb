@@ -4,11 +4,13 @@ module VideoBlobs
   # Refreshes TMDB-backed metadata for a blob when the tmdb_id is already known.
   # This is intended for background enrichment after upload finalization.
   class TmdbSyncService < ApplicationService
-    TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p"
+    TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p'
 
     class << self
       #: (VideoBlob blob) -> void
-      def call(...) = super
+      def call(blob)
+        new(blob).call
+      end
     end
 
     # @rbs @blob: VideoBlob
@@ -24,13 +26,13 @@ module VideoBlobs
       return unless tmdb_id
 
       data = @blob.tv? ? TheMovieDb::Tv.new(id: tmdb_id).results : TheMovieDb::Movie.new(id: tmdb_id).results
-      title_key = @blob.tv? ? "name" : "title"
-      date_key = @blob.tv? ? "first_air_date" : "release_date"
+      title_key = @blob.tv? ? 'name' : 'title'
+      date_key = @blob.tv? ? 'first_air_date' : 'release_date'
 
       @blob.update!(
         title: fetched_title(data[title_key]) || @blob.title,
         year: fetched_year(data[date_key]) || @blob.year,
-        poster_url: build_poster_url(data["poster_path"])
+        poster_url: build_poster_url(data['poster_path'])
       )
     end
 

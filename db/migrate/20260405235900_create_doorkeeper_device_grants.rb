@@ -10,7 +10,7 @@ class CreateDoorkeeperDeviceGrants < ActiveRecord::Migration[8.1]
       t.integer :expires_in, null: false
       t.datetime :created_at, null: false
       t.datetime :last_polling_at, null: true
-      t.string :scopes, null: false, default: ""
+      t.string :scopes, null: false, default: ''
     end
 
     add_index :oauth_device_grants, :device_code, unique: true

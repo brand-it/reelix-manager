@@ -20,3 +20,6 @@ class ApplicationRecord < ActiveRecord::Base
   # Returns an empty relation; useful as a no-op base for conditional query chains.
   def self.none: () -> ::ActiveRecord::Relation
 end
+
+class ErrorEntry
+end

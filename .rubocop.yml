@@ -1,5 +1,4 @@
-# Omakase Ruby styling for Rails
-inherit_gem: { rubocop-rails-omakase: rubocop.yml }
+inherit_from: .rubocop_todo.yml
 
 # Overwrite or add rules to create your own house style
 #
@@ -7,6 +6,29 @@ inherit_gem: { rubocop-rails-omakase: rubocop.yml }
 # Layout/SpaceInsideArrayLiteralBrackets:
 #   Enabled: false
 
+AllCops:
+  NewCops: enable
+  UseCache: true
+  Exclude:
+    - bin/*
+    - config/application.rb
+    - config/unicorn.rb
+    - Dangerfile
+    - db/**/*
+    - node_modules/**/*
+    - vendor/**/*
+
+Metrics/BlockLength:
+  Exclude:
+    - config/routes.rb # Rails
+    - lib/tasks/**/* # Rake
+    - test/**/* # Test
+    - config/initializers/*
+    - config/environments/*
+
 # Allow Steep inline type annotations (#: Type) which intentionally omit the space after #.
 Layout/LeadingCommentSpace:
   AllowSteepAnnotation: true
+
+Style/Documentation:
+  Enabled: false

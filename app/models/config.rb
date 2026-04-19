@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Config < ApplicationRecord
   class << self
     #: () -> Config::Setting
@@ -8,7 +10,10 @@ class Config < ApplicationRecord
       @setting = Setting.call(block) # steep:ignore UnknownInstanceVariable, ArgumentTypeMismatch
       @setting.attributes.each_key do |name| # steep:ignore UnknownInstanceVariable, NoMethod, FallbackAny
         define_method(:"settings_#{name}") { settings[name] } # steep:ignore NoMethod
-        define_method(:"settings_#{name}=") { |val| self.settings = { name => val } } # steep:ignore NoMethod, UnannotatedEmptyCollection
+        # steep:ignore NoMethod, UnannotatedEmptyCollection
+        define_method(:"settings_#{name}=") do |val|
+          self.settings = { name => val } # steep:ignore UnannotatedEmptyCollection, NoMethod
+        end
       end
     end
 

@@ -1,5 +1,5 @@
 ---
-name: ship
+id: ship
 description: Commit staged changes, push to GitHub, create a PR, and write the PR description. Use this when asked to ship, push, open a PR, or create a pull request from staged changes.
 ---
 

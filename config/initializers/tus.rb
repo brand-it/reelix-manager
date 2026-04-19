@@ -1,9 +1,11 @@
-require "tus/storage/filesystem"
+# frozen_string_literal: true
+
+require 'tus/storage/filesystem'
 
 # Store in-progress uploads in tmp/tus_uploads/. These are the raw upload
 # files while the tus protocol is receiving chunks — not the final destination.
 Tus::Server.opts[:storage] = Tus::Storage::Filesystem.new(
-  Rails.root.join("tmp", "tus_uploads")
+  Rails.root.join('tmp', 'tus_uploads')
 )
 
 # Maximum upload size (100 GB — adjust to match your use case).
@@ -13,28 +15,28 @@ Tus::Server.opts[:expiration_time] = 48.hours
 
 # Authenticate tus uploads using Doorkeeper OAuth tokens
 # The Bearer token from Authorization header is validated before allowing uploads
-Tus::Server.before_create do |uid, info|
-  auth_header = self.request.headers["Authorization"]
+Tus::Server.before_create do |_uid, _info|
+  auth_header = request.headers['Authorization']
 
   # Skip auth check if no Authorization header (for local dev)
   # Remove this in production
   next if auth_header.blank?
 
   # Use Doorkeeper's token introspection via the access token model
-  token_string = auth_header.gsub(/^Bearer\s+/i, "")
+  token_string = auth_header.gsub(/^Bearer\s+/i, '')
   token = Doorkeeper::AccessToken.by_token(token_string)
 
   if token.blank? || !token.accessible?
-    self.response.status = 401
-    self.response.write("Unauthorized: Invalid or expired token")
-    self.request.halt
+    response.status = 401
+    response.write('Unauthorized: Invalid or expired token')
+    request.halt
   end
 
   # Check that token has upload scope
-  unless token.includes_scope?("upload")
-    self.response.status = 403
-    self.response.write("Forbidden: upload scope required")
-    self.request.halt
+  unless token.includes_scope?('upload')
+    response.status = 403
+    response.write('Forbidden: upload scope required')
+    request.halt
   end
 end
 

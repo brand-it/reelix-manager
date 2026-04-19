@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :video_blob do
     sequence(:key) { |n| "/movies/Test Movie #{n} (2020)/Test Movie #{n} (2020).mkv" }
     sequence(:filename) { |n| "Test Movie #{n} (2020).mkv" }
-    content_type { "video/x-matroska" }
+    content_type { 'video/x-matroska' }
     media_type   { :movie }
-    title        { "Test Movie" }
+    title        { 'Test Movie' }
     year         { 2020 }
     extra_type   { :feature_films }
     plex_version { false }

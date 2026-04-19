@@ -1,28 +1,30 @@
+# frozen_string_literal: true
+
 module Mutations
   class FinalizeUpload < Mutations::BaseMutation
     ALLOWED_MEDIA_TYPES = %w[movie tv].freeze #: Array[String]
 
-    description "Promote a completed tus upload to its final destination. " \
-                "Call this after the tus client has finished uploading all bytes. " \
-                "Fetches metadata from TMDB, builds the correct media path, moves the file, " \
-                "and creates a VideoBlob record."
+    description 'Promote a completed tus upload to its final destination. ' \
+                'Call this after the tus client has finished uploading all bytes. ' \
+                'Fetches metadata from TMDB, builds the correct media path, moves the file, ' \
+                'and creates a VideoBlob record.'
 
     argument :upload_id, String, required: true,
-      description: "The tus upload UID returned in the Location header from POST /files"
+                                 description: 'The tus upload UID returned in the Location header from POST /files'
     argument :tmdb_id, Integer, required: true,
-      description: "TMDB ID for the movie or TV show"
+                                description: 'TMDB ID for the movie or TV show'
     argument :filename, String, required: false,
-      description: "Override the filename (defaults to the filename from tus Upload-Metadata)"
-    argument :media_type, String, required: false, default_value: "movie",
-      description: "Target media library: 'movie' or 'tv' (defaults to 'movie')"
+                                description: 'Override the filename (defaults to the filename from tus Upload-Metadata)'
+    argument :media_type, String, required: false, default_value: 'movie',
+                                  description: "Target media library: 'movie' or 'tv' (defaults to 'movie')"
     argument :season_number, Integer, required: false,
-      description: "Season number (required when media_type is 'tv')"
+                                      description: "Season number (required when media_type is 'tv')"
     argument :episode_number, Integer, required: false,
-      description: "Episode number (required when media_type is 'tv')"
+                                       description: "Episode number (required when media_type is 'tv')"
 
     field :video_blob,        Types::VideoBlobType, null: true
     field :destination_path,  String,               null: true
-    field :errors,            [ String ],            null: false
+    field :errors,            [String], null: false
 
     #: (
     #    upload_id: String,
@@ -32,7 +34,7 @@ module Mutations
     #    ?season_number: Integer?,
     #    ?episode_number: Integer?
     #  ) -> bool
-    def ready?(upload_id:, tmdb_id:, filename: nil, media_type: "movie", season_number: nil, episode_number: nil)
+    def ready?(upload_id:, tmdb_id:, filename: nil, media_type: 'movie', season_number: nil, episode_number: nil)
       require_upload!
       true
     end
@@ -45,14 +47,14 @@ module Mutations
     #    ?season_number: Integer?,
     #    ?episode_number: Integer?
     #  ) -> ::Hash[Symbol, VideoBlob | String | nil | ::Array[String]]
-    def resolve(upload_id:, tmdb_id:, filename: nil, media_type: "movie", season_number: nil, episode_number: nil)
+    def resolve(upload_id:, tmdb_id:, filename: nil, media_type: 'movie', season_number: nil, episode_number: nil)
       validate_media_type!(media_type)
       validate_tv_fields!(media_type:, season_number:, episode_number:)
 
       upload = Uploads::TusUploadService.call(upload_id:, filename:)
 
       config = Config::Video.newest
-      return err("No video configuration found. Configure settings first.") unless config.persisted?
+      return err('No video configuration found. Configure settings first.') unless config.persisted?
 
       blob = VideoBlob.new(
         tmdb_id:,
@@ -67,7 +69,10 @@ module Mutations
 
       generated_filename = blob.generated_filename
       media_path = blob.media_path
-      raise Uploads::TusUploadService::Error, "Could not build media path" unless generated_filename.present? && media_path.present?
+      unless generated_filename.present? && media_path.present?
+        raise Uploads::TusUploadService::Error,
+              'Could not build media path'
+      end
 
       blob.filename = generated_filename
       blob.key = media_path
@@ -94,22 +99,22 @@ module Mutations
 
     #: (String message) -> ::Hash[Symbol, VideoBlob | String | nil | ::Array[String]]
     def err(message)
-      { video_blob: nil, destination_path: nil, errors: [ message ] }
+      { video_blob: nil, destination_path: nil, errors: [message] }
     end
 
     #: (String media_type) -> void
     def validate_media_type!(media_type)
       return if ALLOWED_MEDIA_TYPES.include?(media_type)
 
-      raise Uploads::TusUploadService::Error, "media_type must be one of: #{ALLOWED_MEDIA_TYPES.join(", ")}"
+      raise Uploads::TusUploadService::Error, "media_type must be one of: #{ALLOWED_MEDIA_TYPES.join(', ')}"
     end
 
     #: (media_type: String, season_number: Integer?, episode_number: Integer?) -> void
     def validate_tv_fields!(media_type:, season_number:, episode_number:)
-      return unless media_type == "tv"
+      return unless media_type == 'tv'
 
-      raise Uploads::TusUploadService::Error, "season_number is required for TV uploads" if season_number.nil?
-      raise Uploads::TusUploadService::Error, "episode_number is required for TV uploads" if episode_number.nil?
+      raise Uploads::TusUploadService::Error, 'season_number is required for TV uploads' if season_number.nil?
+      raise Uploads::TusUploadService::Error, 'episode_number is required for TV uploads' if episode_number.nil?
     end
   end
 end

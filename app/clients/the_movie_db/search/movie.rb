@@ -11,7 +11,7 @@ module TheMovieDb
       #: (query: String, ?page: Integer, ?api_key: String?, ?language: String?, ?year: Integer?, ?primary_release_year: Integer?) -> void
       def initialize(query:, page: 1, api_key: nil, language: nil, year: nil, primary_release_year: nil)
         super(query: query, page: page, api_key: api_key, language: language)
-        @year = year&.to_i               #: Integer?
+        @year = year&.to_i #: Integer?
         @primary_release_year = primary_release_year&.to_i #: Integer?
       end
 
@@ -22,7 +22,7 @@ module TheMovieDb
 
       #: () -> TheMovieDb::Search::Movie
       def previous_page
-        @previous_page ||= self.class.new(page: [ page - 1, 1 ].max, query:, language:, year:, primary_release_year:) #: TheMovieDb::Search::Movie
+        @previous_page ||= self.class.new(page: [page - 1, 1].max, query:, language:, year:, primary_release_year:) #: TheMovieDb::Search::Movie
       end
 
       private

@@ -8,6 +8,7 @@
 #   result.movie?   # => true
 #   result.title    # => "Inception"
 #   result.year     # => 2010
+# steep:ignore MethodDefinitionMissing
 class KeyParserService < ApplicationService
   VIDEO_FORMATS = %w[
     .avi .mp4 .mkv .mov .wmv .flv .webm .mpeg .mpg .3gp .m4v .swf .rm .vob
@@ -16,41 +17,41 @@ class KeyParserService < ApplicationService
   ].freeze
 
   VIDEO_MIME_TYPES = {
-    "avi"  => "video/x-msvideo",
-    "mp4"  => "video/mp4",
-    "mkv"  => "video/x-matroska",
-    "mov"  => "video/quicktime",
-    "wmv"  => "video/x-ms-wmv",
-    "flv"  => "video/x-flv",
-    "webm" => "video/webm",
-    "mpeg" => "video/mpeg",
-    "mpg"  => "video/mpeg",
-    "3gp"  => "video/3gpp",
-    "m4v"  => "video/x-m4v",
-    "swf"  => "application/x-shockwave-flash",
-    "rm"   => "application/vnd.rn-realmedia",
-    "vob"  => "video/dvd",
-    "ogv"  => "video/ogg",
-    "ts"   => "video/mp2t",
-    "f4v"  => "video/mp4",
-    "divx" => "video/divx",
-    "asf"  => "video/x-ms-asf",
-    "mts"  => "model/vnd.mts",
-    "m2ts" => "video/mp2t",
-    "dv"   => "video/x-dv",
-    "mxf"  => "application/mxf",
-    "f4p"  => "video/mp4",
-    "gxf"  => "application/gxf",
-    "m2v"  => "video/mpeg",
-    "yuv"  => "application/octet-stream",
-    "amv"  => "video/x-amv",
-    "svi"  => "video/vnd.sealedmedia.softseal.mov",
-    "nsv"  => "video/x-nsv"
+    'avi' => 'video/x-msvideo',
+    'mp4' => 'video/mp4',
+    'mkv' => 'video/x-matroska',
+    'mov' => 'video/quicktime',
+    'wmv' => 'video/x-ms-wmv',
+    'flv' => 'video/x-flv',
+    'webm' => 'video/webm',
+    'mpeg' => 'video/mpeg',
+    'mpg' => 'video/mpeg',
+    '3gp' => 'video/3gpp',
+    'm4v' => 'video/x-m4v',
+    'swf' => 'application/x-shockwave-flash',
+    'rm' => 'application/vnd.rn-realmedia',
+    'vob' => 'video/dvd',
+    'ogv' => 'video/ogg',
+    'ts' => 'video/mp2t',
+    'f4v' => 'video/mp4',
+    'divx' => 'video/divx',
+    'asf' => 'video/x-ms-asf',
+    'mts' => 'model/vnd.mts',
+    'm2ts' => 'video/mp2t',
+    'dv' => 'video/x-dv',
+    'mxf' => 'application/mxf',
+    'f4p' => 'video/mp4',
+    'gxf' => 'application/gxf',
+    'm2v' => 'video/mpeg',
+    'yuv' => 'application/octet-stream',
+    'amv' => 'video/x-amv',
+    'svi' => 'video/vnd.sealedmedia.softseal.mov',
+    'nsv' => 'video/x-nsv'
   }.freeze
 
   EXTRA_DIR_NAMES = VideoBlob::EXTRA_TYPES.map { |_k, v| v[:dir_name] }.freeze
-  PLEX_VERSIONS   = "Plex Versions"
-  OPTIMIZED       = "Optimized for"
+  PLEX_VERSIONS   = 'Plex Versions'
+  OPTIMIZED       = 'Optimized for'
 
   BlobData = Data.define(
     :content_type,
@@ -73,10 +74,10 @@ class KeyParserService < ApplicationService
 
   class BlobData
     #: () -> bool
-    def movie? = type == "Movie"
+    def movie? = type == 'Movie'
 
     #: () -> bool
-    def tv? = type == "Tv"
+    def tv? = type == 'Tv'
   end
 
   # Helper regex fragments
@@ -101,7 +102,9 @@ class KeyParserService < ApplicationService
 
   class << self
     #: (String key, ?movie_path: String?, ?tv_path: String?) -> BlobData?
-    def call(...) = super
+    def call(key, movie_path: nil, tv_path: nil)
+      new(key, movie_path:, tv_path:).call
+    end
   end
 
   # @rbs @key: String
@@ -121,13 +124,17 @@ class KeyParserService < ApplicationService
   #: () -> BlobData?
   def call
     return unless video_file?
-    return parsed_movie   if key_movie?
+    return parsed_movie if key_movie?
+
     parsed_tv_show if key_tv_show?
   end
 
-  private
+  # Public reader accessors for instance variables
+  attr_reader :key #: String
+  attr_reader :movie_path #: String?
+  attr_reader :tv_path #: String?
 
-  attr_reader :key, :movie_path, :tv_path
+  private
 
   #: () -> bool
   def video_file?
@@ -158,23 +165,23 @@ class KeyParserService < ApplicationService
       directory_name.match(TITLE_MATCHER)
     )&.named_captures || {}
 
-      BlobData.new(
-        content_type:  content_type,
-        edition:       (dir_match["edition"].presence || match["edition"])&.strip,
-        episode:       nil,
-        episode_last:  nil,
-        episode_title: nil,
-        extra_number:  extra_number,
-        extra_type:    extra_type_key,
-        extra:         extra,
-      filename:      filename,
-      optimized:     optimized?,
-      part:          part,
-      plex_version:  plex_version?,
-      season:        nil,
-      title:         coerce_title(dir_match["title"].presence || match["title"]),
-      type:          "Movie",
-      year:          (dir_match["year"].presence || match["year"])&.to_i
+    BlobData.new(
+      content_type: content_type,
+      edition: (dir_match['edition'].presence || match['edition'])&.strip,
+      episode: nil,
+      episode_last: nil,
+      episode_title: nil,
+      extra_number: extra_number,
+      extra_type: extra_type_key,
+      extra: extra,
+      filename: filename,
+      optimized: optimized?,
+      part: part,
+      plex_version: plex_version?,
+      season: nil,
+      title: coerce_title(dir_match['title'].presence || match['title']),
+      type: 'Movie',
+      year: (dir_match['year'].presence || match['year'])&.to_i
     )
   end
 
@@ -194,23 +201,23 @@ class KeyParserService < ApplicationService
       directory_name.match(TITLE_MATCHER)
     )&.named_captures || {}
 
-      BlobData.new(
-        content_type:  content_type,
-        edition:       nil,
-        episode:       match["episode"]&.to_i,
-        episode_last:  episode_last,
-        episode_title: normalize_episode_title(match["episode_name"]),
-        extra_number:  nil,
-        extra_type:    :feature_films,
-        extra:         nil,
-      filename:      filename,
-      optimized:     optimized?,
-      part:          part,
-      plex_version:  plex_version?,
-      season:        match["season"]&.to_i,
-      title:         coerce_title(dir_match["title"].presence || match["title"]),
-      type:          "Tv",
-      year:          (dir_match["year"].presence || match["year"])&.to_i
+    BlobData.new(
+      content_type: content_type,
+      edition: nil,
+      episode: match['episode']&.to_i,
+      episode_last: episode_last,
+      episode_title: normalize_episode_title(match['episode_name']),
+      extra_number: nil,
+      extra_type: :feature_films,
+      extra: nil,
+      filename: filename,
+      optimized: optimized?,
+      part: part,
+      plex_version: plex_version?,
+      season: match['season']&.to_i,
+      title: coerce_title(dir_match['title'].presence || match['title']),
+      type: 'Tv',
+      year: (dir_match['year'].presence || match['year'])&.to_i
     )
   end
 
@@ -218,28 +225,28 @@ class KeyParserService < ApplicationService
   def simplified_key
     @simplified_key ||= begin
       base = key_movie? ? movie_path : tv_path
-      key.delete_prefix(base.to_s).split("/").compact_blank.join("/")
+      key.delete_prefix(base.to_s).split('/').compact_blank.join('/')
     end
   end
 
   #: () -> String
   def directory_name
     @directory_name ||= begin
-      paths = simplified_key.split("/")
-      return "" if paths.size <= 1
+      paths = simplified_key.split('/')
+      return '' if paths.size <= 1
 
-      simplified_key.split("/").first.to_s.strip
+      simplified_key.split('/').first.to_s.strip
     end
   end
 
   #: () -> String
   def filename
-    @filename ||= key.split("/").last.to_s.strip
+    @filename ||= key.split('/').last.to_s.strip
   end
 
   #: () -> String?
   def extra
-    (simplified_key.delete_prefix("#{directory_name}/").split("/") & EXTRA_DIR_NAMES).first
+    (simplified_key.delete_prefix("#{directory_name}/").split('/') & EXTRA_DIR_NAMES).first
   end
 
   #: () -> Integer?
@@ -260,7 +267,7 @@ class KeyParserService < ApplicationService
 
   #: () -> String?
   def content_type
-    ext = filename.split(".").last
+    ext = filename.split('.').last
     VIDEO_MIME_TYPES[ext]
   end
 
@@ -276,20 +283,20 @@ class KeyParserService < ApplicationService
 
   #: () -> Integer?
   def episode_last
-    (filename.match(TV_SHOW_SEASON_EPISODE_LAST)&.named_captures || {})["episode_last"]&.to_i
+    (filename.match(TV_SHOW_SEASON_EPISODE_LAST)&.named_captures || {})['episode_last']&.to_i
   end
 
   #: (String? raw) -> String?
   def normalize_episode_title(raw)
     return if raw.blank?
 
-    raw.strip.sub(/\A\d{4}-\d{2}-\d{2}\s*-\s*/, "")
+    raw.strip.sub(/\A\d{4}-\d{2}-\d{2}\s*-\s*/, '')
   end
 
   #: (String? raw) -> String?
   def coerce_title(raw)
     return if raw.blank?
 
-    raw.strip.gsub(/ {2,}/, " ").gsub(/ (-\w)/, '\1')
+    raw.strip.gsub(/ {2,}/, ' ').gsub(/ (-\w)/, '\1')
   end
 end

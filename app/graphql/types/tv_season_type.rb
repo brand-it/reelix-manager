@@ -4,7 +4,7 @@ module Types
   # Summary season object returned inside a TvType response.
   # For full episode details use the SeasonType resolver.
   class TvSeasonType < Types::BaseObject
-    description "Summary of a TV season as returned inside a TV show detail response"
+    description 'Summary of a TV season as returned inside a TV show detail response'
 
     field :id, Integer, null: false
     field :name, String, null: false
@@ -16,21 +16,21 @@ module Types
     field :vote_average, Float, null: false
 
     #: () -> Integer
-    def id             = object["id"]
+    def id             = object['id']
 
     #: () -> String
-    def name           = object["name"] || ""
+    def name           = object['name'] || ''
 
     #: () -> String
-    def overview       = object["overview"] || ""
+    def overview       = object['overview'] || ''
 
     #: () -> Integer
-    def episode_count  = object["episode_count"] || 0
+    def episode_count  = object['episode_count'] || 0
 
     #: () -> Integer
-    def season_number  = object["season_number"] || 0
+    def season_number  = object['season_number'] || 0
 
     #: () -> Float
-    def vote_average   = object["vote_average"] || 0.0
+    def vote_average   = object['vote_average'] || 0.0
   end
 end

@@ -38,15 +38,15 @@ class VideoBlob < ApplicationRecord
 
   # Sort order is important — matches plex_the_ripper convention.
   EXTRA_TYPES = {
-    feature_films:     { dir_name: "Feature Films" },
-    behind_the_scenes: { dir_name: "Behind The Scenes" },
-    deleted_scenes:    { dir_name: "Deleted Scenes" },
-    featurettes:       { dir_name: "Featurettes" },
-    interviews:        { dir_name: "Interviews" },
-    scenes:            { dir_name: "Scenes" },
-    shorts:            { dir_name: "Shorts" },
-    trailers:          { dir_name: "Trailers" },
-    other:             { dir_name: "Other" }
+    feature_films: { dir_name: 'Feature Films' },
+    behind_the_scenes: { dir_name: 'Behind The Scenes' },
+    deleted_scenes: { dir_name: 'Deleted Scenes' },
+    featurettes: { dir_name: 'Featurettes' },
+    interviews: { dir_name: 'Interviews' },
+    scenes: { dir_name: 'Scenes' },
+    shorts: { dir_name: 'Shorts' },
+    trailers: { dir_name: 'Trailers' },
+    other: { dir_name: 'Other' }
   }.with_indifferent_access
 
   enum :media_type, { movie: 0, tv: 1 }
@@ -59,13 +59,13 @@ class VideoBlob < ApplicationRecord
 
   scope :without_tmdb_id,  -> { where(tmdb_id: nil) }
   scope :with_tmdb_id,     -> { where.not(tmdb_id: nil) }
-  scope :with_poster,      -> { where.not(poster_url: [ nil, "" ]) }
+  scope :with_poster,      -> { where.not(poster_url: [nil, '']) }
   scope :movies,           -> { where(media_type: :movie) }
   scope :tv_shows,         -> { where(media_type: :tv) }
   scope :plex_versions,    -> { where(plex_version: true) }
   scope :optimized_blobs,  -> { where(optimized: true) }
   scope :by_media_type,    ->(type) { type.present? ? where(media_type: type) : all }
-  scope :search_title,     ->(query) { query.present? ? where("title LIKE ?", "%#{sanitize_sql_like(query)}%") : all }
+  scope :search_title,     ->(query) { query.present? ? where('title LIKE ?', "%#{sanitize_sql_like(query)}%") : all }
 
   # Returns the canonical display name for this media item (no extension, no directory).
   #
@@ -95,7 +95,7 @@ class VideoBlob < ApplicationRecord
     show_name = show_name_for_path
     return unless show_name && path_extension.present?
 
-    sanitized_extension = path_extension.to_s.downcase.delete_prefix(".")
+    sanitized_extension = path_extension.to_s.downcase.delete_prefix('.')
     return "#{show_name}.#{sanitized_extension}" unless tv?
 
     episode_code = episode_code_for_path
@@ -148,7 +148,7 @@ class VideoBlob < ApplicationRecord
     return "#{show_name}/#{filename_for_path}" if movie?
     return unless season_number.present?
 
-    padded_season = season_number.to_s.rjust(2, "0")
+    padded_season = season_number.to_s.rjust(2, '0')
     "#{show_name}/Season #{padded_season}/#{filename_for_path}"
   end
 
@@ -158,7 +158,7 @@ class VideoBlob < ApplicationRecord
     return unless title_value.present?
 
     sanitized_title = sanitize_path_component(title_value)
-    year_part = year ? " (#{year})" : ""
+    year_part = year ? " (#{year})" : ''
     "#{sanitized_title}#{year_part}"
   end
 
@@ -166,17 +166,17 @@ class VideoBlob < ApplicationRecord
   def episode_code_for_path
     return unless season_number.present? && episode_number.present?
 
-    padded_season  = season_number.to_s.rjust(2, "0")
-    padded_episode = episode_number.to_s.rjust(2, "0")
+    padded_season  = season_number.to_s.rjust(2, '0')
+    padded_episode = episode_number.to_s.rjust(2, '0')
     "s#{padded_season}e#{padded_episode}"
   end
 
   #: (String name) -> String
   def sanitize_path_component(name)
     name
-      .gsub(/[\/\\]/, "-")
-      .gsub(/\.\.+/, ".")
-      .gsub(/\x00/, "")
+      .gsub(%r{[/\\]}, '-')
+      .gsub(/\.\.+/, '.')
+      .gsub("\x00", '')
       .strip
   end
 

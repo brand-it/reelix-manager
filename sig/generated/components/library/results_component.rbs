@@ -1,14 +1,17 @@
 # Generated from app/components/library/results_component.rb with RBS::Inline
 
 module Library
+  # steep:ignore MethodDefinitionMissing
   class ResultsComponent < ViewComponent::Base
     # : (video_blobs: Array[VideoBlob], query: String) -> void
     def initialize: (video_blobs: Array[VideoBlob], query: String) -> void
 
     # : Array[VideoBlob]
+  # steep:ignore MethodDefinitionMissing
     attr_reader video_blobs: untyped
 
     # : String
+  # steep:ignore MethodDefinitionMissing
     attr_reader query: untyped
 
     # : () -> bool

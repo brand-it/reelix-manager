@@ -2,7 +2,7 @@
 
 module Types
   class TvType < Types::BaseObject
-    description "Full TV show details from TMDB /tv/{id}"
+    description 'Full TV show details from TMDB /tv/{id}'
 
     field :id, Integer, null: false
     field :name, String, null: false
@@ -13,7 +13,7 @@ module Types
     field :homepage, String, null: true
 
     field :show_type, String, null: true,
-      description: "TMDB show type (e.g. Scripted, Reality, Documentary)"
+                              description: 'TMDB show type (e.g. Scripted, Reality, Documentary)'
 
     field :first_air_date, String, null: true
     field :last_air_date, String, null: true
@@ -29,69 +29,69 @@ module Types
 
     field :number_of_seasons, Integer, null: false
     field :number_of_episodes, Integer, null: false
-    field :episode_run_time, [ Integer ], null: false,
-      description: "Typical episode runtimes in minutes"
+    field :episode_run_time, [Integer], null: false,
+                                        description: 'Typical episode runtimes in minutes'
 
     field :original_language, String, null: false
-    field :languages, [ String ], null: false
-    field :origin_country, [ String ], null: false
+    field :languages, [String], null: false
+    field :origin_country, [String], null: false
 
-    field :genres, [ Types::GenreType ], null: false
-    field :seasons, [ Types::TvSeasonType ], null: false,
-      description: "Season summary list. Use the season query for full episode details."
+    field :genres, [Types::GenreType], null: false
+    field :seasons, [Types::TvSeasonType], null: false,
+                                           description: 'Season summary list. Use the season query for full episode details.'
 
     #: () -> Integer
-    def id                 = object["id"]
+    def id                 = object['id']
 
     #: () -> String
-    def name               = object["name"] || ""
+    def name               = object['name'] || ''
 
     #: () -> String
-    def original_name      = object["original_name"] || ""
+    def original_name      = object['original_name'] || ''
 
     #: () -> String
-    def overview           = object["overview"] || ""
+    def overview           = object['overview'] || ''
 
     #: () -> String?
-    def show_type          = object["type"]
+    def show_type          = object['type']
 
     #: () -> bool
-    def in_production      = object["in_production"] || false
+    def in_production      = object['in_production'] || false
 
     #: () -> bool
-    def adult              = object["adult"] || false
+    def adult              = object['adult'] || false
 
     #: () -> Float
-    def popularity         = object["popularity"] || 0.0
+    def popularity         = object['popularity'] || 0.0
 
     #: () -> Float
-    def vote_average       = object["vote_average"] || 0.0
+    def vote_average       = object['vote_average'] || 0.0
 
     #: () -> Integer
-    def vote_count         = object["vote_count"] || 0
+    def vote_count         = object['vote_count'] || 0
 
     #: () -> Integer
-    def number_of_seasons  = object["number_of_seasons"] || 0
+    def number_of_seasons  = object['number_of_seasons'] || 0
 
     #: () -> Integer
-    def number_of_episodes = object["number_of_episodes"] || 0
+    def number_of_episodes = object['number_of_episodes'] || 0
 
     #: () -> ::Array[Integer]
-    def episode_run_time   = object["episode_run_time"] || []
+    def episode_run_time   = object['episode_run_time'] || []
 
     #: () -> String
-    def original_language  = object["original_language"] || ""
+    def original_language  = object['original_language'] || ''
 
     #: () -> ::Array[String]
-    def languages          = object["languages"] || []
+    def languages          = object['languages'] || []
 
     #: () -> ::Array[String]
-    def origin_country     = object["origin_country"] || []
+    def origin_country     = object['origin_country'] || []
 
     #: () -> ::Array[::Hash[String, untyped]]
-    def genres             = object["genres"] || []
+    def genres             = object['genres'] || []
 
     #: () -> ::Array[::Hash[String, untyped]]
-    def seasons            = object["seasons"] || []
+    def seasons            = object['seasons'] || []
   end
 end

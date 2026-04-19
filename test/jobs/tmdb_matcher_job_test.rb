@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require "test_helper"
+require 'test_helper'
 
 class TmdbMatcherJobTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
 
-  test "delegates to TmdbMatcherService" do
-    blob = create(:video_blob, title: "Inception", year: 2010)
+  test 'delegates to TmdbMatcherService' do
+    blob = create(:video_blob, title: 'Inception', year: 2010)
     called_with = nil
     original = TmdbMatcherService.method(:call)
     TmdbMatcherService.define_singleton_method(:call) { |b| called_with = b }
@@ -18,7 +18,7 @@ class TmdbMatcherJobTest < ActiveSupport::TestCase
     TmdbMatcherService.define_singleton_method(:call, &original)
   end
 
-  test "skips blob that already has a tmdb_id" do
+  test 'skips blob that already has a tmdb_id' do
     blob = create(:video_blob, :with_tmdb_id)
     original_id = blob.tmdb_id
     called = false
@@ -33,7 +33,7 @@ class TmdbMatcherJobTest < ActiveSupport::TestCase
     TmdbMatcherService.define_singleton_method(:call, &original)
   end
 
-  test "skips gracefully when blob no longer exists" do
+  test 'skips gracefully when blob no longer exists' do
     assert_nothing_raised { TmdbMatcherJob.perform_now(0) }
   end
 end

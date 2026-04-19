@@ -9,9 +9,9 @@ module Sources
       media_types = keys.map(&:first).uniq
       tmdb_ids    = keys.map(&:last).compact.uniq
       grouped = ::VideoBlob.where(media_type: media_types, tmdb_id: tmdb_ids)
-                           .group_by { |b| [ b.media_type, b.tmdb_id ] }
+                           .group_by { |b| [b.media_type, b.tmdb_id] }
       keys.map do |media_type, tmdb_id|
-        tmdb_id.nil? ? [] : (grouped[[ media_type, tmdb_id ]] || [])
+        tmdb_id.nil? ? [] : (grouped[[media_type, tmdb_id]] || [])
       end
     end
   end

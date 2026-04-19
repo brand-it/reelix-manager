@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Config
   class Setting
     include SimplyEncrypt
@@ -24,7 +26,7 @@ class Config
     end
 
     #: (Symbol | String name, ?default: Proc, ?encrypted: bool) -> void
-    def attribute(name, default: -> { }, encrypted: false)
+    def attribute(name, default: -> {}, encrypted: false)
       attributes[name.to_sym] = Option.new(default, encrypted)
     end
 

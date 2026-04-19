@@ -12,9 +12,16 @@ module GraphQL
   end
 
   class Query
+    # The query string being executed.
+    def query_string: () -> String
+    # The variables provided to the query.
+    def provided_variables: () -> Hash[String, untyped]
+
     class Context
       # Returns the schema that is executing this query.
       def schema: () -> singleton(GraphQL::Schema)
+      # Returns the GraphQL::Query object for this context.
+      def query: () -> GraphQL::Query
     end
   end
 

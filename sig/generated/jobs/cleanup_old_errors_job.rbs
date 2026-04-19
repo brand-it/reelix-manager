@@ -1,0 +1,9 @@
+# Generated from app/jobs/cleanup_old_errors_job.rb with RBS::Inline
+
+# Cleanup old error entries to prevent database bloat
+class CleanupOldErrorsJob < ApplicationJob
+  # Number of days after which errors are deleted
+  DAYS_TO_KEEP: ::Integer
+
+  def perform: () -> untyped
+end

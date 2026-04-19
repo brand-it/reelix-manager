@@ -1,0 +1,16 @@
+# Generated from lib/error_tracking.rb with RBS::Inline
+
+module ErrorTracking
+  class Middleware
+    # Skip error tracking for these paths (assets, health checks, etc.)
+    SKIPPED_PATHS: untyped
+
+    def initialize: (untyped app) -> untyped
+
+    def call: (untyped env) -> untyped
+
+    private
+
+    def should_skip?: () -> untyped
+  end
+end

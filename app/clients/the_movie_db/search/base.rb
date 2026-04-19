@@ -19,9 +19,9 @@ module TheMovieDb
 
       #: (?use_cache: bool) -> ::Hash[String, untyped]
       def results(use_cache: true)
-        return ({ "results" => [] }) if query.blank? # steep:ignore UnannotatedEmptyCollection
+        return { 'results' => [] } if query.blank? # steep:ignore UnannotatedEmptyCollection
 
-        super(use_cache:)
+        super
       end
 
       #: () -> TheMovieDb::Search::Base
@@ -31,7 +31,7 @@ module TheMovieDb
 
       #: () -> TheMovieDb::Search::Base
       def previous_page
-        @previous_page ||= self.class.new(page: [ page - 1, 1 ].max, query:, language:) #: TheMovieDb::Search::Base
+        @previous_page ||= self.class.new(page: [page - 1, 1].max, query:, language:) #: TheMovieDb::Search::Base
       end
 
       private

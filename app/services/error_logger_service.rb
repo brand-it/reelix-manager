@@ -28,9 +28,6 @@ class ErrorLoggerService < ApplicationService
     add_context_attributes(attributes, @context)
 
     ErrorEntry.create!(**attributes)
-  rescue StandardError => e
-    Rails.logger.error("ErrorLoggerService: Failed to store error: #{e.message}")
-    Rails.logger.error(e.backtrace&.join("\n"))
   end
 
   private

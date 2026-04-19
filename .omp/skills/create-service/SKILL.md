@@ -1,8 +1,7 @@
-# Create Service Skill
-
-## Purpose
-
-Create new service objects in the Reelix Manager Rails application following established patterns for type checking, testing, and maintainability.
+---
+id: create-service
+description: Create new service objects following Rails patterns for type checking, testing, and maintainability. Use when asked to create a new service.
+---
 
 ## Rules
 

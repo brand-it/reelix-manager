@@ -64,11 +64,20 @@ Rules:
 
 ## Step 5 — Present and optionally commit
 
-Show the user the generated message. Then ask if they would like you to run:
+Show the user the generated message. Then use the `ask` tool to confirm before committing:
 
-```bash
-git commit -m "<the generated message>"
+```javascript
+ask({
+  questions: [{
+    id: "commit",
+    question: "Would you like me to commit with this message?",
+    options: [
+      { label: "Yes, commit the changes" },
+      { label: "No, let me review first" }
+    ],
+    recommended: 0
+  }]
+})
 ```
 
-Do not run `git commit` without explicit confirmation.
-
+Only run `git commit -m "<the generated message>"` after the user confirms.

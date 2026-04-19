@@ -234,7 +234,35 @@ GraphQL operations require OAuth scopes via `ScopeEnforceable` module:
 
 Session-based requests (browser GraphiQL) bypass scope checks.
 
-### Error Handling
+### Error Handling Rules
+
+**Critical Rule: Never swallow errors**
+
+- **NEVER** rescue `StandardError` (or any exception) without re-raising it
+- The **ONLY** exception is when you explicitly log the error AND re-raise it
+- This prevents silent failures that are difficult to debug
+
+**Correct Pattern:**
+
+```ruby
+rescue StandardError => e
+  Rails.logger.error("Failed to do something: #{e.message}")
+  Rails.logger.error(e.backtrace&.join("\n"))
+  raise  # Always re-raise!
+end
+```
+
+**Incorrect Pattern (DO NOT DO THIS):**
+
+```ruby
+rescue StandardError => e
+  Rails.logger.error("Failed: #{e.message}")
+  # Missing re-raise - error is swallowed!
+  nil
+end
+```
+range_end_pos_inclusive_marker_after_237#XP
+content_pos_marker_after_237#XP
 
 #### Application-Level Errors
 ```ruby

@@ -12,3 +12,7 @@ application.register("submit-on-keyup", SubmitOnKeyupController)
 
 import HostnameController from "controllers/hostname_controller"
 application.register("hostname", HostnameController)
+
+
+import PollingController from "controllers/polling_controller"
+application.register("polling", PollingController)

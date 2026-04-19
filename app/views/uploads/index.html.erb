@@ -1,3 +1,5 @@
+<div data-controller="polling" data-polling-interval-value="2000" data-action="turbo:load->polling#start turbo:load->polling#resetInFlight">
+  <div data-polling-target="content">
 <div class="d-flex align-items-center justify-content-between mb-3">
   <h1 class="h3 mb-0">Uploads</h1>
   <span class="text-secondary small"><%= @active_uploads.size %> active</span>
@@ -88,4 +90,6 @@
       </div>
     </div>
   </div>
+</div>
+</div>
 </div>

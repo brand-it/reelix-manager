@@ -1,0 +1,34 @@
+<div class="card h-100">
+  <div class="card-body">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <h2 class="h5 mb-0">Recently uploaded files</h2>
+      <span class="text-secondary small"><%= recent_video_blobs.size %> recent</span>
+    </div>
+
+    <% if recent_video_blobs.empty? %>
+      <p class="text-secondary mb-0">No files have been finalized yet.</p>
+    <% else %>
+      <div class="list-group list-group-flush">
+        <% recent_video_blobs.each do |blob| %>
+          <div class="list-group-item px-0">
+            <div class="d-flex justify-content-between align-items-start gap-3">
+              <div>
+                <div class="fw-semibold"><%= blob.title.presence || blob.filename %></div>
+                <div class="small text-secondary">
+                  <%= blob.media_type.humanize %>
+                  <% if blob.year.present? %>· <%= blob.year %><% end %>
+                  <% if blob.tv? && blob.season_number.present? && blob.episode_number.present? %>
+                    · S<%= format("%02d", blob.season_number) %>E<%= format("%02d", blob.episode_number) %>
+                  <% end %>
+                </div>
+              </div>
+              <div class="small text-secondary text-nowrap">
+                <%= time_ago_in_words(blob.created_at) %> ago
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

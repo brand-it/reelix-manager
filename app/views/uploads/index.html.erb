@@ -1,91 +1,30 @@
+<div data-controller="polling" data-polling-interval-value="2000">
+  <div data-polling-target="content">
 <div class="d-flex align-items-center justify-content-between mb-3">
   <h1 class="h3 mb-0">Uploads</h1>
-  <span class="text-secondary small"><%= @active_uploads.size %> active</span>
+  <div class="d-flex align-items-center gap-3">
+    <span class="text-secondary small"><%= @active_uploads.size %> active</span>
+    <span class="badge bg-secondary d-flex align-items-center gap-1">
+      <span data-polling-target="spinner" class="spinner-border spinner-border-sm" role="status" style="display: none;">
+        <span class="visually-hidden">Loading...</span>
+      </span>
+      <span data-polling-target="countdown">2</span>s
+    </span>
+  </div>
 </div>
 
 <div class="row g-3">
   <div class="col-12 col-xl-6">
-    <div class="card h-100">
-      <div class="card-body">
-        <div class="d-flex align-items-center justify-content-between mb-3">
-          <h2 class="h5 mb-0">Current uploads</h2>
-          <span class="text-secondary small"><%= @active_uploads.size %> active</span>
-        </div>
-
-        <% if @active_uploads.empty? %>
-          <p class="text-secondary mb-0">No incomplete uploads are currently on disk.</p>
-        <% else %>
-          <div class="vstack gap-3">
-            <% @active_uploads.each do |upload| %>
-              <div>
-                <div class="d-flex justify-content-between align-items-start gap-2">
-                  <div>
-                    <div class="fw-semibold"><%= upload.filename %></div>
-                    <div class="small text-secondary">
-                      <code><%= upload.id %></code>
-                    </div>
-                  </div>
-                  <span class="badge text-bg-<%= upload.upload_complete ? "success" : "secondary" %>">
-                    <%= upload.status.humanize %>
-                  </span>
-                </div>
-
-                <div class="progress mt-2" role="progressbar" aria-valuenow="<%= upload.progress_percent %>" aria-valuemin="0" aria-valuemax="100">
-                  <div class="progress-bar" style="width: <%= upload.progress_percent %>%;">
-                    <%= upload.progress_percent %>%
-                  </div>
-                </div>
-
-                <div class="d-flex justify-content-between small text-secondary mt-1">
-                  <span><%= number_to_human_size(upload.upload_offset) %> / <%= number_to_human_size(upload.upload_length) %></span>
-                  <span><%= number_to_human_size(upload.bytes_remaining) %> remaining</span>
-                </div>
-
-                <div class="small text-secondary mt-1">
-                  Updated <%= time_ago_in_words(upload.updated_at) %> ago · expires <%= time_ago_in_words(upload.expires_at) %> from now
-                </div>
-              </div>
-            <% end %>
-          </div>
-        <% end %>
-      </div>
-    </div>
+    <%= turbo_frame_tag "active_uploads" do %>
+      <%= render Uploads::ActiveUploadsComponent.new(active_uploads: @active_uploads) %>
+    <% end %>
   </div>
 
   <div class="col-12 col-xl-6">
-    <div class="card h-100">
-      <div class="card-body">
-        <div class="d-flex align-items-center justify-content-between mb-3">
-          <h2 class="h5 mb-0">Recently uploaded files</h2>
-          <span class="text-secondary small"><%= @recent_video_blobs.size %> recent</span>
-        </div>
-
-        <% if @recent_video_blobs.empty? %>
-          <p class="text-secondary mb-0">No files have been finalized yet.</p>
-        <% else %>
-          <div class="list-group list-group-flush">
-            <% @recent_video_blobs.each do |blob| %>
-              <div class="list-group-item px-0">
-                <div class="d-flex justify-content-between align-items-start gap-3">
-                  <div>
-                    <div class="fw-semibold"><%= blob.title.presence || blob.filename %></div>
-                    <div class="small text-secondary">
-                      <%= blob.media_type.humanize %>
-                      <% if blob.year.present? %>· <%= blob.year %><% end %>
-                      <% if blob.tv? && blob.season_number.present? && blob.episode_number.present? %>
-                        · S<%= format("%02d", blob.season_number) %>E<%= format("%02d", blob.episode_number) %>
-                      <% end %>
-                    </div>
-                  </div>
-                  <div class="small text-secondary text-nowrap">
-                    <%= time_ago_in_words(blob.created_at) %> ago
-                  </div>
-                </div>
-              </div>
-            <% end %>
-          </div>
-        <% end %>
-      </div>
-    </div>
+    <%= turbo_frame_tag "recent_files" do %>
+      <%= render Uploads::RecentFilesComponent.new(recent_video_blobs: @recent_video_blobs) %>
+    <% end %>
+  </div>
+</div>
   </div>
 </div>

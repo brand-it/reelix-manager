@@ -1,0 +1,7 @@
+<%= turbo_stream.update "active_uploads", method: :morph do %>
+  <%= render Uploads::ActiveUploadsComponent.new(active_uploads: @active_uploads) %>
+<% end %>
+
+<%= turbo_stream.update "recent_files", method: :morph do %>
+  <%= render Uploads::RecentFilesComponent.new(recent_video_blobs: @recent_video_blobs) %>
+<% end %>

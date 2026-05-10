@@ -96,4 +96,4 @@ group :test do
 end
 gem 'graphiql-rails'
 
-gem 'rubocop-rails', '~> 2.34'
+gem 'rubocop-rails', '~> 2.35'

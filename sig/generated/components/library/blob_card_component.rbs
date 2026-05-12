@@ -7,7 +7,6 @@ module Library
     def initialize: (blob: VideoBlob) -> void
 
     # : VideoBlob
-  # steep:ignore MethodDefinitionMissing
     attr_reader blob: untyped
 
     # : () -> String

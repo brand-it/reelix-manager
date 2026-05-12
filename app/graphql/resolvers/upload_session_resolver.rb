@@ -6,11 +6,10 @@ module Resolvers
 
     argument :id, ID, required: true, description: 'Upload session ID'
 
-    #: (id: String) -> Uploads::SessionSnapshot?
+    #: (id: String) -> TusUploadSession?
     def resolve(id:)
       require_upload!
-      all_uploads = Uploads::ActiveUploadsService.call
-      all_uploads.find { |session| session.id == id }
+      TusUploadSession.find_by(id: id)
     end
   end
 end

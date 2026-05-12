@@ -11,7 +11,7 @@ export default defineConfig({
     setupFiles: ['app/javascript/test/setup.js'],
     alias: {
       '@controllers': resolve(__dirname, 'app/javascript/controllers'),
-      '@helpers': resolve(__dirname, 'app/javascript/helpers')
+      '@test': resolve(__dirname, 'app/javascript/test')
     }
   }
 })

@@ -1,0 +1,10 @@
+# resolve-type-names: false
+
+class ::CleanupExpiredTusUploadsJob < ::ApplicationJob
+  EXPIRATION_BUFFER: ::ActiveSupport::Duration
+
+  def perform: () -> void
+end
+
+class ::ApplicationJob < ::ActiveJob::Base
+end

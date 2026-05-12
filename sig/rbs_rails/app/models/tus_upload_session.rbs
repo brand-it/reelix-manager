@@ -1,0 +1,550 @@
+# resolve-type-names: false
+
+class ::TusUploadSession < ::ApplicationRecord
+  extend ::ActiveRecord::Base::ClassMethods[::TusUploadSession, ::TusUploadSession::ActiveRecord_Relation, ::String]
+
+  module ::TusUploadSession::GeneratedAttributeMethods
+    def id: () -> ::String
+
+    def id=: (::String) -> ::String
+
+    def id?: () -> bool
+
+    def id_changed?: (?from: ::String?, ?to: ::String?) -> bool
+
+    def id_change: () -> [ ::String?, ::String? ]
+
+    def id_will_change!: () -> void
+
+    def id_was: () -> ::String?
+
+    def id_previously_changed?: (?from: ::String?, ?to: ::String?) -> bool
+
+    def id_previous_change: () -> ::Array[::String?]?
+
+    def id_previously_was: () -> ::String?
+
+    def id_before_last_save: () -> ::String?
+
+    def id_change_to_be_saved: () -> ::Array[::String?]?
+
+    def id_in_database: () -> ::String?
+
+    def saved_change_to_id: () -> ::Array[::String?]?
+
+    def saved_change_to_id?: () -> bool
+
+    def will_save_change_to_id?: () -> bool
+
+    def restore_id!: () -> void
+
+    def clear_id_change: () -> void
+
+    def id_before_type_cast: () -> ::String
+
+    def id_for_database: () -> ::String
+
+    def filename: () -> ::String
+
+    def filename=: (::String) -> ::String
+
+    def filename?: () -> bool
+
+    def filename_changed?: (?from: ::String?, ?to: ::String?) -> bool
+
+    def filename_change: () -> [ ::String?, ::String? ]
+
+    def filename_will_change!: () -> void
+
+    def filename_was: () -> ::String?
+
+    def filename_previously_changed?: (?from: ::String?, ?to: ::String?) -> bool
+
+    def filename_previous_change: () -> ::Array[::String?]?
+
+    def filename_previously_was: () -> ::String?
+
+    def filename_before_last_save: () -> ::String?
+
+    def filename_change_to_be_saved: () -> ::Array[::String?]?
+
+    def filename_in_database: () -> ::String?
+
+    def saved_change_to_filename: () -> ::Array[::String?]?
+
+    def saved_change_to_filename?: () -> bool
+
+    def will_save_change_to_filename?: () -> bool
+
+    def restore_filename!: () -> void
+
+    def clear_filename_change: () -> void
+
+    def filename_before_type_cast: () -> ::String
+
+    def filename_for_database: () -> ::String
+
+    def upload_length: () -> ::Integer
+
+    def upload_length=: (::Integer) -> ::Integer
+
+    def upload_length?: () -> bool
+
+    def upload_length_changed?: (?from: ::Integer?, ?to: ::Integer?) -> bool
+
+    def upload_length_change: () -> [ ::Integer?, ::Integer? ]
+
+    def upload_length_will_change!: () -> void
+
+    def upload_length_was: () -> ::Integer?
+
+    def upload_length_previously_changed?: (?from: ::Integer?, ?to: ::Integer?) -> bool
+
+    def upload_length_previous_change: () -> ::Array[::Integer?]?
+
+    def upload_length_previously_was: () -> ::Integer?
+
+    def upload_length_before_last_save: () -> ::Integer?
+
+    def upload_length_change_to_be_saved: () -> ::Array[::Integer?]?
+
+    def upload_length_in_database: () -> ::Integer?
+
+    def saved_change_to_upload_length: () -> ::Array[::Integer?]?
+
+    def saved_change_to_upload_length?: () -> bool
+
+    def will_save_change_to_upload_length?: () -> bool
+
+    def restore_upload_length!: () -> void
+
+    def clear_upload_length_change: () -> void
+
+    def upload_length_before_type_cast: () -> ::Integer
+
+    def upload_length_for_database: () -> ::Integer
+
+    def mime_type: () -> ::String?
+
+    def mime_type=: (::String?) -> ::String?
+
+    def mime_type?: () -> bool
+
+    def mime_type_changed?: (?from: ::String?, ?to: ::String?) -> bool
+
+    def mime_type_change: () -> [ ::String?, ::String? ]
+
+    def mime_type_will_change!: () -> void
+
+    def mime_type_was: () -> ::String?
+
+    def mime_type_previously_changed?: (?from: ::String?, ?to: ::String?) -> bool
+
+    def mime_type_previous_change: () -> ::Array[::String?]?
+
+    def mime_type_previously_was: () -> ::String?
+
+    def mime_type_before_last_save: () -> ::String?
+
+    def mime_type_change_to_be_saved: () -> ::Array[::String?]?
+
+    def mime_type_in_database: () -> ::String?
+
+    def saved_change_to_mime_type: () -> ::Array[::String?]?
+
+    def saved_change_to_mime_type?: () -> bool
+
+    def will_save_change_to_mime_type?: () -> bool
+
+    def restore_mime_type!: () -> void
+
+    def clear_mime_type_change: () -> void
+
+    def mime_type_before_type_cast: () -> ::String?
+
+    def mime_type_for_database: () -> ::String?
+
+    def metadata: () -> ::String?
+
+    def metadata=: (::String?) -> ::String?
+
+    def metadata?: () -> bool
+
+    def metadata_changed?: (?from: ::String?, ?to: ::String?) -> bool
+
+    def metadata_change: () -> [ ::String?, ::String? ]
+
+    def metadata_will_change!: () -> void
+
+    def metadata_was: () -> ::String?
+
+    def metadata_previously_changed?: (?from: ::String?, ?to: ::String?) -> bool
+
+    def metadata_previous_change: () -> ::Array[::String?]?
+
+    def metadata_previously_was: () -> ::String?
+
+    def metadata_before_last_save: () -> ::String?
+
+    def metadata_change_to_be_saved: () -> ::Array[::String?]?
+
+    def metadata_in_database: () -> ::String?
+
+    def saved_change_to_metadata: () -> ::Array[::String?]?
+
+    def saved_change_to_metadata?: () -> bool
+
+    def will_save_change_to_metadata?: () -> bool
+
+    def restore_metadata!: () -> void
+
+    def clear_metadata_change: () -> void
+
+    def metadata_before_type_cast: () -> ::String?
+
+    def metadata_for_database: () -> ::String?
+
+    def finalized: () -> bool
+
+    def finalized=: (bool) -> bool
+
+    def finalized?: () -> bool
+
+    def finalized_changed?: (?from: bool?, ?to: bool?) -> bool
+
+    def finalized_change: () -> [ bool?, bool? ]
+
+    def finalized_will_change!: () -> void
+
+    def finalized_was: () -> bool?
+
+    def finalized_previously_changed?: (?from: bool?, ?to: bool?) -> bool
+
+    def finalized_previous_change: () -> ::Array[bool?]?
+
+    def finalized_previously_was: () -> bool?
+
+    def finalized_before_last_save: () -> bool?
+
+    def finalized_change_to_be_saved: () -> ::Array[bool?]?
+
+    def finalized_in_database: () -> bool?
+
+    def saved_change_to_finalized: () -> ::Array[bool?]?
+
+    def saved_change_to_finalized?: () -> bool
+
+    def will_save_change_to_finalized?: () -> bool
+
+    def restore_finalized!: () -> void
+
+    def clear_finalized_change: () -> void
+
+    def finalized_before_type_cast: () -> bool
+
+    def finalized_for_database: () -> bool
+
+    def video_blob_id: () -> ::Integer?
+
+    def video_blob_id=: (::Integer?) -> ::Integer?
+
+    def video_blob_id?: () -> bool
+
+    def video_blob_id_changed?: (?from: ::Integer?, ?to: ::Integer?) -> bool
+
+    def video_blob_id_change: () -> [ ::Integer?, ::Integer? ]
+
+    def video_blob_id_will_change!: () -> void
+
+    def video_blob_id_was: () -> ::Integer?
+
+    def video_blob_id_previously_changed?: (?from: ::Integer?, ?to: ::Integer?) -> bool
+
+    def video_blob_id_previous_change: () -> ::Array[::Integer?]?
+
+    def video_blob_id_previously_was: () -> ::Integer?
+
+    def video_blob_id_before_last_save: () -> ::Integer?
+
+    def video_blob_id_change_to_be_saved: () -> ::Array[::Integer?]?
+
+    def video_blob_id_in_database: () -> ::Integer?
+
+    def saved_change_to_video_blob_id: () -> ::Array[::Integer?]?
+
+    def saved_change_to_video_blob_id?: () -> bool
+
+    def will_save_change_to_video_blob_id?: () -> bool
+
+    def restore_video_blob_id!: () -> void
+
+    def clear_video_blob_id_change: () -> void
+
+    def video_blob_id_before_type_cast: () -> ::Integer?
+
+    def video_blob_id_for_database: () -> ::Integer?
+
+    def user_id: () -> ::Integer?
+
+    def user_id=: (::Integer?) -> ::Integer?
+
+    def user_id?: () -> bool
+
+    def user_id_changed?: (?from: ::Integer?, ?to: ::Integer?) -> bool
+
+    def user_id_change: () -> [ ::Integer?, ::Integer? ]
+
+    def user_id_will_change!: () -> void
+
+    def user_id_was: () -> ::Integer?
+
+    def user_id_previously_changed?: (?from: ::Integer?, ?to: ::Integer?) -> bool
+
+    def user_id_previous_change: () -> ::Array[::Integer?]?
+
+    def user_id_previously_was: () -> ::Integer?
+
+    def user_id_before_last_save: () -> ::Integer?
+
+    def user_id_change_to_be_saved: () -> ::Array[::Integer?]?
+
+    def user_id_in_database: () -> ::Integer?
+
+    def saved_change_to_user_id: () -> ::Array[::Integer?]?
+
+    def saved_change_to_user_id?: () -> bool
+
+    def will_save_change_to_user_id?: () -> bool
+
+    def restore_user_id!: () -> void
+
+    def clear_user_id_change: () -> void
+
+    def user_id_before_type_cast: () -> ::Integer?
+
+    def user_id_for_database: () -> ::Integer?
+
+    def doorkeeper_token_id: () -> ::Integer?
+
+    def doorkeeper_token_id=: (::Integer?) -> ::Integer?
+
+    def doorkeeper_token_id?: () -> bool
+
+    def doorkeeper_token_id_changed?: (?from: ::Integer?, ?to: ::Integer?) -> bool
+
+    def doorkeeper_token_id_change: () -> [ ::Integer?, ::Integer? ]
+
+    def doorkeeper_token_id_will_change!: () -> void
+
+    def doorkeeper_token_id_was: () -> ::Integer?
+
+    def doorkeeper_token_id_previously_changed?: (?from: ::Integer?, ?to: ::Integer?) -> bool
+
+    def doorkeeper_token_id_previous_change: () -> ::Array[::Integer?]?
+
+    def doorkeeper_token_id_previously_was: () -> ::Integer?
+
+    def doorkeeper_token_id_before_last_save: () -> ::Integer?
+
+    def doorkeeper_token_id_change_to_be_saved: () -> ::Array[::Integer?]?
+
+    def doorkeeper_token_id_in_database: () -> ::Integer?
+
+    def saved_change_to_doorkeeper_token_id: () -> ::Array[::Integer?]?
+
+    def saved_change_to_doorkeeper_token_id?: () -> bool
+
+    def will_save_change_to_doorkeeper_token_id?: () -> bool
+
+    def restore_doorkeeper_token_id!: () -> void
+
+    def clear_doorkeeper_token_id_change: () -> void
+
+    def doorkeeper_token_id_before_type_cast: () -> ::Integer?
+
+    def doorkeeper_token_id_for_database: () -> ::Integer?
+
+    def created_at: () -> ::ActiveSupport::TimeWithZone
+
+    def created_at=: (::ActiveSupport::TimeWithZone) -> ::ActiveSupport::TimeWithZone
+
+    def created_at?: () -> bool
+
+    def created_at_changed?: (?from: ::ActiveSupport::TimeWithZone?, ?to: ::ActiveSupport::TimeWithZone?) -> bool
+
+    def created_at_change: () -> [ ::ActiveSupport::TimeWithZone?, ::ActiveSupport::TimeWithZone? ]
+
+    def created_at_will_change!: () -> void
+
+    def created_at_was: () -> ::ActiveSupport::TimeWithZone?
+
+    def created_at_previously_changed?: (?from: ::ActiveSupport::TimeWithZone?, ?to: ::ActiveSupport::TimeWithZone?) -> bool
+
+    def created_at_previous_change: () -> ::Array[::ActiveSupport::TimeWithZone?]?
+
+    def created_at_previously_was: () -> ::ActiveSupport::TimeWithZone?
+
+    def created_at_before_last_save: () -> ::ActiveSupport::TimeWithZone?
+
+    def created_at_change_to_be_saved: () -> ::Array[::ActiveSupport::TimeWithZone?]?
+
+    def created_at_in_database: () -> ::ActiveSupport::TimeWithZone?
+
+    def saved_change_to_created_at: () -> ::Array[::ActiveSupport::TimeWithZone?]?
+
+    def saved_change_to_created_at?: () -> bool
+
+    def will_save_change_to_created_at?: () -> bool
+
+    def restore_created_at!: () -> void
+
+    def clear_created_at_change: () -> void
+
+    def created_at_before_type_cast: () -> ::Time
+
+    def created_at_for_database: () -> ::Time
+
+    def updated_at: () -> ::ActiveSupport::TimeWithZone
+
+    def updated_at=: (::ActiveSupport::TimeWithZone) -> ::ActiveSupport::TimeWithZone
+
+    def updated_at?: () -> bool
+
+    def updated_at_changed?: (?from: ::ActiveSupport::TimeWithZone?, ?to: ::ActiveSupport::TimeWithZone?) -> bool
+
+    def updated_at_change: () -> [ ::ActiveSupport::TimeWithZone?, ::ActiveSupport::TimeWithZone? ]
+
+    def updated_at_will_change!: () -> void
+
+    def updated_at_was: () -> ::ActiveSupport::TimeWithZone?
+
+    def updated_at_previously_changed?: (?from: ::ActiveSupport::TimeWithZone?, ?to: ::ActiveSupport::TimeWithZone?) -> bool
+
+    def updated_at_previous_change: () -> ::Array[::ActiveSupport::TimeWithZone?]?
+
+    def updated_at_previously_was: () -> ::ActiveSupport::TimeWithZone?
+
+    def updated_at_before_last_save: () -> ::ActiveSupport::TimeWithZone?
+
+    def updated_at_change_to_be_saved: () -> ::Array[::ActiveSupport::TimeWithZone?]?
+
+    def updated_at_in_database: () -> ::ActiveSupport::TimeWithZone?
+
+    def saved_change_to_updated_at: () -> ::Array[::ActiveSupport::TimeWithZone?]?
+
+    def saved_change_to_updated_at?: () -> bool
+
+    def will_save_change_to_updated_at?: () -> bool
+
+    def restore_updated_at!: () -> void
+
+    def clear_updated_at_change: () -> void
+
+    def updated_at_before_type_cast: () -> ::Time
+
+    def updated_at_for_database: () -> ::Time
+  end
+  include ::TusUploadSession::GeneratedAttributeMethods
+  module ::TusUploadSession::GeneratedAliasAttributeMethods
+    include ::TusUploadSession::GeneratedAttributeMethods
+
+    alias id_value id
+
+    alias id_value= id=
+
+    alias id_value? id?
+
+    alias id_value_changed? id_changed?
+
+    alias id_value_change id_change
+
+    alias id_value_will_change! id_will_change!
+
+    alias id_value_was id_was
+
+    alias id_value_previously_changed? id_previously_changed?
+
+    alias id_value_previous_change id_previous_change
+
+    alias id_value_previously_was id_previously_was
+
+    alias id_value_before_last_save id_before_last_save
+
+    alias id_value_change_to_be_saved id_change_to_be_saved
+
+    alias id_value_in_database id_in_database
+
+    alias saved_change_to_id_value saved_change_to_id
+
+    alias saved_change_to_id_value? saved_change_to_id?
+
+    alias will_save_change_to_id_value? will_save_change_to_id?
+
+    alias restore_id_value! restore_id!
+
+    alias clear_id_value_change clear_id_change
+
+    alias id_value_before_type_cast id_before_type_cast
+
+    alias id_value_for_database id_for_database
+  end
+  include ::TusUploadSession::GeneratedAliasAttributeMethods
+
+  module ::TusUploadSession::GeneratedAssociationMethods
+    def user: () -> ::User?
+    def user=: (::User?) -> ::User?
+
+    def doorkeeper_token: () -> ::Doorkeeper::AccessToken?
+    def doorkeeper_token=: (::Doorkeeper::AccessToken?) -> ::Doorkeeper::AccessToken?
+
+    def video_blob: () -> ::VideoBlob?
+    def video_blob=: (::VideoBlob?) -> ::VideoBlob?
+  end
+  include ::TusUploadSession::GeneratedAssociationMethods
+
+  def upload_offset: () -> ::Integer
+  def upload_status: () -> ::String
+  def expires_at: () -> ::ActiveSupport::TimeWithZone
+  def upload_complete?: () -> bool
+  def progress_percent: () -> ::Integer
+  def bytes_remaining: () -> ::Integer
+  def device_application: () -> ::Doorkeeper::Application?
+
+  # Private methods (Steep can't distinguish visibility)
+  def compute_offset: () -> ::Integer
+  def compute_status: () -> ::String
+  def tus_info_path: () -> ::Pathname
+  def tus_data_path: () -> ::Pathname
+
+  module ::TusUploadSession::GeneratedRelationMethods
+  end
+
+  class ::TusUploadSession::ActiveRecord_Relation < ::ActiveRecord::Relation
+    include ::Enumerable[::TusUploadSession]
+    include ::TusUploadSession::GeneratedRelationMethods
+    include ::ActiveRecord::Relation::Methods[::TusUploadSession, ::String]
+  end
+
+  class ::TusUploadSession::ActiveRecord_Associations_CollectionProxy < ::ActiveRecord::Associations::CollectionProxy
+    include ::Enumerable[::TusUploadSession]
+    include ::TusUploadSession::GeneratedRelationMethods
+    include ::ActiveRecord::Relation::Methods[::TusUploadSession, ::String]
+
+    def build: (?::ActiveRecord::Associations::CollectionProxy::_EachPair attributes) ?{ () -> untyped } -> ::TusUploadSession
+             | (::Array[::ActiveRecord::Associations::CollectionProxy::_EachPair] attributes) ?{ () -> untyped } -> ::Array[::TusUploadSession]
+    def create: (?::ActiveRecord::Associations::CollectionProxy::_EachPair attributes) ?{ () -> untyped } -> ::TusUploadSession
+              | (::Array[::ActiveRecord::Associations::CollectionProxy::_EachPair] attributes) ?{ () -> untyped } -> ::Array[::TusUploadSession]
+    def create!: (?::ActiveRecord::Associations::CollectionProxy::_EachPair attributes) ?{ () -> untyped } -> ::TusUploadSession
+               | (::Array[::ActiveRecord::Associations::CollectionProxy::_EachPair] attributes) ?{ () -> untyped } -> ::Array[::TusUploadSession]
+    def reload: () -> ::Array[::TusUploadSession]
+
+    def replace: (::Array[::TusUploadSession]) -> void
+    def delete: (*::TusUploadSession | ::String) -> ::Array[::TusUploadSession]
+    def destroy: (*::TusUploadSession | ::String) -> ::Array[::TusUploadSession]
+    def <<: (*::TusUploadSession | ::Array[::TusUploadSession]) -> self
+    def prepend: (*::TusUploadSession | ::Array[::TusUploadSession]) -> self
+  end
+end
+
+class ::ApplicationRecord < ::ActiveRecord::Base
+end

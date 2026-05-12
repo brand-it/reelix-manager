@@ -56,7 +56,8 @@ class VideoBlob < ApplicationRecord
   validates :filename,   presence: true
   validates :media_type, presence: true
   validates :extra_type, presence: true
-
+  # Skip key validation when finalizing (file not yet moved)
+  validates :key, presence: false, if: -> { finalizing }
   scope :without_tmdb_id,  -> { where(tmdb_id: nil) }
   scope :with_tmdb_id,     -> { where.not(tmdb_id: nil) }
   scope :with_poster,      -> { where.not(poster_url: [nil, '']) }

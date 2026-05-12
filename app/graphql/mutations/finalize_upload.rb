@@ -47,52 +47,58 @@ module Mutations
     #    ?season_number: Integer?,
     #    ?episode_number: Integer?
     #  ) -> ::Hash[Symbol, VideoBlob | String | nil | ::Array[String]]
+    #: (
+    #    upload_id: String,
+    #    tmdb_id: Integer,
+    #    ?filename: String?,
+    #    ?media_type: String,
+    #    ?season_number: Integer?,
+    #    ?episode_number: Integer?
+    #  ) -> ::Hash[Symbol, VideoBlob | String | nil | ::Array[String]]
+    #: (
+    #    upload_id: String,
+    #    tmdb_id: Integer,
+    #    ?filename: String?,
+    #    ?media_type: String,
+    #    ?season_number: Integer?,
+    #    ?episode_number: Integer?
+    #  ) -> ::Hash[Symbol, VideoBlob | String | nil | ::Array[String]]
+    #: (
+    #    upload_id: String,
+    #    tmdb_id: Integer,
+    #    ?filename: String?,
+    #    ?media_type: String,
+    #    ?season_number: Integer?,
+    #    ?episode_number: Integer?
+    #  ) -> ::Hash[Symbol, VideoBlob | String | nil | ::Array[String]]
     def resolve(upload_id:, tmdb_id:, filename: nil, media_type: 'movie', season_number: nil, episode_number: nil)
-      validate_media_type!(media_type)
-      validate_tv_fields!(media_type:, season_number:, episode_number:)
+      # Validate media type - return error instead of raising
+      return err("media_type must be one of: #{ALLOWED_MEDIA_TYPES.join(', ')}") unless ALLOWED_MEDIA_TYPES.include?(media_type)
 
-      upload = Uploads::TusUploadService.call(upload_id:, filename:)
-
-      config = Config::Video.newest
-      return err('No video configuration found. Configure settings first.') unless config.persisted?
-
-      blob = VideoBlob.new(
-        tmdb_id:,
-        media_type:,
-        season_number:,
-        episode_number:,
-        path_extension: upload[:extension]
-      )
-
-      Uploads::TmdbMetadataService.call(video_blob: blob)
-      return err("Could not fetch title from TMDB (id: #{tmdb_id})") unless blob.title.present?
-
-      generated_filename = blob.generated_filename
-      media_path = blob.media_path
-      unless generated_filename.present? && media_path.present?
-        raise Uploads::TusUploadService::Error,
-              'Could not build media path'
+      # Validate TV fields - return error instead of raising
+      if media_type == 'tv'
+        return err('season_number is required for TV uploads') if season_number.nil?
+        return err('episode_number is required for TV uploads') if episode_number.nil?
       end
 
-      blob.filename = generated_filename
-      blob.key = media_path
+      # Find tus session
+      tus_session = TusUploadSession.find_by(id: upload_id)
+      return err('Upload session not found') unless tus_session
 
-      Uploads::PromoteFileService.call(
+      # Check if already finalized
+      return err('Upload already finalized') if tus_session.finalized?
+
+      # Queue async promotion job
+      PromoteUploadJob.perform_later(
         upload_id:,
-        info: upload[:info],
-        extension: upload[:extension],
-        video_blob: blob
+        tmdb_id:,
+        filename:,
+        media_type:,
+        season_number:,
+        episode_number:
       )
 
-      blob = VideoBlobs::UpsertFromUploadService.call(
-        video_blob: blob
-      )
-
-      VideoBlobTmdbSyncJob.perform_later(blob.id)
-
-      { video_blob: blob, destination_path: blob.key, errors: [] }
-    rescue Uploads::TusUploadService::Error, TheMovieDb::Error, ActiveRecord::RecordInvalid, SystemCallError => e
-      err(e.message)
+      { video_blob: nil, destination_path: nil, errors: [] }
     end
 
     private
@@ -100,21 +106,6 @@ module Mutations
     #: (String message) -> ::Hash[Symbol, VideoBlob | String | nil | ::Array[String]]
     def err(message)
       { video_blob: nil, destination_path: nil, errors: [message] }
-    end
-
-    #: (String media_type) -> void
-    def validate_media_type!(media_type)
-      return if ALLOWED_MEDIA_TYPES.include?(media_type)
-
-      raise Uploads::TusUploadService::Error, "media_type must be one of: #{ALLOWED_MEDIA_TYPES.join(', ')}"
-    end
-
-    #: (media_type: String, season_number: Integer?, episode_number: Integer?) -> void
-    def validate_tv_fields!(media_type:, season_number:, episode_number:)
-      return unless media_type == 'tv'
-
-      raise Uploads::TusUploadService::Error, 'season_number is required for TV uploads' if season_number.nil?
-      raise Uploads::TusUploadService::Error, 'episode_number is required for TV uploads' if episode_number.nil?
     end
   end
 end

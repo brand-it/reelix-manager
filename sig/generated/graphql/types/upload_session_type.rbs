@@ -2,8 +2,17 @@
 
 module Types
   class UploadSessionType < Types::BaseObject
+    # : () -> String
+    def status: () -> String
+
     # : () -> bool
-    def upload_complete: () -> bool
+    def upload_complete?: () -> bool
+
+    # : () -> Integer
+    def bytes_remaining: () -> Integer
+
+    # : () -> Integer
+    def progress_percent: () -> Integer
 
     # : () -> String
     def created_at: () -> String
@@ -13,5 +22,11 @@ module Types
 
     # : () -> String
     def expires_at: () -> String
+
+    # : () -> String?
+    def device_name: () -> String?
+
+    # : () -> String?
+    def user_email: () -> String?
   end
 end

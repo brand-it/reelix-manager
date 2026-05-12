@@ -1,0 +1,10 @@
+# resolve-type-names: false
+
+class ::CleanupStuckFinalizingBlobsJob < ::ApplicationJob
+  STUCK_THRESHOLD: ::ActiveSupport::Duration
+
+  def perform: () -> void
+end
+
+class ::ApplicationJob < ::ActiveJob::Base
+end

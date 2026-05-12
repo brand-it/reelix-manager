@@ -2,7 +2,7 @@
 
 module Resolvers
   class UploadSessionsResolver < Resolvers::BaseResolver
-    # : () -> ::Array[Uploads::SessionSnapshot]
-    def resolve: () -> ::Array[Uploads::SessionSnapshot]
+    # : () -> ::Array[TusUploadSession]
+    def resolve: () -> ::Array[TusUploadSession]
   end
 end

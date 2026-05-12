@@ -2,7 +2,7 @@
 
 module Resolvers
   class UploadSessionResolver < Resolvers::BaseResolver
-    # : (id: String) -> Uploads::SessionSnapshot?
-    def resolve: (id: String) -> Uploads::SessionSnapshot?
+    # : (id: String) -> TusUploadSession?
+    def resolve: (id: String) -> TusUploadSession?
   end
 end

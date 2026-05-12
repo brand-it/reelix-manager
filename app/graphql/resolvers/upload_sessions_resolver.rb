@@ -4,10 +4,14 @@ module Resolvers
   class UploadSessionsResolver < Resolvers::BaseResolver
     type [Types::UploadSessionType], null: false
 
-    #: () -> ::Array[Uploads::SessionSnapshot]
+    #: () -> ::Array[TusUploadSession]
     def resolve
       require_upload!
-      Uploads::ActiveUploadsService.call
+      TusUploadSession
+        .where(finalized: false)
+        .includes(:doorkeeper_token, :user)
+        .order(updated_at: :desc)
+        .to_a
     end
   end
 end

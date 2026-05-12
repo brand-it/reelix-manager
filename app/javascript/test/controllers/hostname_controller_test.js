@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { screen, within } from '@testing-library/dom'
-import HostnameController from './hostname_controller'
-import { createStimulusTestHelper, simulateLocation } from '../test'
+import HostnameController from '@controllers/hostname_controller'
+import { createStimulusTestHelper, simulateLocation } from '@test/index'
 
 describe('HostnameController', () => {
   const helper = createStimulusTestHelper(HostnameController, 'hostname')

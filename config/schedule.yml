@@ -1,4 +1,15 @@
 # Schedule background jobs using solid_queue or good_job
+
+# Cleanup expired tus uploads every hour
+cleanup_expired_tus_uploads:
+  cron: "0 * * * *"
+  class: "CleanupExpiredTusUploadsJob"
+
+# Cleanup stuck finalizing blobs every 6 hours
+cleanup_stuck_finalizing_blobs:
+  cron: "0 */6 * * *"
+  class: "CleanupStuckFinalizingBlobsJob"
+
 # Run cleanup job daily at 2:00 AM
 cleanup_old_errors:
   cron: "0 2 * * *"

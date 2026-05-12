@@ -1,7 +1,8 @@
 # Generated from app/controllers/uploads_controller.rb with RBS::Inline
 
+# frozen_string_literal: true
 class UploadsController < ApplicationController
-  @active_uploads: Array[Uploads::SessionSnapshot]
+  @active_uploads: Array[TusUploadSession]
 
   @recent_video_blobs: ActiveRecord::Relation
 

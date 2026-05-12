@@ -6,6 +6,6 @@ module Uploads
     def initialize: (recent_video_blobs: ActiveRecord::Relation) -> void
 
     # : ActiveRecord::Relation
-    attr_reader recent_video_blobs: ActiveRecord::Relation
+    attr_reader recent_video_blobs: untyped
   end
 end

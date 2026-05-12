@@ -18,8 +18,8 @@
                   <code><%= upload.id %></code>
                 </div>
               </div>
-              <span class="badge text-bg-<%= upload.upload_complete ? "success" : "secondary" %>">
-                <%= upload.status.humanize %>
+              <span class="badge text-bg-<%= upload.upload_complete? ? "success" : "secondary" %>">
+                <%= upload.upload_status.humanize %>
               </span>
             </div>
 

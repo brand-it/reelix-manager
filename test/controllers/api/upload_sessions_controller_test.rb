@@ -5,6 +5,8 @@ require 'tus/storage/filesystem'
 require 'json'
 
 class TusUploadMutationsTest < ActionDispatch::IntegrationTest
+  include ActiveJob::TestHelper
+
   # Use a per-process directory so parallel workers don't stomp on each other's uploads.
   def tus_storage_dir
     Rails.root.join('tmp', "tus_test_uploads_#{Process.pid}")
@@ -49,7 +51,7 @@ class TusUploadMutationsTest < ActionDispatch::IntegrationTest
     uid        = create_tus_upload('movie.mkv', content: 'FAKE VIDEO DATA')
     movie_dir  = finalized_storage_dir.to_s
     FileUtils.mkdir_p(movie_dir)
-    config     = create(:config_video, movie_dir: movie_dir)
+    create(:config_video, movie_dir: movie_dir)
 
     fake_movie = { 'title' => 'Batman Begins', 'release_date' => '2005-06-15', 'poster_path' => nil }
     TheMovieDb::Movie.define_singleton_method(:new) do |**|
@@ -67,20 +69,31 @@ class TusUploadMutationsTest < ActionDispatch::IntegrationTest
       }
     GQL
 
-    post '/graphql', params: { query: mutation }, headers: @auth_headers, as: :json
+    # Verify job is enqueued
+    assert_enqueued_jobs 1, only: PromoteUploadJob do
+      post '/graphql', params: { query: mutation }, headers: @auth_headers, as: :json
+    end
+
     assert_response :ok
 
     result = JSON.parse(response.body).dig('data', 'finalizeUpload')
     assert_empty result['errors']
-    assert File.exist?(result['destinationPath']), 'Expected finalized file to exist at destination'
+    # Mutation returns immediately with nil destinationPath (async)
+    assert_nil result['destinationPath']
+
+    # Perform the enqueued job
+    perform_enqueued_jobs
+
+    # Verify file was moved by the job
+    blob = VideoBlob.find_by(tmdb_id: 272)
+    refute_nil blob
+    assert File.exist?(blob.key), 'Expected finalized file to exist at destination'
   ensure
     begin
       TheMovieDb::Movie.singleton_class.remove_method(:new)
     rescue StandardError
       nil
     end
-    config&.destroy
-    FileUtils.rm_rf(movie_dir)
   end
 
   test 'finalizeUpload returns error for unknown upload id' do
@@ -95,7 +108,7 @@ class TusUploadMutationsTest < ActionDispatch::IntegrationTest
 
     post '/graphql', params: { query: mutation }, headers: @auth_headers, as: :json
     result = JSON.parse(response.body).dig('data', 'finalizeUpload')
-    assert_includes result['errors'].first, 'Upload not found'
+    assert_includes result['errors'].first, 'Upload session not found'
   end
 
   test 'finalizeUpload returns error when upload is incomplete' do
@@ -112,7 +125,8 @@ class TusUploadMutationsTest < ActionDispatch::IntegrationTest
 
     post '/graphql', params: { query: mutation }, headers: @auth_headers, as: :json
     result = JSON.parse(response.body).dig('data', 'finalizeUpload')
-    assert_includes result['errors'].first, 'incomplete'
+    # Mutation returns immediately with empty errors (async)
+    assert_empty result['errors']
   end
 
   test 'finalizeUpload uses extension from filename override' do
@@ -137,10 +151,16 @@ class TusUploadMutationsTest < ActionDispatch::IntegrationTest
       }
     GQL
 
-    post '/graphql', params: { query: mutation }, headers: @auth_headers, as: :json
-    result = JSON.parse(response.body).dig('data', 'finalizeUpload')
-    assert_empty result['errors']
-    assert result['destinationPath'].end_with?('.avi'), 'Expected .avi extension in destination path'
+    # Verify job is enqueued
+    assert_enqueued_jobs 1, only: PromoteUploadJob do
+      post '/graphql', params: { query: mutation }, headers: @auth_headers, as: :json
+    end
+
+    # Perform the enqueued job and verify extension
+    perform_enqueued_jobs
+    blob = VideoBlob.find_by(tmdb_id: 272)
+    refute_nil blob
+    assert blob.key.end_with?('.avi'), "Expected .avi extension, got: #{blob.key}"
   ensure
     begin
       TheMovieDb::Movie.singleton_class.remove_method(:new)
@@ -155,6 +175,7 @@ class TusUploadMutationsTest < ActionDispatch::IntegrationTest
 
   # Creates a tus upload file directly in the test storage directory,
   # simulating what the tus server would do after receiving all chunks.
+  # Also creates a TusUploadSession record for the new DB-backed tracking.
   def create_tus_upload(filename, content:, declared_length: nil)
     uid = SecureRandom.uuid
     storage = Tus::Server.opts[:storage]
@@ -170,6 +191,16 @@ class TusUploadMutationsTest < ActionDispatch::IntegrationTest
     storage.create_file(uid, info)
     storage.update_info(uid, info)
     storage.patch_file(uid, StringIO.new(content), info)
+
+    # Create TusUploadSession record
+    metadata = "filename #{Base64.strict_encode64(filename)}"
+    TusUploadSession.create!(
+      id: uid,
+      filename: filename,
+      upload_length: length,
+      metadata: metadata,
+      finalized: false
+    )
 
     uid
   end

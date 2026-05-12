@@ -2,10 +2,10 @@
 
 module Uploads
   class ActiveUploadsComponent < ViewComponent::Base
-    # : (active_uploads: Array[Uploads::SessionSnapshot]) -> void
-    def initialize: (active_uploads: ::Array[Uploads::SessionSnapshot]) -> void
+    # : (active_uploads: Array[TusUploadSession]) -> void
+    def initialize: (active_uploads: Array[TusUploadSession]) -> void
 
-    # : Array[Uploads::SessionSnapshot]
-    attr_reader active_uploads: ::Array[Uploads::SessionSnapshot]
+    # : Array[TusUploadSession]
+    attr_reader active_uploads: untyped
   end
 end

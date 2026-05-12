@@ -51,7 +51,8 @@ export function simulateLocation(url) {
       port: parsed.port,
       protocol: parsed.protocol,
       href: parsed.href,
-      origin: parsed.origin
+      origin: parsed.origin,
+      pathname: parsed.pathname
     },
     writable: true,
     configurable: true

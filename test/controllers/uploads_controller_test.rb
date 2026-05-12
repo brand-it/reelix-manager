@@ -29,7 +29,24 @@ class UploadsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'index shows active uploads and recent uploads' do
-    create_upload(uid: 'upload-1', filename: 'movie.mkv', length: 1000, offset: 250)
+    # Create TusUploadSession and tus filesystem files
+    metadata = Base64.strict_encode64('movie.mkv')
+    File.binwrite(File.join(@storage_dir, 'upload-1'), 'x' * 250)
+    File.binwrite(
+      File.join(@storage_dir, 'upload-1.info'),
+      JSON.generate(
+        'Upload-Length' => '1000',
+        'Upload-Offset' => '250',
+        'Upload-Metadata' => "filename #{metadata}"
+      )
+    )
+    TusUploadSession.create!(
+      id: 'upload-1',
+      filename: 'movie.mkv',
+      upload_length: 1000,
+      metadata: "filename #{metadata}",
+      finalized: false
+    )
     create(:video_blob, title: 'Batman Begins', year: 2005, created_at: 1.minute.ago)
 
     get uploads_path
@@ -43,7 +60,13 @@ class UploadsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'index responds with turbo_stream format when Accept header is set' do
-    create_upload(uid: 'upload-1', filename: 'movie.mkv', length: 1000, offset: 250)
+    TusUploadSession.create!(
+      id: 'upload-1',
+      filename: 'movie.mkv',
+      upload_length: 1000,
+      metadata: '',
+      finalized: false
+    )
 
     # NOTE: Accept header must not contain */* or Rails will treat it as browser-like
     # and ignore the Accept header, defaulting to HTML
@@ -55,7 +78,13 @@ class UploadsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'index responds with html format by default' do
-    create_upload(uid: 'upload-1', filename: 'movie.mkv', length: 1000, offset: 250)
+    TusUploadSession.create!(
+      id: 'upload-1',
+      filename: 'movie.mkv',
+      upload_length: 1000,
+      metadata: '',
+      finalized: false
+    )
 
     get uploads_path
 

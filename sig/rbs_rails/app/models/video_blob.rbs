@@ -564,6 +564,46 @@ class ::VideoBlob < ::ApplicationRecord
 
     def plex_version_for_database: () -> bool
 
+    def finalizing: () -> bool
+
+    def finalizing=: (bool) -> bool
+
+    def finalizing?: () -> bool
+
+    def finalizing_changed?: (?from: bool?, ?to: bool?) -> bool
+
+    def finalizing_change: () -> [ bool?, bool? ]
+
+    def finalizing_will_change!: () -> void
+
+    def finalizing_was: () -> bool?
+
+    def finalizing_previously_changed?: (?from: bool?, ?to: bool?) -> bool
+
+    def finalizing_previous_change: () -> ::Array[bool?]?
+
+    def finalizing_previously_was: () -> bool?
+
+    def finalizing_before_last_save: () -> bool?
+
+    def finalizing_change_to_be_saved: () -> ::Array[bool?]?
+
+    def finalizing_in_database: () -> bool?
+
+    def saved_change_to_finalizing: () -> ::Array[bool?]?
+
+    def saved_change_to_finalizing?: () -> bool
+
+    def will_save_change_to_finalizing?: () -> bool
+
+    def restore_finalizing!: () -> void
+
+    def clear_finalizing_change: () -> void
+
+    def finalizing_before_type_cast: () -> bool
+
+    def finalizing_for_database: () -> bool
+
     def poster_url: () -> ::String?
 
     def poster_url=: (::String?) -> ::String?

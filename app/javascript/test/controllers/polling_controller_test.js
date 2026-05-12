@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { screen } from '@testing-library/dom'
-import PollingController from './polling_controller'
-import { createStimulusTestHelper, simulateLocation } from '../test'
+import PollingController from '@controllers/polling_controller'
+import { createStimulusTestHelper, simulateLocation } from '@test/index'
 
 describe('PollingController', () => {
   let fetchSpy
@@ -18,7 +18,7 @@ describe('PollingController', () => {
     })
     Turbo.renderStreamMessage = vi.fn()
     renderStreamMessageSpy = Turbo.renderStreamMessage
-    simulateLocation('https://example.com/page')
+    simulateLocation('https://example.com/uploads')
     await helper.start()
   })
 
@@ -121,7 +121,8 @@ describe('PollingController', () => {
   })
 
   it('uses current location when no custom URL provided', async () => {
-    simulateLocation('https://example.com/page?query=test')
+    // Note: Must use /uploads path for polling to work
+    simulateLocation('https://example.com/uploads?query=test')
 
     document.body.innerHTML = `
       <div data-controller="polling" data-polling-interval-value="100">
@@ -131,7 +132,7 @@ describe('PollingController', () => {
 
     await new Promise(resolve => setTimeout(resolve, 150))
 
-    expect(fetchSpy).toHaveBeenCalledWith('https://example.com/page?query=test', expect.any(Object))
+    expect(fetchSpy).toHaveBeenCalledWith('https://example.com/uploads?query=test', expect.any(Object))
   })
 
   it('sends Turbo Stream accept header', async () => {

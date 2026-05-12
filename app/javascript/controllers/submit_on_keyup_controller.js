@@ -1,4 +1,4 @@
-import { Controller } from "@hotwired/stimulus"
+import { Controller } from "@hotwired/stimulus";
 
 // Connects to data-controller="submit-on-keyup"
 //
@@ -22,60 +22,60 @@ import { Controller } from "@hotwired/stimulus"
 //     </form>
 //   </div>
 export default class extends Controller {
-  static targets = ["input", "form"]
+  static targets = ["input", "form"];
 
   connect() {
-    this.lastSubmittedValues = new Map()
-    this.timeout = null
+    this.lastSubmittedValues = new Map();
+    this.timeout = null;
 
     this.inputTargets.forEach((input) => {
-      this.lastSubmittedValues.set(input.name || input.id, input.value)
-    })
+      this.lastSubmittedValues.set(input.name || input.id, input.value);
+    });
   }
 
   disconnect() {
-    clearTimeout(this.timeout)
-    this.timeout = null
+    clearTimeout(this.timeout);
+    this.timeout = null;
   }
 
   submit(event) {
-    const input = event.currentTarget
-    clearTimeout(this.timeout)
+    const input = event.currentTarget;
+    clearTimeout(this.timeout);
     this.timeout = setTimeout(() => {
-      this.timeout = null
-      if (!this.element.isConnected) return
+      this.timeout = null;
+      if (!this.element.isConnected) return;
 
-      this.requestSubmitIfChanged(input)
-    }, 300)
+      this.requestSubmitIfChanged(input);
+    }, 300);
   }
 
   // Compatibility for stale cached markup that still uses
   // change->submit-on-keyup#submitNow.
   submitNow(event) {
-    clearTimeout(this.timeout)
-    this.timeout = null
-    this.requestSubmitIfChanged(event.currentTarget)
+    clearTimeout(this.timeout);
+    this.timeout = null;
+    this.requestSubmitIfChanged(event.currentTarget);
   }
 
   // Compatibility for stale cached markup that still uses
   // click->submit-on-keyup#submitFilter on a <label>.
   submitFilter(event) {
-    const input = event.currentTarget.control
-    if (!input) return
+    const input = event.currentTarget.control;
+    if (!input) return;
 
-    clearTimeout(this.timeout)
-    this.timeout = null
-    input.checked = true
-    this.requestSubmitIfChanged(input)
+    clearTimeout(this.timeout);
+    this.timeout = null;
+    input.checked = true;
+    this.requestSubmitIfChanged(input);
   }
 
   requestSubmitIfChanged(input) {
-    if (!this.element.isConnected) return
+    if (!this.element.isConnected) return;
 
-    const key = input.name || input.id
-    if (this.lastSubmittedValues.get(key) === input.value) return
+    const key = input.name || input.id;
+    if (this.lastSubmittedValues.get(key) === input.value) return;
 
-    this.lastSubmittedValues.set(key, input.value)
-    this.formTarget.requestSubmit()
+    this.lastSubmittedValues.set(key, input.value);
+    this.formTarget.requestSubmit();
   }
 }

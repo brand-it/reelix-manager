@@ -7,11 +7,9 @@ class ErrorLoggerService < ApplicationService
   @context: untyped?
 
   # : (StandardError, ?untyped?) -> ErrorEntry
-  # steep:ignore MethodDefinitionMissing
   def self.call: (StandardError, ?untyped?) -> ErrorEntry
 
   # : (StandardError, ?untyped?) -> void
-  # steep:ignore MethodDefinitionMissing
   def initialize: (StandardError, ?untyped?) -> void
 
   # : () -> ErrorEntry

@@ -1,0 +1,15 @@
+# Generated from app/jobs/promote_upload_job.rb with RBS::Inline
+
+# Promotes a completed tus upload to its final destination asynchronously.
+# Handles file movement, VideoBlob creation, and TMDB metadata syncing.
+class PromoteUploadJob < ApplicationJob
+  # : (
+  #     upload_id: String,
+  #     tmdb_id: Integer,
+  #     filename: String?,
+  #     media_type: String,
+  #     season_number: Integer?,
+  #     episode_number: Integer?
+  #   ) -> void
+  def perform: (upload_id: String, tmdb_id: Integer, filename: String?, media_type: String, season_number: Integer?, episode_number: Integer?) -> void
+end

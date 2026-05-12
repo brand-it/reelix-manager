@@ -1,6 +1,5 @@
 # Generated from app/controllers/uploads_controller.rb with RBS::Inline
 
-# frozen_string_literal: true
 class UploadsController < ApplicationController
   @active_uploads: Array[TusUploadSession]
 

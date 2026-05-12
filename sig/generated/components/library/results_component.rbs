@@ -7,11 +7,9 @@ module Library
     def initialize: (video_blobs: Array[VideoBlob], query: String) -> void
 
     # : Array[VideoBlob]
-  # steep:ignore MethodDefinitionMissing
     attr_reader video_blobs: untyped
 
     # : String
-  # steep:ignore MethodDefinitionMissing
     attr_reader query: untyped
 
     # : () -> bool

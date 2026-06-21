@@ -119,7 +119,7 @@ GEM
       railties (>= 7.0)
       responders
       warden (~> 1.2.3)
-    doorkeeper (5.9.2)
+    doorkeeper (5.9.3)
       railties (>= 5)
     doorkeeper-device_authorization_grant (1.0.3)
       doorkeeper (~> 5.5)

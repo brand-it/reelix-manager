@@ -215,6 +215,38 @@ class FinalizeUploadMutationTest < ActiveSupport::TestCase
   ensure
     FileUtils.rm_rf(tv_dir)
   end
+  test 'successfully finalizes a TV episode upload with part number' do
+    tv_dir = Dir.mktmpdir('tv_dest_part_')
+    create(:config_video, movie_dir: '/tmp', tv_dir:)
+
+    tv_tmdb     = { 'name' => 'The Wire', 'first_air_date' => '2002-06-02', 'poster_path' => '/wire.jpg' }
+    season_tmdb = { 'episodes' => [{ 'episode_number' => 1, 'name' => 'The Buys' }] }
+
+    with_fake_tus_upload(uid: 'uid-tv-part', original_filename: 'episode.mkv') do
+      with_fake_tv_tmdb(tv_data: tv_tmdb, season_data: season_tmdb) do
+        result = nil
+
+        assert_enqueued_jobs(1, only: PromoteUploadJob) do
+          result = execute(uploadId: 'uid-tv-part', tmdbId: 1438, mediaType: 'tv',
+                           seasonNumber: 1, episodeNumber: 1, part: 1)
+        end
+
+        assert_nil result['errors'], result['errors'].inspect
+        data = result.dig('data', 'finalizeUpload')
+        assert_empty data['errors']
+
+        perform_enqueued_jobs
+
+        blob = VideoBlob.find_by(tmdb_id: 1438)
+        refute_nil blob
+        assert_equal 1, blob.part
+        assert_includes blob.generated_filename, '-pt1'
+        assert_includes blob.key, 'The Buys-pt1'
+      end
+    end
+  ensure
+    FileUtils.rm_rf(tv_dir)
+  end
 
   # ---------------------------------------------------------------------------
   # Error cases

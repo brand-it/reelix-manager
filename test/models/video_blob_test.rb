@@ -154,6 +154,79 @@ class VideoBlobTest < ActiveSupport::TestCase
   end
 
   # ---------------------------------------------------------------------------
+  # part_suffix
+  # ---------------------------------------------------------------------------
+
+  test 'part_suffix returns empty string when part is nil' do
+    blob = build(:video_blob, :tv, part: nil)
+    assert_equal '', blob.send(:part_suffix)
+  end
+
+  test 'part_suffix returns empty string when part is zero' do
+    blob = build(:video_blob, :tv, part: 0)
+    assert_equal '', blob.send(:part_suffix)
+  end
+
+  test 'part_suffix returns -ptN for positive part' do
+    blob = build(:video_blob, :tv, part: 1)
+    assert_equal '-pt1', blob.send(:part_suffix)
+
+    blob.part = 2
+    assert_equal '-pt2', blob.send(:part_suffix)
+  end
+
+  # ---------------------------------------------------------------------------
+  # generated_filename with part
+  # ---------------------------------------------------------------------------
+
+  test 'generated_filename includes part suffix for multi-part episodes' do
+    blob = build(:video_blob, :tv,
+                 title: 'The Wire', year: 2002,
+                 season_number: 1, episode_number: 1,
+                 part: 1)
+    blob.path_extension = 'mkv'
+    blob.episode_title = 'The Buys'
+
+    assert_equal 'The Wire (2002) - s01e01 - The Buys-pt1.mkv', blob.generated_filename
+  end
+
+  test 'generated_filename omits part suffix when part is nil' do
+    blob = build(:video_blob, :tv,
+                 title: 'The Wire', year: 2002,
+                 season_number: 1, episode_number: 1,
+                 part: nil)
+    blob.path_extension = 'mkv'
+    blob.episode_title = 'The Buys'
+
+    assert_equal 'The Wire (2002) - s01e01 - The Buys.mkv', blob.generated_filename
+  end
+
+  test 'generated_filename includes part suffix without episode title' do
+    blob = build(:video_blob, :tv,
+                 title: 'The Wire', year: 2002,
+                 season_number: 1, episode_number: 1,
+                 part: 2,
+                 episode_title: nil)
+    blob.path_extension = 'mkv'
+
+    assert_equal 'The Wire (2002) - s01e01-pt2.mkv', blob.generated_filename
+  end
+
+  # ---------------------------------------------------------------------------
+  # media_path with part
+  # ---------------------------------------------------------------------------
+
+  test 'media_path includes part suffix in TV episode path' do
+    blob = build(:video_blob, :tv,
+                 title: 'The Wire', year: 2002,
+                 season_number: 1, episode_number: 1,
+                 filename: 'The Wire (2002) - s01e01 - The Buys-pt1.mkv',
+                 part: 1)
+    expected = File.join(@tv_dir, 'The Wire (2002)', 'Season 01',
+                         'The Wire (2002) - s01e01 - The Buys-pt1.mkv')
+    assert_equal expected, blob.media_path
+  end
+  # ---------------------------------------------------------------------------
   # media_path
   # ---------------------------------------------------------------------------
 

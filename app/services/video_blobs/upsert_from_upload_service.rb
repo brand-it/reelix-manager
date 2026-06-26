@@ -36,6 +36,7 @@ module VideoBlobs
         episode_title: @video_blob.episode_title,
         season_number: @video_blob.season_number,
         episode_number: @video_blob.episode_number,
+        part: @video_blob.part,
         content_type: KeyParserService::VIDEO_MIME_TYPES[@video_blob.path_extension.to_s]
       )
       blob.save!

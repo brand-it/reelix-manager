@@ -13,9 +13,10 @@ class PromoteUploadJob < ApplicationJob
   #    filename: String?,
   #    media_type: String,
   #    season_number: Integer?,
-  #    episode_number: Integer?
+  #    episode_number: Integer?,
+  #    part: Integer?
   #  ) -> void
-  def perform(upload_id:, tmdb_id:, filename:, media_type:, season_number:, episode_number:)
+  def perform(upload_id:, tmdb_id:, filename:, media_type:, season_number:, episode_number:, part: nil)
     # Find tus session
     tus_session = TusUploadSession.find_by(id: upload_id)
     return unless tus_session
@@ -33,6 +34,7 @@ class PromoteUploadJob < ApplicationJob
       media_type:,
       season_number:,
       episode_number:,
+      part:,
       path_extension: upload[:extension],
       finalizing: true
     )

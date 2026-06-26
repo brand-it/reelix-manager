@@ -111,7 +111,7 @@ class VideoBlob < ApplicationRecord
         "#{show_name} - #{episode_code}"
       end
 
-    "#{file_base}.#{sanitized_extension}"
+    "#{file_base}#{part_suffix}.#{sanitized_extension}"
   end
 
   # Returns the absolute media path for this blob.
@@ -139,6 +139,13 @@ class VideoBlob < ApplicationRecord
   end
 
   private
+
+  #: () -> String
+  def part_suffix
+    return '' if part.to_i <= 0
+
+    "-pt#{part}"
+  end
 
   #: () -> String?
   def relative_media_path

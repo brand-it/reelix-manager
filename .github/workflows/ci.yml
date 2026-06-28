@@ -70,7 +70,7 @@ jobs:
           bundler-cache: true
 
       - name: Prepare RuboCop cache
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         env:
           DEPENDENCIES_HASH: ${{ hashFiles('.ruby-version', '**/.rubocop.yml', '**/.rubocop_todo.yml', 'Gemfile.lock') }}
         with:
@@ -153,7 +153,7 @@ jobs:
           bundler-cache: true
 
       - name: Cache RBS gem collection
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: .gem_rbs_collection
           key: rbs-collection-${{ runner.os }}-${{ hashFiles('rbs_collection.lock.yaml') }}

@@ -1,8 +1,11 @@
-# rbs_inline: disabled
 # frozen_string_literal: true
 
 class TusUploadSession < ApplicationRecord
   self.primary_key = 'id'
+
+  VERIFICATION_STATUSES = %w[pending verified verification_failed].freeze #: Array[String]
+
+  validates :verification_status, inclusion: { in: VERIFICATION_STATUSES }, allow_nil: true
 
   belongs_to :user, optional: true
   belongs_to :doorkeeper_token, class_name: 'Doorkeeper::AccessToken', optional: true
@@ -20,7 +23,7 @@ class TusUploadSession < ApplicationRecord
     compute_status
   end
 
-  #: () -> Time
+  #: () -> ActiveSupport::TimeWithZone
   def expires_at
     # updated_at + tus expiration time (48 hours)
     updated_at + Tus::Server.opts[:expiration_time]
@@ -46,6 +49,16 @@ class TusUploadSession < ApplicationRecord
   #: () -> Doorkeeper::Application?
   def device_application
     doorkeeper_token&.application
+  end
+
+  #: () -> bool
+  def verification_passed?
+    verification_status == 'verified'
+  end
+
+  #: () -> bool
+  def verification_failed?
+    verification_status == 'verification_failed'
   end
 
   private

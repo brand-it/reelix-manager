@@ -16,6 +16,9 @@ module Types
                                description: 'When the incomplete tus upload will expire if no more data is sent'
     field :device_name, String, null: true, description: 'OAuth application name'
     field :user_email, String, null: true, description: 'Email of user who uploaded'
+    field :client_digest, String, null: true, description: 'Client-provided SHA-256 digest (Base64)'
+    field :server_digest, String, null: true, description: 'Server-computed SHA-256 digest (Base64)'
+    field :verification_status, String, null: true, description: 'Verification status: pending, verified, failed'
 
     #: () -> String
     def status = object.upload_status

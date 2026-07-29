@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_21_163117) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_29_160951) do
   create_table "configs", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "settings"
@@ -234,6 +234,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_21_163117) do
   end
 
   create_table "tus_upload_sessions", id: :string, force: :cascade do |t|
+    t.string "client_digest"
     t.datetime "created_at", null: false
     t.integer "doorkeeper_token_id"
     t.string "filename", null: false
@@ -241,9 +242,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_21_163117) do
     t.string "fingerprint"
     t.text "metadata"
     t.string "mime_type"
+    t.string "server_digest"
     t.datetime "updated_at", null: false
     t.bigint "upload_length", null: false
     t.integer "user_id"
+    t.string "verification_status", default: "pending", null: false
     t.integer "video_blob_id"
     t.index ["doorkeeper_token_id"], name: "index_tus_upload_sessions_on_doorkeeper_token_id"
     t.index ["finalized", "updated_at"], name: "index_tus_upload_sessions_on_finalized_and_updated_at"

@@ -1,0 +1,31 @@
+# Generated from app/services/uploads/verify_digest_service.rb with RBS::Inline
+
+module Uploads
+  class VerifyDigestService < ApplicationService
+    class DigestMismatchError < StandardError
+      # : (String client_digest, String server_digest) -> void
+      def initialize: (String client_digest, String server_digest) -> void
+    end
+
+    # : (file_path: String, client_digest: String) -> String
+    def self.call: (file_path: String, client_digest: String) -> String
+
+    @file_path: String
+
+    @client_digest: String
+
+    # : (file_path: String, client_digest: String) -> void
+    def initialize: (file_path: String, client_digest: String) -> void
+
+    # : () -> String
+    def call: () -> String
+
+    private
+
+    # : () -> String
+    def compute_digest: () -> String
+
+    # : (String expected, String actual) -> bool
+    def constant_time_compare: (String expected, String actual) -> bool
+  end
+end

@@ -67,6 +67,7 @@ class VideoBlob < ApplicationRecord
   def directory: () -> String?
 
   private
+
   # : () -> String
   def part_suffix: () -> String
 

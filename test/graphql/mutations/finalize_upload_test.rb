@@ -63,7 +63,8 @@ class FinalizeUploadMutationTest < ActiveSupport::TestCase
       finalized: false
     )
 
-    yield dir, tus_session
+    fake_digest = Base64.strict_encode64(Digest::SHA256.digest('x' * size))
+    yield dir, tus_session, fake_digest
   ensure
     TusUploadSession.find_by(id: uid)&.destroy if defined?(uid)
     FileUtils.rm_rf(dir) if defined?(dir)
@@ -107,13 +108,13 @@ class FinalizeUploadMutationTest < ActiveSupport::TestCase
       'poster_path' => '/batman.jpg'
     }
 
-    with_fake_tus_upload(uid: 'uid-movie-1') do
+    with_fake_tus_upload(uid: 'uid-movie-1') do |_dir, _tus_session, fake_digest|
       with_fake_movie_tmdb(movie_tmdb) do
         result = nil
 
         # Verify job is enqueued and execute it
         assert_enqueued_jobs(1, only: PromoteUploadJob) do
-          result = execute(uploadId: 'uid-movie-1', tmdbId: 272)
+          result = execute(uploadId: 'uid-movie-1', tmdbId: 272, clientDigest: fake_digest)
         end
 
         # Mutation returns immediately with empty response (async)
@@ -154,11 +155,11 @@ class FinalizeUploadMutationTest < ActiveSupport::TestCase
       'poster_path' => nil
     }
 
-    with_fake_tus_upload(uid: 'uid-movie-2') do
+    with_fake_tus_upload(uid: 'uid-movie-2') do |_dir, _tus_session, fake_digest|
       with_fake_movie_tmdb(movie_tmdb) do
         assert_difference 'VideoBlob.count', 1 do
           assert_enqueued_jobs(1, only: PromoteUploadJob) do
-            execute(uploadId: 'uid-movie-2', tmdbId: 27_205)
+            execute(uploadId: 'uid-movie-2', tmdbId: 27_205, clientDigest: fake_digest)
           end
           # Perform the enqueued job
           perform_enqueued_jobs
@@ -180,14 +181,14 @@ class FinalizeUploadMutationTest < ActiveSupport::TestCase
     tv_tmdb     = { 'name' => 'Breaking Bad', 'first_air_date' => '2008-01-20', 'poster_path' => '/bb.jpg' }
     season_tmdb = { 'episodes' => [{ 'episode_number' => 1, 'name' => 'Pilot' }] }
 
-    with_fake_tus_upload(uid: 'uid-tv-1', original_filename: 'episode.mkv') do
+    with_fake_tus_upload(uid: 'uid-tv-1', original_filename: 'episode.mkv') do |_dir, _tus_session, fake_digest|
       with_fake_tv_tmdb(tv_data: tv_tmdb, season_data: season_tmdb) do
         result = nil
 
         # Verify job is enqueued
         assert_enqueued_jobs(1, only: PromoteUploadJob) do
           result = execute(uploadId: 'uid-tv-1', tmdbId: 1396, mediaType: 'tv',
-                           seasonNumber: 1, episodeNumber: 1)
+                           seasonNumber: 1, episodeNumber: 1, clientDigest: fake_digest)
         end
 
         # Mutation returns immediately with empty response (async)
@@ -222,13 +223,13 @@ class FinalizeUploadMutationTest < ActiveSupport::TestCase
     tv_tmdb     = { 'name' => 'The Wire', 'first_air_date' => '2002-06-02', 'poster_path' => '/wire.jpg' }
     season_tmdb = { 'episodes' => [{ 'episode_number' => 1, 'name' => 'The Buys' }] }
 
-    with_fake_tus_upload(uid: 'uid-tv-part', original_filename: 'episode.mkv') do
+    with_fake_tus_upload(uid: 'uid-tv-part', original_filename: 'episode.mkv') do |_dir, _tus_session, fake_digest|
       with_fake_tv_tmdb(tv_data: tv_tmdb, season_data: season_tmdb) do
         result = nil
 
         assert_enqueued_jobs(1, only: PromoteUploadJob) do
           result = execute(uploadId: 'uid-tv-part', tmdbId: 1438, mediaType: 'tv',
-                           seasonNumber: 1, episodeNumber: 1, part: 1)
+                           seasonNumber: 1, episodeNumber: 1, part: 1, clientDigest: fake_digest)
         end
 
         assert_nil result['errors'], result['errors'].inspect
@@ -253,7 +254,7 @@ class FinalizeUploadMutationTest < ActiveSupport::TestCase
   # ---------------------------------------------------------------------------
 
   test 'returns error when upload is not found' do
-    result = execute(uploadId: 'missing-uid', tmdbId: 1)
+    result = execute(uploadId: 'missing-uid', tmdbId: 1, clientDigest: 'fake-digest')
     data   = result.dig('data', 'finalizeUpload')
     refute_nil data, result.inspect
     assert_includes data['errors'].first, 'not found'
@@ -268,7 +269,7 @@ class FinalizeUploadMutationTest < ActiveSupport::TestCase
     # Verify job is enqueued
     result = nil
     assert_enqueued_jobs(1, only: PromoteUploadJob) do
-      result = execute(uploadId: uid, tmdbId: 1)
+      result = execute(uploadId: uid, tmdbId: 1, clientDigest: 'fake-digest')
     end
 
     data = result.dig('data', 'finalizeUpload')
@@ -280,9 +281,9 @@ class FinalizeUploadMutationTest < ActiveSupport::TestCase
   end
 
   test 'returns error when TV upload is missing season_number' do
-    with_fake_tus_upload(uid: 'uid-tv-noseas') do
+    with_fake_tus_upload(uid: 'uid-tv-noseas') do |_dir, _tus_session, fake_digest|
       result = execute(uploadId: 'uid-tv-noseas', tmdbId: 1396, mediaType: 'tv',
-                       episodeNumber: 1)
+                       episodeNumber: 1, clientDigest: fake_digest)
       data   = result.dig('data', 'finalizeUpload')
       refute_nil data, result.inspect
       assert_includes data['errors'].first, 'season_number'
@@ -290,9 +291,9 @@ class FinalizeUploadMutationTest < ActiveSupport::TestCase
   end
 
   test 'returns error when TV upload is missing episode_number' do
-    with_fake_tus_upload(uid: 'uid-tv-noep') do
+    with_fake_tus_upload(uid: 'uid-tv-noep') do |_dir, _tus_session, fake_digest|
       result = execute(uploadId: 'uid-tv-noep', tmdbId: 1396, mediaType: 'tv',
-                       seasonNumber: 1)
+                       seasonNumber: 1, clientDigest: fake_digest)
       data   = result.dig('data', 'finalizeUpload')
       refute_nil data, result.inspect
       assert_includes data['errors'].first, 'episode_number'
@@ -300,8 +301,8 @@ class FinalizeUploadMutationTest < ActiveSupport::TestCase
   end
 
   test 'returns error when media_type is invalid' do
-    with_fake_tus_upload(uid: 'uid-invalid-type') do
-      result = execute(uploadId: 'uid-invalid-type', tmdbId: 272, mediaType: 'nope')
+    with_fake_tus_upload(uid: 'uid-invalid-type') do |_dir, _tus_session, fake_digest|
+      result = execute(uploadId: 'uid-invalid-type', tmdbId: 272, mediaType: 'nope', clientDigest: fake_digest)
       data   = result.dig('data', 'finalizeUpload')
       refute_nil data, result.inspect
       assert_includes data['errors'].first, 'media_type must be one of: movie, tv'
@@ -310,13 +311,20 @@ class FinalizeUploadMutationTest < ActiveSupport::TestCase
 
   test 'returns error when no Config::Video is configured' do
     Config::Video.delete_all
-    with_fake_tus_upload(uid: 'uid-noconfig') do
-      result = execute(uploadId: 'uid-noconfig', tmdbId: 272)
+    with_fake_tus_upload(uid: 'uid-noconfig') do |_dir, _tus_session, fake_digest|
+      result = execute(uploadId: 'uid-noconfig', tmdbId: 272, clientDigest: fake_digest)
       data   = result.dig('data', 'finalizeUpload')
       refute_nil data, result.inspect
       # Config validation happens in the job, mutation returns immediately
       assert_empty data['errors']
     end
+  end
+
+  test 'returns error when client_digest is missing' do
+    result = execute(uploadId: 'nonexistent', tmdbId: 123, mediaType: 'movie')
+    # GraphQL rejects required argument at validation level, error appears in top-level errors
+    errors = result['errors'] || []
+    assert errors.any? { |e| e['message'].include?('clientDigest') }, "Expected clientDigest error, got: #{result.inspect}"
   end
 
   test 'returns GraphQL forbidden error without upload scope' do
@@ -325,7 +333,7 @@ class FinalizeUploadMutationTest < ActiveSupport::TestCase
     end
     context = { doorkeeper_token: fake_token }
     result  = ReelixManagerSchema.execute(FINALIZE_MUTATION,
-                                          variables: { input: { uploadId: 'x', tmdbId: 1 } },
+                                          variables: { input: { uploadId: 'x', tmdbId: 1, clientDigest: 'fake' } },
                                           context:)
     # ready? raises GraphQL::ExecutionError which appears in top-level errors
     errors = result['errors'] || []

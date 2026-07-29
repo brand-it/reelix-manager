@@ -85,7 +85,7 @@ class GraphqlControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
     mutation = <<~GQL
       mutation {
-        finalizeUpload(input: { uploadId: "fake-upload-id" }) {
+        finalizeUpload(input: { uploadId: "fake-upload-id", tmdbId: 1, clientDigest: "fake" }) {
           destinationPath
           errors
         }
@@ -159,7 +159,7 @@ class GraphqlControllerTest < ActionDispatch::IntegrationTest
   test 'mutation returns forbidden error when token only has search scope' do
     mutation = <<~GQL
       mutation {
-        finalizeUpload(input: { uploadId: "fake-upload-id", tmdbId: 1 }) {
+        finalizeUpload(input: { uploadId: "fake-upload-id", tmdbId: 1, clientDigest: "fake" }) {
           destinationPath
           errors
         }
@@ -181,7 +181,7 @@ class GraphqlControllerTest < ActionDispatch::IntegrationTest
   test 'mutation passes scope check with upload scope' do
     mutation = <<~GQL
       mutation {
-        finalizeUpload(input: { uploadId: "fake-upload-id", tmdbId: 1 }) {
+        finalizeUpload(input: { uploadId: "fake-upload-id", tmdbId: 1, clientDigest: "fake" }) {
           destinationPath
           errors
         }
@@ -203,7 +203,7 @@ class GraphqlControllerTest < ActionDispatch::IntegrationTest
   test 'mutation passes scope check with all scope' do
     mutation = <<~GQL
       mutation {
-        finalizeUpload(input: { uploadId: "fake-upload-id", tmdbId: 1 }) {
+        finalizeUpload(input: { uploadId: "fake-upload-id", tmdbId: 1, clientDigest: "fake" }) {
           destinationPath
           errors
         }

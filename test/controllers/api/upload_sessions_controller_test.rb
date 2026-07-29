@@ -62,7 +62,7 @@ class TusUploadMutationsTest < ActionDispatch::IntegrationTest
 
     mutation = <<~GQL
       mutation {
-        finalizeUpload(input: { uploadId: "#{uid}", tmdbId: 272 }) {
+        finalizeUpload(input: { uploadId: "#{uid}", tmdbId: 272, clientDigest: "#{Base64.strict_encode64(Digest::SHA256.digest('FAKE VIDEO DATA'))}" }) {
           destinationPath
           errors
         }
@@ -99,7 +99,7 @@ class TusUploadMutationsTest < ActionDispatch::IntegrationTest
   test 'finalizeUpload returns error for unknown upload id' do
     mutation = <<~GQL
       mutation {
-        finalizeUpload(input: { uploadId: "nonexistent-uid", tmdbId: 1 }) {
+        finalizeUpload(input: { uploadId: "nonexistent-uid", tmdbId: 1, clientDigest: "fake" }) {
           destinationPath
           errors
         }
@@ -116,7 +116,7 @@ class TusUploadMutationsTest < ActionDispatch::IntegrationTest
 
     mutation = <<~GQL
       mutation {
-        finalizeUpload(input: { uploadId: "#{uid}", tmdbId: 1 }) {
+        finalizeUpload(input: { uploadId: "#{uid}", tmdbId: 1, clientDigest: "fake" }) {
           destinationPath
           errors
         }
@@ -144,7 +144,7 @@ class TusUploadMutationsTest < ActionDispatch::IntegrationTest
 
     mutation = <<~GQL
       mutation {
-        finalizeUpload(input: { uploadId: "#{uid}", tmdbId: 272, filename: "renamed.avi" }) {
+        finalizeUpload(input: { uploadId: "#{uid}", tmdbId: 272, filename: "renamed.avi", clientDigest: "#{Base64.strict_encode64(Digest::SHA256.digest('DATA'))}" }) {
           destinationPath
           errors
         }

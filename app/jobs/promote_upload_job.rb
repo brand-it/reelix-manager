@@ -53,14 +53,15 @@ class PromoteUploadJob < ApplicationJob
     blob.filename = generated_filename
     blob.key = media_path
 
+    # Verify digest against tus source file BEFORE promotion
+    verify_digest(tus_session, tus_source_path(upload_id), client_digest)
+
     Uploads::PromoteFileService.call(
       upload_id:,
       info: upload[:info],
       extension: upload[:extension],
       video_blob: blob
     )
-
-    verify_digest(tus_session, media_path, client_digest)
 
     blob = VideoBlobs::UpsertFromUploadService.call(
       video_blob: blob
@@ -86,14 +87,19 @@ class PromoteUploadJob < ApplicationJob
   private
 
   #: (TusUploadSession, String, String) -> void
-  def verify_digest(tus_session, media_path, client_digest)
+  def verify_digest(tus_session, file_path, client_digest)
     computed_digest = Uploads::VerifyDigestService.call(
-      file_path: media_path,
+      file_path: file_path,
       client_digest: client_digest
     )
     tus_session.update!(verification_status: 'verified', server_digest: computed_digest)
   rescue Uploads::VerifyDigestService::DigestMismatchError
     tus_session.update!(verification_status: 'verification_failed')
     raise
+  end
+
+  #: (String) -> String
+  def tus_source_path(upload_id)
+    Pathname.new(Tus::Server.opts[:storage].directory.to_s).join(upload_id).to_s
   end
 end

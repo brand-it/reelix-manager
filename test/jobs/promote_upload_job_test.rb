@@ -22,7 +22,9 @@ class PromoteUploadJobTest < ActiveSupport::TestCase
       s.define_singleton_method(:directory) { dir }
     end
 
-    Tus::Server.define_singleton_method(:opts) { { storage: fake_storage, expiration_time: 48.hours } }
+    @original_tus_opts = Tus::Server.opts.dup
+    Tus::Server.opts[:storage] = fake_storage
+    Tus::Server.opts[:expiration_time] = 48.hours
 
     @tus_session = TusUploadSession.create!(
       id: uid,
@@ -39,7 +41,7 @@ class PromoteUploadJobTest < ActiveSupport::TestCase
   def teardown
     TusUploadSession.find_by(id: @tus_session&.id)&.destroy if defined?(@tus_session)
     FileUtils.rm_rf(@dir) if defined?(@dir)
-    Tus::Server.singleton_class.remove_method(:opts) if Tus::Server.singleton_class.method_defined?(:opts)
+    Tus::Server.opts.replace(@original_tus_opts) if defined?(@original_tus_opts)
     FileUtils.rm_rf(@movie_dir) if defined?(@movie_dir)
   end
 

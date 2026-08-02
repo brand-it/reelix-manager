@@ -54,6 +54,8 @@ module Uploads
 
     #: (String expected, String actual) -> bool
     def constant_time_compare(expected, actual)
+      return false unless expected.bytesize == actual.bytesize
+
       ActiveSupport::SecurityUtils.secure_compare(expected, actual)
     end
   end

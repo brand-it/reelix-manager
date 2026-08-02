@@ -18,7 +18,7 @@ module Types
     field :user_email, String, null: true, description: 'Email of user who uploaded'
     field :client_digest, String, null: true, description: 'Client-provided SHA-256 digest (Base64)'
     field :server_digest, String, null: true, description: 'Server-computed SHA-256 digest (Base64)'
-    field :verification_status, String, null: true, description: 'Verification status: pending, verified, failed'
+    field :verification_status, String, null: true, description: 'Verification status: pending, verified, verification_failed'
 
     #: () -> String
     def status = object.upload_status

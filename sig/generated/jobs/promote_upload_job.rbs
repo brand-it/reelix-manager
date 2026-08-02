@@ -19,4 +19,7 @@ class PromoteUploadJob < ApplicationJob
 
   # : (TusUploadSession, String, String) -> void
   def verify_digest: (TusUploadSession, String, String) -> void
+
+  # : (String) -> String
+  def tus_source_path: (String) -> String
 end

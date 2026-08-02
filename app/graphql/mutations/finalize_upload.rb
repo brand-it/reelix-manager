@@ -23,6 +23,8 @@ module Mutations
                                        description: "Episode number (required when media_type is 'tv')"
     argument :part, Integer, required: false,
                              description: 'Part number for multi-part episodes (e.g. 1 for -pt1)'
+    argument :client_digest, String, required: true,
+                                     description: 'SHA-256 digest of the uploaded file (Base64-encoded)'
 
     field :video_blob,        Types::VideoBlobType, null: true
     field :destination_path,  String,               null: true
@@ -31,13 +33,14 @@ module Mutations
     #: (
     #    upload_id: String,
     #    tmdb_id: Integer,
+    #    client_digest: String,
     #    ?filename: String?,
     #    ?media_type: String,
     #    ?season_number: Integer?,
     #    ?episode_number: Integer?,
     #    ?part: Integer?
     #  ) -> bool
-    def ready?(upload_id:, tmdb_id:, filename: nil, media_type: 'movie', season_number: nil, episode_number: nil, part: nil)
+    def ready?(upload_id:, tmdb_id:, client_digest:, filename: nil, media_type: 'movie', season_number: nil, episode_number: nil, part: nil)
       require_upload!
       true
     end
@@ -45,41 +48,15 @@ module Mutations
     #: (
     #    upload_id: String,
     #    tmdb_id: Integer,
+    #    client_digest: String,
     #    ?filename: String?,
     #    ?media_type: String,
     #    ?season_number: Integer?,
     #    ?episode_number: Integer?,
     #    ?part: Integer?
     #  ) -> ::Hash[Symbol, VideoBlob | String | nil | ::Array[String]]
-    #: (
-    #    upload_id: String,
-    #    tmdb_id: Integer,
-    #    ?filename: String?,
-    #    ?media_type: String,
-    #    ?season_number: Integer?,
-    #    ?episode_number: Integer?,
-    #    ?part: Integer?
-    #  ) -> ::Hash[Symbol, VideoBlob | String | nil | ::Array[String]]
-    #: (
-    #    upload_id: String,
-    #    tmdb_id: Integer,
-    #    ?filename: String?,
-    #    ?media_type: String,
-    #    ?season_number: Integer?,
-    #    ?episode_number: Integer?,
-    #    ?part: Integer?
-    #  ) -> ::Hash[Symbol, VideoBlob | String | nil | ::Array[String]]
-    #: (
-    #    upload_id: String,
-    #    tmdb_id: Integer,
-    #    ?filename: String?,
-    #    ?media_type: String,
-    #    ?season_number: Integer?,
-    #    ?episode_number: Integer?,
-    #    ?part: Integer?
-    #  ) -> ::Hash[Symbol, VideoBlob | String | nil | ::Array[String]]
-    def resolve(upload_id:, tmdb_id:, filename: nil, media_type: 'movie', season_number: nil, episode_number: nil, part: nil)
-      # Validate media type - return error instead of raising
+    def resolve(upload_id:, tmdb_id:, client_digest:, filename: nil, media_type: 'movie', season_number: nil, episode_number: nil, part: nil)
+      return err('client_digest is required') unless client_digest&.present?
       return err("media_type must be one of: #{ALLOWED_MEDIA_TYPES.join(', ')}") unless ALLOWED_MEDIA_TYPES.include?(media_type)
 
       # Validate TV fields - return error instead of raising
@@ -103,7 +80,8 @@ module Mutations
         media_type:,
         season_number:,
         episode_number:,
-        part:
+        part:,
+        client_digest:
       )
 
       { video_blob: nil, destination_path: nil, errors: [] }

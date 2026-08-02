@@ -6,6 +6,7 @@ class PromoteUploadJob < ApplicationJob
   queue_as :default
 
   retry_on TheMovieDb::Error, wait: :polynomially_longer, attempts: 3
+  discard_on Uploads::VerifyDigestService::DigestMismatchError
 
   #: (
   #    upload_id: String,
@@ -14,9 +15,10 @@ class PromoteUploadJob < ApplicationJob
   #    media_type: String,
   #    season_number: Integer?,
   #    episode_number: Integer?,
-  #    part: Integer?
+  #    part: Integer?,
+  #    client_digest: String
   #  ) -> void
-  def perform(upload_id:, tmdb_id:, filename:, media_type:, season_number:, episode_number:, part: nil)
+  def perform(upload_id:, tmdb_id:, filename:, media_type:, season_number:, episode_number:, client_digest:, part: nil)
     # Find tus session
     tus_session = TusUploadSession.find_by(id: upload_id)
     return unless tus_session
@@ -24,6 +26,8 @@ class PromoteUploadJob < ApplicationJob
     # Check if already finalized
     return if tus_session.finalized?
 
+    # Store client_digest before expensive hash computation
+    tus_session.update!(client_digest: client_digest)
     upload = Uploads::TusUploadService.call(upload_id:, filename:)
 
     config = Config::Video.newest
@@ -49,6 +53,9 @@ class PromoteUploadJob < ApplicationJob
     blob.filename = generated_filename
     blob.key = media_path
 
+    # Verify digest against tus source file BEFORE promotion
+    verify_digest(tus_session, tus_source_path(upload_id), client_digest)
+
     Uploads::PromoteFileService.call(
       upload_id:,
       info: upload[:info],
@@ -71,9 +78,28 @@ class PromoteUploadJob < ApplicationJob
 
     # Queue TMDB sync job
     VideoBlobTmdbSyncJob.perform_later(blob.id)
-  rescue Uploads::TusUploadService::Error, TheMovieDb::Error, ActiveRecord::RecordInvalid, SystemCallError
+  rescue Uploads::VerifyDigestService::DigestMismatchError, Uploads::TusUploadService::Error, TheMovieDb::Error, ActiveRecord::RecordInvalid, SystemCallError
     # Clear finalizing state on error if blob was created
     blob&.update(finalizing: false) if defined?(blob) && blob.respond_to?(:update)
     raise
+  end
+
+  private
+
+  #: (TusUploadSession, String, String) -> void
+  def verify_digest(tus_session, file_path, client_digest)
+    computed_digest = Uploads::VerifyDigestService.call(
+      file_path: file_path,
+      client_digest: client_digest
+    )
+    tus_session.update!(verification_status: 'verified', server_digest: computed_digest)
+  rescue Uploads::VerifyDigestService::DigestMismatchError
+    tus_session.update!(verification_status: 'verification_failed')
+    raise
+  end
+
+  #: (String) -> String
+  def tus_source_path(upload_id)
+    Pathname.new(Tus::Server.opts[:storage].directory.to_s).join(upload_id).to_s
   end
 end

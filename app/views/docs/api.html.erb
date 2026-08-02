@@ -203,6 +203,7 @@
             <tr><td>Maximum file size</td><td>100 GB</td></tr>
             <tr><td>Incomplete upload expiry</td><td>48 hours of inactivity</td></tr>
             <tr><td>Finalize step</td><td><code>POST /graphql</code> with the <code>finalizeUpload</code> mutation</td></tr>
+            <tr><td>Integrity verification</td><td>SHA-256 digest (Base64-encoded) passed as <code>clientDigest</code> in <code>finalizeUpload</code></td></tr>
           </tbody>
         </table>
       </div>
@@ -302,6 +303,98 @@ Tus-Resumable: 1.0.0</code></pre>
     </div>
   </div>
 
+  <%# ── Upload digest verification ── %>
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Upload integrity verification</h5>
+      <p>
+        Before calling <code>finalizeUpload</code>, you must compute a SHA-256 digest of the
+        uploaded file and pass it as <code>clientDigest</code>. The server computes its own
+        digest after the upload completes and compares the two using a constant-time comparison
+        to detect any corruption in transit.
+      </p>
+
+      <h6 class="mt-3">How to compute the digest</h6>
+      <p>
+        Hash the file with SHA-256, then encode the binary digest as Base64 (standard alphabet,
+        no padding stripped).
+      </p>
+
+      <p class="mb-1"><strong>Linux / macOS (shell):</strong></p>
+      <pre data-controller="hostname" class="bg-dark text-light p-3 rounded"><code data-hostname-target="code">sha256sum Batman.Begins.mkv | awk '{print $1}' | xxd -r -p | base64</code></pre>
+
+      <p class="mb-1"><strong>Python:</strong></p>
+      <pre data-controller="hostname" class="bg-dark text-light p-3 rounded"><code data-hostname-target="code">import hashlib, base64
+
+digest = hashlib.sha256()
+with open("Batman.Begins.mkv", "rb") as f:
+    for chunk in iter(lambda: f.read(1048576), b""):  # 1 MiB chunks
+        digest.update(chunk)
+print(base64.b64encode(digest.digest()).decode())</code></pre>
+
+      <p class="mb-1"><strong>JavaScript (Node.js):</strong></p>
+      <pre data-controller="hostname" class="bg-dark text-light p-3 rounded"><code data-hostname-target="code">import { createHash } from "crypto";
+import { createReadStream } from "fs";
+import { pipeline } from "stream/promises";
+
+async function computeDigest(filePath) {
+  const hash = createHash("sha256");
+  await pipeline(createReadStream(filePath, { highWaterMark: 1048576 }), hash);
+  return hash.digest("base64");
+}
+
+console.log(await computeDigest("Batman.Begins.mkv"));</code></pre>
+
+      <p class="mb-1"><strong>Rust:</strong></p>
+      <pre data-controller="hostname" class="bg-dark text-light p-3 rounded"><code data-hostname-target="code">use sha2::{Sha256, Digest};
+use std::fs::File;
+use std::io::{BufReader, Read};
+use base64::{Engine as _, engine::general_purpose};
+
+fn compute_digest(path: &str) -> Result<String, Box<dyn std::error::Error>> {
+    let file = File::open(path)?;
+    let mut reader = BufReader::with_capacity(1024 * 1024, file);  // 1 MiB buffer
+    let mut hasher = Sha256::new();
+    let mut buffer = [0u8; 1024 * 1024];
+    loop {
+        let bytes_read = reader.read(&mut buffer)?;
+        if bytes_read == 0 {
+            break;
+        }
+        hasher.update(&buffer[..bytes_read]);
+    }
+    let result = hasher.finalize();
+    Ok(general_purpose::STANDARD.encode(result))
+}</code></pre>
+
+      <h6 class="mt-3">Verification results</h6>
+      <p>
+        After the server computes its digest, the upload session's <code>verificationStatus</code>
+        is set to one of three values:
+      </p>
+      <div class="table-responsive">
+        <table class="table table-sm mb-0">
+          <thead>
+            <tr>
+              <th>Status</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>pending</code></td><td>The digest has not been computed yet (upload is still being processed).</td></tr>
+            <tr><td><code>verified</code></td><td>Client and server digests match — the file is intact.</td></tr>
+            <tr><td><code>verification_failed</code></td><td>Digests do not match — the file was corrupted in transit. The upload is rejected and the file is not added to the library.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="mb-0">
+        You can check the verification status by querying <code>uploadSessions</code> and inspecting
+        <code>verificationStatus</code>, <code>clientDigest</code>, and <code>serverDigest</code>.
+        If verification fails, re-upload the file — do not retry <code>finalizeUpload</code> with the
+        same <code>uploadId</code>.
+      </p>
+    </div>
+  </div>
   <div class="card mb-4">
     <div class="card-body">
       <h5 class="card-title">Step 6 — Finalize the completed upload</h5>
@@ -313,6 +406,7 @@ Tus-Resumable: 1.0.0</code></pre>
         <li>fetches TMDB naming metadata</li>
         <li>builds the final movie or TV path</li>
         <li>moves the file into the media library</li>
+        <li>computes a SHA-256 digest of the file and compares it against your <code>clientDigest</code></li>
         <li>creates or updates the <code>VideoBlob</code> record</li>
         <li>queues background TMDB enrichment</li>
       </ol>
@@ -326,7 +420,8 @@ Tus-Resumable: 1.0.0</code></pre>
       "input": {
         "uploadId": "3b6f4d64-9240-4fb0-9d8d-d3df0562f1f1",
         "tmdbId": 272,
-        "mediaType": "movie"
+        "mediaType": "movie",
+        "clientDigest": "<computed-sha256-base64>"
       }
     }
   }'</code></pre>
@@ -338,11 +433,12 @@ Tus-Resumable: 1.0.0</code></pre>
     "tmdbId": 1396,
     "mediaType": "tv",
     "seasonNumber": 1,
-    "episodeNumber": 1
+    "episodeNumber": 1,
+    "clientDigest": "<computed-sha256-base64>"
   }
 }</code></pre>
 
-      <p class="mb-1">Optional arguments:</p>
+      <p class="mb-1">Arguments:</p>
       <div class="table-responsive">
         <table class="table table-sm mb-0">
           <thead>
@@ -352,10 +448,12 @@ Tus-Resumable: 1.0.0</code></pre>
             </tr>
           </thead>
           <tbody>
+            <tr><td><code>clientDigest</code></td><td><strong>Required.</strong> SHA-256 digest of the file, Base64-encoded. See the integrity verification section above.</td></tr>
             <tr><td><code>filename</code></td><td>Overrides the filename used to determine the final extension. If omitted, Reelix uses the tus <code>Upload-Metadata</code> filename.</td></tr>
             <tr><td><code>mediaType</code></td><td><code>movie</code> (default) or <code>tv</code></td></tr>
             <tr><td><code>seasonNumber</code></td><td>Required for TV uploads</td></tr>
             <tr><td><code>episodeNumber</code></td><td>Required for TV uploads</td></tr>
+            <tr><td><code>part</code></td><td>Part number for multi-part episodes (e.g. <code>1</code> for <code>-pt1</code>)</td></tr>
           </tbody>
         </table>
       </div>

@@ -502,20 +502,13 @@ class ::TusUploadSession < ::ApplicationRecord
   end
   include ::TusUploadSession::GeneratedAssociationMethods
 
-  def upload_offset: () -> ::Integer
-  def upload_status: () -> ::String
-  def expires_at: () -> ::ActiveSupport::TimeWithZone
-  def upload_complete?: () -> bool
-  def progress_percent: () -> ::Integer
-  def bytes_remaining: () -> ::Integer
-  def device_application: () -> ::Doorkeeper::Application?
-
-  # Private methods (Steep can't distinguish visibility)
-  def compute_offset: () -> ::Integer
-  def compute_status: () -> ::String
-  def tus_info_path: () -> ::Pathname
-  def tus_data_path: () -> ::Pathname
-
+  # New columns from migration
+  def client_digest: () -> ::String?
+  def client_digest=: (::String?) -> ::String?
+  def server_digest: () -> ::String?
+  def server_digest=: (::String?) -> ::String?
+  def verification_status: () -> ::String
+  def verification_status=: (::String) -> ::String
   module ::TusUploadSession::GeneratedRelationMethods
   end
 

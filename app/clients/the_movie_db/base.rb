@@ -91,7 +91,7 @@ module TheMovieDb
     def path
       self.class
           .name
-          .split('::')[1..] # steep:ignore NoMethod
+          .split('::')[1..]
           &.join('::')
           &.parameterize(separator: '/') || ''
     end

@@ -13,7 +13,7 @@ class Config
     class << self
       #: () -> Config::Video
       def newest
-        order(updated_at: :desc).first || new # steep:ignore NoMethod
+        order(updated_at: :desc).first || new
       end
     end
 

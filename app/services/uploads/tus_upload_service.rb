@@ -78,7 +78,7 @@ module Uploads
 
       acc = {} #: ::Hash[String, String?]
       header.split(',').each_with_object(acc) do |pair, hash|
-        key, encoded_value = pair.strip.split(' ', 2) # steep:ignore NoMethod
+        key, encoded_value = pair.strip.split(' ', 2)
         next unless key
 
         hash[key] = encoded_value ? Base64.decode64(encoded_value) : nil

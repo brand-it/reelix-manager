@@ -12,7 +12,6 @@ require 'find'
 #   result[:updated] # => 3
 #   result[:removed] # => 1
 #   result[:skipped] # => 0
-# steep:ignore MethodDefinitionMissing
 class LibraryScannerService < ApplicationService
   #:
   # @config: Config::Video?
@@ -96,7 +95,7 @@ class LibraryScannerService < ApplicationService
   #: (String directory, ::Hash[Symbol, Integer] stats) -> ::Array[String]
   def scan_directory(directory, stats)
     scanned = [] #: Array[String]
-    Find.find(directory) do |path| # steep:ignore NoMethod
+    Find.find(directory) do |path|
       next unless File.file?(path)
       next if has_hidden_directories?(path)
 

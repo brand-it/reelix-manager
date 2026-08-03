@@ -1,0 +1,47 @@
+# Generated from app/models/tus_upload_session.rb with RBS::Inline
+
+class TusUploadSession < ApplicationRecord
+  VERIFICATION_STATUSES: Array[String]
+
+  # Computed attributes from tus filesystem
+  # : () -> Integer
+  def upload_offset: () -> Integer
+
+  # : () -> String
+  def upload_status: () -> String
+
+  # : () -> ActiveSupport::TimeWithZone
+  def expires_at: () -> ActiveSupport::TimeWithZone
+
+  # : () -> bool
+  def upload_complete?: () -> bool
+
+  # : () -> Integer
+  def progress_percent: () -> Integer
+
+  # : () -> Integer
+  def bytes_remaining: () -> Integer
+
+  # : () -> Doorkeeper::Application?
+  def device_application: () -> Doorkeeper::Application?
+
+  # : () -> bool
+  def verification_passed?: () -> bool
+
+  # : () -> bool
+  def verification_failed?: () -> bool
+
+  private
+
+  # : () -> Integer
+  def compute_offset: () -> Integer
+
+  # : () -> String
+  def compute_status: () -> String
+
+  # : () -> Pathname
+  def tus_info_path: () -> Pathname
+
+  # : () -> Pathname
+  def tus_data_path: () -> Pathname
+end

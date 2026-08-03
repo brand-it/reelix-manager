@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module Library
-  # steep:ignore MethodDefinitionMissing
   class ResultsComponent < ViewComponent::Base
     #: (video_blobs: Array[VideoBlob], query: String) -> void
     def initialize(video_blobs:, query:)

@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
-# steep:ignore MethodDefinitionMissing
 class ApplicationRecord < ActiveRecord::Base
   primary_abstract_class
-
-  scope :newest, -> { order(created_at: :desc) } # steep:ignore NoMethod
-  scope :oldest, -> { order(created_at: :asc) }  # steep:ignore NoMethod
+  scope :newest, -> { order(created_at: :desc) }
+  scope :oldest, -> { order(created_at: :asc) }
 end

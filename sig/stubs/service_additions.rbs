@@ -5,3 +5,7 @@ module Find
   def self.find: (String path, *String paths) { (String) -> void } -> nil
                | (String path, *String paths) -> ::Enumerator[String, nil]
 end
+
+module SecureRandom
+  def self.uuid: () -> String
+end

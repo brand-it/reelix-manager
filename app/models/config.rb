@@ -5,31 +5,30 @@ class Config < ApplicationRecord
     #: () -> Config::Setting
     #: () { (Config::Setting) -> void } -> Config::Setting
     def setting(&block)
-      return @setting unless block_given? # steep:ignore UnknownInstanceVariable, ReturnTypeMismatch, FallbackAny
+      return @setting unless block_given?
 
-      @setting = Setting.call(block) # steep:ignore UnknownInstanceVariable, ArgumentTypeMismatch
-      @setting.attributes.each_key do |name| # steep:ignore UnknownInstanceVariable, NoMethod, FallbackAny
-        define_method(:"settings_#{name}") { settings[name] } # steep:ignore NoMethod
-        # steep:ignore NoMethod, UnannotatedEmptyCollection
+      @setting = Setting.call(block)
+      @setting.attributes.each_key do |name|
+        define_method(:"settings_#{name}") { settings[name] }
         define_method(:"settings_#{name}=") do |val|
-          self.settings = { name => val } # steep:ignore UnannotatedEmptyCollection, NoMethod
+          self.settings = { name => val }
         end
       end
     end
 
     #: () -> Config
     def newest
-      order(updated_at: :desc).first || new # steep:ignore NoMethod
+      order(updated_at: :desc).first || new
     end
   end
 
   #: () -> Config::Serializer
   def settings
-    self.class.setting.load(self, super) # steep:ignore UnexpectedSuper
+    self.class.setting.load(self, super)
   end
 
   #: (::Hash[String | Symbol, untyped] hash) -> void
   def settings=(hash)
-    super(self.class.setting.dump(self, settings.to_h.with_indifferent_access.merge(hash))) # steep:ignore UnexpectedSuper
+    super(self.class.setting.dump(self, settings.to_h.with_indifferent_access.merge(hash)))
   end
 end

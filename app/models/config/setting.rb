@@ -57,7 +57,7 @@ class Config
 
     #: (Config item, Config::Setting::Option option) -> String?
     def instance_exec_default(item, option)
-      item.instance_exec(&option.default) # steep:ignore BlockTypeMismatch
+      item.instance_exec(&option.default)
       # Steep cannot verify the return type of the Proc stored in option.default
       # through the `&` coercion + instance_exec dispatch. The Proc is always
       # defined to return String? in Config::Setting::Option, so the ignore is safe.

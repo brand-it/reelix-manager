@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module Library
-  # steep:ignore MethodDefinitionMissing
   class BlobCardComponent < ViewComponent::Base
     #: (blob: VideoBlob) -> void
     def initialize(blob:)

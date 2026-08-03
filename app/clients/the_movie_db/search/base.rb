@@ -19,7 +19,7 @@ module TheMovieDb
 
       #: (?use_cache: bool) -> ::Hash[String, untyped]
       def results(use_cache: true)
-        return { 'results' => [] } if query.blank? # steep:ignore UnannotatedEmptyCollection
+        return { 'results' => [] } if query.blank?
 
         super
       end

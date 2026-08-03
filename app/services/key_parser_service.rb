@@ -8,7 +8,6 @@
 #   result.movie?   # => true
 #   result.title    # => "Inception"
 #   result.year     # => 2010
-# steep:ignore MethodDefinitionMissing
 class KeyParserService < ApplicationService
   VIDEO_FORMATS = %w[
     .avi .mp4 .mkv .mov .wmv .flv .webm .mpeg .mpg .3gp .m4v .swf .rm .vob

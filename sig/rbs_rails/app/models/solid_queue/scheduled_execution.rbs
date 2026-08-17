@@ -314,13 +314,11 @@ module ::SolidQueue
     end
 
     class ::SolidQueue::ScheduledExecution::ActiveRecord_Relation < ::ActiveRecord::Relation
-      include ::Enumerable[::SolidQueue::ScheduledExecution]
       include ::SolidQueue::ScheduledExecution::GeneratedRelationMethods
       include ::ActiveRecord::Relation::Methods[::SolidQueue::ScheduledExecution, ::Integer]
     end
 
     class ::SolidQueue::ScheduledExecution::ActiveRecord_Associations_CollectionProxy < ::ActiveRecord::Associations::CollectionProxy
-      include ::Enumerable[::SolidQueue::ScheduledExecution]
       include ::SolidQueue::ScheduledExecution::GeneratedRelationMethods
       include ::ActiveRecord::Relation::Methods[::SolidQueue::ScheduledExecution, ::Integer]
 

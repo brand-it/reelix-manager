@@ -299,13 +299,11 @@ module ::SolidCache
     end
 
     class ::SolidCache::Entry::ActiveRecord_Relation < ::ActiveRecord::Relation
-      include ::Enumerable[::SolidCache::Entry]
       include ::SolidCache::Entry::GeneratedRelationMethods
       include ::ActiveRecord::Relation::Methods[::SolidCache::Entry, ::Integer]
     end
 
     class ::SolidCache::Entry::ActiveRecord_Associations_CollectionProxy < ::ActiveRecord::Associations::CollectionProxy
-      include ::Enumerable[::SolidCache::Entry]
       include ::SolidCache::Entry::GeneratedRelationMethods
       include ::ActiveRecord::Relation::Methods[::SolidCache::Entry, ::Integer]
 

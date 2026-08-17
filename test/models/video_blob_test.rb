@@ -226,6 +226,58 @@ class VideoBlobTest < ActiveSupport::TestCase
                          'The Wire (2002) - s01e01 - The Buys-pt1.mkv')
     assert_equal expected, blob.media_path
   end
+
+  # ---------------------------------------------------------------------------
+  # edition
+  # ---------------------------------------------------------------------------
+
+  test 'generated_filename includes edition tag for movies' do
+    blob = build(:video_blob, title: 'Blade Runner', year: 1982, media_type: :movie,
+                              edition: "Director's Cut")
+    blob.path_extension = 'mkv'
+
+    assert_equal "Blade Runner (1982) {edition-Director's Cut}.mkv", blob.generated_filename
+  end
+
+  test 'generated_filename includes edition tag and part suffix for movies' do
+    blob = build(:video_blob, title: 'Kill Bill', year: 2003, media_type: :movie,
+                              edition: 'Uncut', part: 2)
+    blob.path_extension = 'mkv'
+
+    assert_equal 'Kill Bill (2003) {edition-Uncut}-pt2.mkv', blob.generated_filename
+  end
+
+  test 'generated_filename omits edition tag when edition is nil' do
+    blob = build(:video_blob, title: 'Batman Begins', year: 2005, media_type: :movie, edition: nil)
+    blob.path_extension = 'mkv'
+
+    assert_equal 'Batman Begins (2005).mkv', blob.generated_filename
+  end
+
+  test 'generated_filename ignores edition for tv episodes' do
+    blob = build(:video_blob, :tv,
+                 title: 'The Wire', year: 2002,
+                 season_number: 1, episode_number: 1,
+                 edition: 'Extended')
+    blob.path_extension = 'mkv'
+    blob.episode_title = 'The Buys'
+
+    assert_equal 'The Wire (2002) - s01e01 - The Buys.mkv', blob.generated_filename
+  end
+
+  test 'edition_tag sanitizes unsafe characters' do
+    blob = build(:video_blob, title: 'X', year: 2000, media_type: :movie, edition: 'A/B\\C')
+    assert_equal ' {edition-A-B-C}', blob.send(:edition_tag)
+  end
+
+  test 'media_path places edition file under plain movie directory' do
+    blob = build(:video_blob,
+                 title: 'Blade Runner', year: 1982, tmdb_id: 7, media_type: :movie,
+                 edition: "Director's Cut",
+                 filename: "Blade Runner (1982) {edition-Director's Cut}.mkv")
+    expected = File.join(@movie_dir, 'Blade Runner (1982)', "Blade Runner (1982) {edition-Director's Cut}.mkv")
+    assert_equal expected, blob.media_path
+  end
   # ---------------------------------------------------------------------------
   # media_path
   # ---------------------------------------------------------------------------

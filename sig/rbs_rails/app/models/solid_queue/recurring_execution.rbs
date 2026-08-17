@@ -268,13 +268,11 @@ module ::SolidQueue
     end
 
     class ::SolidQueue::RecurringExecution::ActiveRecord_Relation < ::ActiveRecord::Relation
-      include ::Enumerable[::SolidQueue::RecurringExecution]
       include ::SolidQueue::RecurringExecution::GeneratedRelationMethods
       include ::ActiveRecord::Relation::Methods[::SolidQueue::RecurringExecution, ::Integer]
     end
 
     class ::SolidQueue::RecurringExecution::ActiveRecord_Associations_CollectionProxy < ::ActiveRecord::Associations::CollectionProxy
-      include ::Enumerable[::SolidQueue::RecurringExecution]
       include ::SolidQueue::RecurringExecution::GeneratedRelationMethods
       include ::ActiveRecord::Relation::Methods[::SolidQueue::RecurringExecution, ::Integer]
 

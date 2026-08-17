@@ -471,13 +471,11 @@ module ::Doorkeeper
     end
 
     class ::Doorkeeper::AccessToken::ActiveRecord_Relation < ::ActiveRecord::Relation
-      include ::Enumerable[::Doorkeeper::AccessToken]
       include ::Doorkeeper::AccessToken::GeneratedRelationMethods
       include ::ActiveRecord::Relation::Methods[::Doorkeeper::AccessToken, ::Integer]
     end
 
     class ::Doorkeeper::AccessToken::ActiveRecord_Associations_CollectionProxy < ::ActiveRecord::Associations::CollectionProxy
-      include ::Enumerable[::Doorkeeper::AccessToken]
       include ::Doorkeeper::AccessToken::GeneratedRelationMethods
       include ::ActiveRecord::Relation::Methods[::Doorkeeper::AccessToken, ::Integer]
 

@@ -22,7 +22,9 @@ module Mutations
     argument :episode_number, Integer, required: false,
                                        description: "Episode number (required when media_type is 'tv')"
     argument :part, Integer, required: false,
-                             description: 'Part number for multi-part episodes (e.g. 1 for -pt1)'
+                             description: 'Part number for multi-part media (e.g. 1 for -pt1)'
+    argument :edition, String, required: false,
+                               description: 'Movie edition name, e.g. Director\'s Cut (renders the {edition-...} tag)'
     argument :client_digest, String, required: true,
                                      description: 'SHA-256 digest of the uploaded file (Base64-encoded)'
 
@@ -38,9 +40,10 @@ module Mutations
     #    ?media_type: String,
     #    ?season_number: Integer?,
     #    ?episode_number: Integer?,
-    #    ?part: Integer?
+    #    ?part: Integer?,
+    #    ?edition: String?
     #  ) -> bool
-    def ready?(upload_id:, tmdb_id:, client_digest:, filename: nil, media_type: 'movie', season_number: nil, episode_number: nil, part: nil)
+    def ready?(upload_id:, tmdb_id:, client_digest:, filename: nil, media_type: 'movie', season_number: nil, episode_number: nil, part: nil, edition: nil) # rubocop:disable Metrics/ParameterLists
       require_upload!
       true
     end
@@ -53,9 +56,10 @@ module Mutations
     #    ?media_type: String,
     #    ?season_number: Integer?,
     #    ?episode_number: Integer?,
-    #    ?part: Integer?
+    #    ?part: Integer?,
+    #    ?edition: String?
     #  ) -> ::Hash[Symbol, VideoBlob | String | nil | ::Array[String]]
-    def resolve(upload_id:, tmdb_id:, client_digest:, filename: nil, media_type: 'movie', season_number: nil, episode_number: nil, part: nil)
+    def resolve(upload_id:, tmdb_id:, client_digest:, filename: nil, media_type: 'movie', season_number: nil, episode_number: nil, part: nil, edition: nil) # rubocop:disable Metrics/ParameterLists
       return err('client_digest is required') unless client_digest&.present?
       return err("media_type must be one of: #{ALLOWED_MEDIA_TYPES.join(', ')}") unless ALLOWED_MEDIA_TYPES.include?(media_type)
 
@@ -81,6 +85,7 @@ module Mutations
         season_number:,
         episode_number:,
         part:,
+        edition:,
         client_digest:
       )
 

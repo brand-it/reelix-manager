@@ -179,13 +179,11 @@ module ::SolidQueue
     end
 
     class ::SolidQueue::Pause::ActiveRecord_Relation < ::ActiveRecord::Relation
-      include ::Enumerable[::SolidQueue::Pause]
       include ::SolidQueue::Pause::GeneratedRelationMethods
       include ::ActiveRecord::Relation::Methods[::SolidQueue::Pause, ::Integer]
     end
 
     class ::SolidQueue::Pause::ActiveRecord_Associations_CollectionProxy < ::ActiveRecord::Associations::CollectionProxy
-      include ::Enumerable[::SolidQueue::Pause]
       include ::SolidQueue::Pause::GeneratedRelationMethods
       include ::ActiveRecord::Relation::Methods[::SolidQueue::Pause, ::Integer]
 

@@ -49,8 +49,9 @@ class VideoBlob < ApplicationRecord
 
   # Returns the filename derived from this blob's media attributes plus the
   # virtual path fields used during upload-time path construction.
-  # Movie: "Batman Begins (2005).mkv"
-  # TV:    "Breaking Bad (2008) - s01e01 - Pilot.mkv"
+  # Movie:  "Batman Begins (2005).mkv"
+  #         "Blade Runner (1982) {edition-Final Cut}-pt1.mkv"
+  # TV:     "Breaking Bad (2008) - s01e01 - Pilot.mkv"
   # : () -> String?
   def generated_filename: () -> String?
 
@@ -70,6 +71,11 @@ class VideoBlob < ApplicationRecord
 
   # : () -> String
   def part_suffix: () -> String
+
+  # Plex movie edition tag, e.g. " {edition-Director's Cut}".
+  # Movies only; omitted when edition is blank.
+  # : () -> String
+  def edition_tag: () -> String
 
   # : () -> String?
   def relative_media_path: () -> String?

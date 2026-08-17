@@ -1099,13 +1099,11 @@ class ::VideoBlob < ::ApplicationRecord
   end
 
   class ::VideoBlob::ActiveRecord_Relation < ::ActiveRecord::Relation
-    include ::Enumerable[::VideoBlob]
     include ::VideoBlob::GeneratedRelationMethods
     include ::ActiveRecord::Relation::Methods[::VideoBlob, ::Integer]
   end
 
   class ::VideoBlob::ActiveRecord_Associations_CollectionProxy < ::ActiveRecord::Associations::CollectionProxy
-    include ::Enumerable[::VideoBlob]
     include ::VideoBlob::GeneratedRelationMethods
     include ::ActiveRecord::Relation::Methods[::VideoBlob, ::Integer]
 

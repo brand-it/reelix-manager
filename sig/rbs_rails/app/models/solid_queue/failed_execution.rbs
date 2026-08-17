@@ -225,13 +225,11 @@ module ::SolidQueue
     end
 
     class ::SolidQueue::FailedExecution::ActiveRecord_Relation < ::ActiveRecord::Relation
-      include ::Enumerable[::SolidQueue::FailedExecution]
       include ::SolidQueue::FailedExecution::GeneratedRelationMethods
       include ::ActiveRecord::Relation::Methods[::SolidQueue::FailedExecution, ::Integer]
     end
 
     class ::SolidQueue::FailedExecution::ActiveRecord_Associations_CollectionProxy < ::ActiveRecord::Associations::CollectionProxy
-      include ::Enumerable[::SolidQueue::FailedExecution]
       include ::SolidQueue::FailedExecution::GeneratedRelationMethods
       include ::ActiveRecord::Relation::Methods[::SolidQueue::FailedExecution, ::Integer]
 

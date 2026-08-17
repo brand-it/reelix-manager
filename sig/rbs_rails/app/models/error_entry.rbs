@@ -860,13 +860,11 @@ class ::ErrorEntry < ::ApplicationRecord
   end
 
   class ::ErrorEntry::ActiveRecord_Relation < ::ActiveRecord::Relation
-    include ::Enumerable[::ErrorEntry]
     include ::ErrorEntry::GeneratedRelationMethods
     include ::ActiveRecord::Relation::Methods[::ErrorEntry, ::Integer]
   end
 
   class ::ErrorEntry::ActiveRecord_Associations_CollectionProxy < ::ActiveRecord::Associations::CollectionProxy
-    include ::Enumerable[::ErrorEntry]
     include ::ErrorEntry::GeneratedRelationMethods
     include ::ActiveRecord::Relation::Methods[::ErrorEntry, ::Integer]
 

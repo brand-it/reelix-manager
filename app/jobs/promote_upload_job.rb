@@ -16,9 +16,10 @@ class PromoteUploadJob < ApplicationJob
   #    season_number: Integer?,
   #    episode_number: Integer?,
   #    part: Integer?,
+  #    edition: String?,
   #    client_digest: String
   #  ) -> void
-  def perform(upload_id:, tmdb_id:, filename:, media_type:, season_number:, episode_number:, client_digest:, part: nil)
+  def perform(upload_id:, tmdb_id:, filename:, media_type:, season_number:, episode_number:, client_digest:, part: nil, edition: nil) # rubocop:disable Metrics/ParameterLists
     # Find tus session
     tus_session = TusUploadSession.find_by(id: upload_id)
     return unless tus_session
@@ -39,6 +40,7 @@ class PromoteUploadJob < ApplicationJob
       season_number:,
       episode_number:,
       part:,
+      edition:,
       path_extension: upload[:extension],
       finalizing: true
     )

@@ -513,13 +513,11 @@ class ::TusUploadSession < ::ApplicationRecord
   end
 
   class ::TusUploadSession::ActiveRecord_Relation < ::ActiveRecord::Relation
-    include ::Enumerable[::TusUploadSession]
     include ::TusUploadSession::GeneratedRelationMethods
     include ::ActiveRecord::Relation::Methods[::TusUploadSession, ::String]
   end
 
   class ::TusUploadSession::ActiveRecord_Associations_CollectionProxy < ::ActiveRecord::Associations::CollectionProxy
-    include ::Enumerable[::TusUploadSession]
     include ::TusUploadSession::GeneratedRelationMethods
     include ::ActiveRecord::Relation::Methods[::TusUploadSession, ::String]
 

@@ -475,13 +475,11 @@ module ::Doorkeeper
     end
 
     class ::Doorkeeper::Application::ActiveRecord_Relation < ::ActiveRecord::Relation
-      include ::Enumerable[::Doorkeeper::Application]
       include ::Doorkeeper::Application::GeneratedRelationMethods
       include ::ActiveRecord::Relation::Methods[::Doorkeeper::Application, ::Integer]
     end
 
     class ::Doorkeeper::Application::ActiveRecord_Associations_CollectionProxy < ::ActiveRecord::Associations::CollectionProxy
-      include ::Enumerable[::Doorkeeper::Application]
       include ::Doorkeeper::Application::GeneratedRelationMethods
       include ::ActiveRecord::Relation::Methods[::Doorkeeper::Application, ::Integer]
 

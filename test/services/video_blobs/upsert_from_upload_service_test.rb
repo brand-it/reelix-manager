@@ -3,18 +3,8 @@
 require 'test_helper'
 
 class VideoBlobsUpsertFromUploadServiceTest < ActiveSupport::TestCase
-  def build_blob(media_type:, tmdb_id:, title:, year:, extension:, season_number: nil, episode_number: nil,
-                 episode_title: nil)
-    VideoBlob.new(
-      media_type:,
-      tmdb_id:,
-      title:,
-      year:,
-      path_extension: extension,
-      episode_title:,
-      season_number:,
-      episode_number:
-    )
+  def build_blob(...)
+    VideoBlob.new(...)
   end
 
   test 'creates a blob from finalized upload data' do
@@ -23,7 +13,7 @@ class VideoBlobsUpsertFromUploadServiceTest < ActiveSupport::TestCase
       tmdb_id: 272,
       title: 'Batman Begins',
       year: 2005,
-      extension: 'mkv'
+      path_extension: 'mkv'
     )
     video_blob.filename = 'Batman Begins (2005).mkv'
     video_blob.key = '/movies/Batman Begins (2005)/Batman Begins (2005).mkv'
@@ -51,7 +41,7 @@ class VideoBlobsUpsertFromUploadServiceTest < ActiveSupport::TestCase
       tmdb_id: 1396,
       title: 'Breaking Bad',
       year: 2008,
-      extension: 'mkv',
+      path_extension: 'mkv',
       episode_title: 'Pilot',
       season_number: 1,
       episode_number: 1

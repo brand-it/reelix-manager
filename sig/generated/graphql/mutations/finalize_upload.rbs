@@ -12,9 +12,10 @@ module Mutations
     #     ?media_type: String,
     #     ?season_number: Integer?,
     #     ?episode_number: Integer?,
-    #     ?part: Integer?
+    #     ?part: Integer?,
+    #     ?edition: String?
     #   ) -> bool
-    def ready?: (upload_id: String, tmdb_id: Integer, client_digest: String, ?filename: String?, ?media_type: String, ?season_number: Integer?, ?episode_number: Integer?, ?part: Integer?) -> bool
+    def ready?: (upload_id: String, tmdb_id: Integer, client_digest: String, ?filename: String?, ?media_type: String, ?season_number: Integer?, ?episode_number: Integer?, ?part: Integer?, ?edition: String?) -> bool
 
     # : (
     #     upload_id: String,
@@ -24,9 +25,10 @@ module Mutations
     #     ?media_type: String,
     #     ?season_number: Integer?,
     #     ?episode_number: Integer?,
-    #     ?part: Integer?
+    #     ?part: Integer?,
+    #     ?edition: String?
     #   ) -> ::Hash[Symbol, VideoBlob | String | nil | ::Array[String]]
-    def resolve: (upload_id: String, tmdb_id: Integer, client_digest: String, ?filename: String?, ?media_type: String, ?season_number: Integer?, ?episode_number: Integer?, ?part: Integer?) -> ::Hash[Symbol, VideoBlob | String | nil | ::Array[String]]
+    def resolve: (upload_id: String, tmdb_id: Integer, client_digest: String, ?filename: String?, ?media_type: String, ?season_number: Integer?, ?episode_number: Integer?, ?part: Integer?, ?edition: String?) -> ::Hash[Symbol, VideoBlob | String | nil | ::Array[String]]
 
     private
 

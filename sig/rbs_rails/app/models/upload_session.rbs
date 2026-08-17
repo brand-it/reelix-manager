@@ -498,13 +498,11 @@ class ::UploadSession < ::ApplicationRecord
   end
 
   class ::UploadSession::ActiveRecord_Relation < ::ActiveRecord::Relation
-    include ::Enumerable[::UploadSession]
     include ::UploadSession::GeneratedRelationMethods
     include ::ActiveRecord::Relation::Methods[::UploadSession, ::String]
   end
 
   class ::UploadSession::ActiveRecord_Associations_CollectionProxy < ::ActiveRecord::Associations::CollectionProxy
-    include ::Enumerable[::UploadSession]
     include ::UploadSession::GeneratedRelationMethods
     include ::ActiveRecord::Relation::Methods[::UploadSession, ::String]
 

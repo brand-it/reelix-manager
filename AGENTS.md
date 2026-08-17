@@ -160,9 +160,15 @@ bundle exec steep check --log-level=fatal                # Type check
 ## Code Conventions & Common Patterns
 
 ### Ruby Style
-- **Omakase**: Project uses `rubocop-rails-omakase` for Rails-recommended Ruby styling
-- **Type Annotations**: Inline RBS type annotations using `#: (args) -> return_type` syntax
-- **Frozen String Literal**: `# frozen_string_literal: true` at top of files
+- **Omakase**: Project uses `rubocop-rails-omakase` for Rails-recommended Ruby styling; baseline allowances live in `.rubocop_todo.yml`
+- **Frozen String Literal**: `# frozen_string_literal: true` at top of every file
+- **Type Annotations**: Inline RBS `#: (args) -> return_type` annotations (see Type Checking section)
+- **Modern syntax**:
+  - Prefer `...` argument forwarding in pass-through methods (`def wrap(...); inner(...); end`) — do not re-list arguments a method only forwards
+  - Use keyword arguments for named inputs; splat (`**`) only when the method is a true pass-through
+  - Prefer modifier form for single-line guards (`return x if cond`); avoid full `if ... end` for one statements
+- **Parameter width**: Keep methods at 8 or fewer parameters (repo `Metrics/ParameterLists` max). A genuinely wide API gets an inline `# rubocop:disable Metrics/ParameterLists` on the def line — not a `.rubocop_todo.yml` exclusion
+- **RuboCop**: Run `bin/rubocop` (use `-a` for autocorrect); keep `.rubocop_todo.yml` entries for legacy code only
 
 ### Service Objects
 All services inherit from `ApplicationService` which provides a class-level `.call` shortcut:

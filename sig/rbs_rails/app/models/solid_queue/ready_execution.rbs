@@ -268,13 +268,11 @@ module ::SolidQueue
     end
 
     class ::SolidQueue::ReadyExecution::ActiveRecord_Relation < ::ActiveRecord::Relation
-      include ::Enumerable[::SolidQueue::ReadyExecution]
       include ::SolidQueue::ReadyExecution::GeneratedRelationMethods
       include ::ActiveRecord::Relation::Methods[::SolidQueue::ReadyExecution, ::Integer]
     end
 
     class ::SolidQueue::ReadyExecution::ActiveRecord_Associations_CollectionProxy < ::ActiveRecord::Associations::CollectionProxy
-      include ::Enumerable[::SolidQueue::ReadyExecution]
       include ::SolidQueue::ReadyExecution::GeneratedRelationMethods
       include ::ActiveRecord::Relation::Methods[::SolidQueue::ReadyExecution, ::Integer]
 

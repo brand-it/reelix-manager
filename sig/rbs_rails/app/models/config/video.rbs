@@ -259,13 +259,11 @@ class ::Config < ::ApplicationRecord
     end
 
     class ::Config::Video::ActiveRecord_Relation < ::ActiveRecord::Relation
-      include ::Enumerable[::Config::Video]
       include ::Config::Video::GeneratedRelationMethods
       include ::ActiveRecord::Relation::Methods[::Config::Video, ::Integer]
     end
 
     class ::Config::Video::ActiveRecord_Associations_CollectionProxy < ::ActiveRecord::Associations::CollectionProxy
-      include ::Enumerable[::Config::Video]
       include ::Config::Video::GeneratedRelationMethods
       include ::ActiveRecord::Relation::Methods[::Config::Video, ::Integer]
 

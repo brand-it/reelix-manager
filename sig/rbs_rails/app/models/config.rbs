@@ -258,13 +258,11 @@ class ::Config < ::ApplicationRecord
   end
 
   class ::Config::ActiveRecord_Relation < ::ActiveRecord::Relation
-    include ::Enumerable[::Config]
     include ::Config::GeneratedRelationMethods
     include ::ActiveRecord::Relation::Methods[::Config, ::Integer]
   end
 
   class ::Config::ActiveRecord_Associations_CollectionProxy < ::ActiveRecord::Associations::CollectionProxy
-    include ::Enumerable[::Config]
     include ::Config::GeneratedRelationMethods
     include ::ActiveRecord::Relation::Methods[::Config, ::Integer]
 

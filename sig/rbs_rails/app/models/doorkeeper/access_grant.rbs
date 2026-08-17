@@ -425,13 +425,11 @@ module ::Doorkeeper
     end
 
     class ::Doorkeeper::AccessGrant::ActiveRecord_Relation < ::ActiveRecord::Relation
-      include ::Enumerable[::Doorkeeper::AccessGrant]
       include ::Doorkeeper::AccessGrant::GeneratedRelationMethods
       include ::ActiveRecord::Relation::Methods[::Doorkeeper::AccessGrant, ::Integer]
     end
 
     class ::Doorkeeper::AccessGrant::ActiveRecord_Associations_CollectionProxy < ::ActiveRecord::Associations::CollectionProxy
-      include ::Enumerable[::Doorkeeper::AccessGrant]
       include ::Doorkeeper::AccessGrant::GeneratedRelationMethods
       include ::ActiveRecord::Relation::Methods[::Doorkeeper::AccessGrant, ::Integer]
 

@@ -549,13 +549,11 @@ module ::SolidQueue
     end
 
     class ::SolidQueue::RecurringTask::ActiveRecord_Relation < ::ActiveRecord::Relation
-      include ::Enumerable[::SolidQueue::RecurringTask]
       include ::SolidQueue::RecurringTask::GeneratedRelationMethods
       include ::ActiveRecord::Relation::Methods[::SolidQueue::RecurringTask, ::Integer]
     end
 
     class ::SolidQueue::RecurringTask::ActiveRecord_Associations_CollectionProxy < ::ActiveRecord::Associations::CollectionProxy
-      include ::Enumerable[::SolidQueue::RecurringTask]
       include ::SolidQueue::RecurringTask::GeneratedRelationMethods
       include ::ActiveRecord::Relation::Methods[::SolidQueue::RecurringTask, ::Integer]
 

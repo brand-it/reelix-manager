@@ -305,13 +305,11 @@ module ::SolidQueue
     end
 
     class ::SolidQueue::Semaphore::ActiveRecord_Relation < ::ActiveRecord::Relation
-      include ::Enumerable[::SolidQueue::Semaphore]
       include ::SolidQueue::Semaphore::GeneratedRelationMethods
       include ::ActiveRecord::Relation::Methods[::SolidQueue::Semaphore, ::Integer]
     end
 
     class ::SolidQueue::Semaphore::ActiveRecord_Associations_CollectionProxy < ::ActiveRecord::Associations::CollectionProxy
-      include ::Enumerable[::SolidQueue::Semaphore]
       include ::SolidQueue::Semaphore::GeneratedRelationMethods
       include ::ActiveRecord::Relation::Methods[::SolidQueue::Semaphore, ::Integer]
 

@@ -234,13 +234,11 @@ module ::SolidQueue
     end
 
     class ::SolidQueue::ClaimedExecution::ActiveRecord_Relation < ::ActiveRecord::Relation
-      include ::Enumerable[::SolidQueue::ClaimedExecution]
       include ::SolidQueue::ClaimedExecution::GeneratedRelationMethods
       include ::ActiveRecord::Relation::Methods[::SolidQueue::ClaimedExecution, ::Integer]
     end
 
     class ::SolidQueue::ClaimedExecution::ActiveRecord_Associations_CollectionProxy < ::ActiveRecord::Associations::CollectionProxy
-      include ::Enumerable[::SolidQueue::ClaimedExecution]
       include ::SolidQueue::ClaimedExecution::GeneratedRelationMethods
       include ::ActiveRecord::Relation::Methods[::SolidQueue::ClaimedExecution, ::Integer]
 

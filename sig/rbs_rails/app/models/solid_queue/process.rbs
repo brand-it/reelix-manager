@@ -433,13 +433,11 @@ module ::SolidQueue
     end
 
     class ::SolidQueue::Process::ActiveRecord_Relation < ::ActiveRecord::Relation
-      include ::Enumerable[::SolidQueue::Process]
       include ::SolidQueue::Process::GeneratedRelationMethods
       include ::ActiveRecord::Relation::Methods[::SolidQueue::Process, ::Integer]
     end
 
     class ::SolidQueue::Process::ActiveRecord_Associations_CollectionProxy < ::ActiveRecord::Associations::CollectionProxy
-      include ::Enumerable[::SolidQueue::Process]
       include ::SolidQueue::Process::GeneratedRelationMethods
       include ::ActiveRecord::Relation::Methods[::SolidQueue::Process, ::Integer]
 

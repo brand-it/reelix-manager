@@ -536,13 +536,11 @@ module ::SolidQueue
     end
 
     class ::SolidQueue::Job::ActiveRecord_Relation < ::ActiveRecord::Relation
-      include ::Enumerable[::SolidQueue::Job]
       include ::SolidQueue::Job::GeneratedRelationMethods
       include ::ActiveRecord::Relation::Methods[::SolidQueue::Job, ::Integer]
     end
 
     class ::SolidQueue::Job::ActiveRecord_Associations_CollectionProxy < ::ActiveRecord::Associations::CollectionProxy
-      include ::Enumerable[::SolidQueue::Job]
       include ::SolidQueue::Job::GeneratedRelationMethods
       include ::ActiveRecord::Relation::Methods[::SolidQueue::Job, ::Integer]
 

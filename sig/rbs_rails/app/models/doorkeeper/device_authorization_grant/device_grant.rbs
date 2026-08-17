@@ -432,13 +432,11 @@ module ::Doorkeeper
       end
 
       class ::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant::ActiveRecord_Relation < ::ActiveRecord::Relation
-        include ::Enumerable[::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant]
         include ::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant::GeneratedRelationMethods
         include ::ActiveRecord::Relation::Methods[::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant, ::Integer]
       end
 
       class ::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant::ActiveRecord_Associations_CollectionProxy < ::ActiveRecord::Associations::CollectionProxy
-        include ::Enumerable[::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant]
         include ::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant::GeneratedRelationMethods
         include ::ActiveRecord::Relation::Methods[::Doorkeeper::DeviceAuthorizationGrant::DeviceGrant, ::Integer]
 

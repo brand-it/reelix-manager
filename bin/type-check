@@ -11,6 +11,12 @@ cd "$(dirname "$0")/.."
 echo "Running rbs_rails..."
 bundle exec rbs_rails all
 
+# Steep 2.0's ModuleSelfTypeError validator rejects the redundant `include ::Enumerable[Model]`
+# lines rbs_rails emits into ActiveRecord_Relation / ActiveRecord_Associations_CollectionProxy
+# (the parent ActiveRecord::Relation already mixes in Enumerable). Strip them so the
+# generated sigs match what CI and the pre-push hook check (they run steep without regenerating).
+find sig/rbs_rails -name '*.rbs' -print0 | xargs -0 sed -i '/^[[:space:]]*include ::Enumerable\[::/d'
+
 echo "Regenerating RBS from inline annotations..."
 bundle exec rails type_check:gen
 

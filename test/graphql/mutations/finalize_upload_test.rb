@@ -249,6 +249,44 @@ class FinalizeUploadMutationTest < ActiveSupport::TestCase
     FileUtils.rm_rf(tv_dir)
   end
 
+  test 'successfully finalizes a movie upload with edition' do
+    movie_dir = Dir.mktmpdir('movie_dest_edition_')
+    create(:config_video, movie_dir:, tv_dir: '/tmp')
+
+    movie_tmdb = {
+      'title' => 'Blade Runner',
+      'release_date' => '1982-06-25',
+      'poster_path' => '/blade.jpg'
+    }
+
+    with_fake_tus_upload(uid: 'uid-movie-edition') do |_dir, _tus_session, fake_digest|
+      with_fake_movie_tmdb(movie_tmdb) do
+        result = nil
+
+        assert_enqueued_jobs(1, only: PromoteUploadJob) do
+          result = execute(uploadId: 'uid-movie-edition', tmdbId: 313, mediaType: 'movie',
+                           edition: "Director's Cut", clientDigest: fake_digest)
+        end
+
+        assert_nil result['errors'], result['errors'].inspect
+        data = result.dig('data', 'finalizeUpload')
+        assert_empty data['errors']
+
+        perform_enqueued_jobs
+
+        blob = VideoBlob.find_by(tmdb_id: 313)
+        refute_nil blob
+        assert_equal "Director's Cut", blob.edition
+        assert_equal "Blade Runner (1982) {edition-Director's Cut}.mkv", blob.filename
+        expected = File.join(movie_dir, 'Blade Runner (1982)', "Blade Runner (1982) {edition-Director's Cut}.mkv")
+        assert_equal expected, blob.key
+        assert File.exist?(blob.key), "Expected file to exist at #{blob.key}"
+      end
+    end
+  ensure
+    FileUtils.rm_rf(movie_dir)
+  end
+
   # ---------------------------------------------------------------------------
   # Error cases
   # ---------------------------------------------------------------------------

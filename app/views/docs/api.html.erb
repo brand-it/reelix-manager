@@ -453,7 +453,8 @@ fn compute_digest(path: &str) -> Result<String, Box<dyn std::error::Error>> {
             <tr><td><code>mediaType</code></td><td><code>movie</code> (default) or <code>tv</code></td></tr>
             <tr><td><code>seasonNumber</code></td><td>Required for TV uploads</td></tr>
             <tr><td><code>episodeNumber</code></td><td>Required for TV uploads</td></tr>
-            <tr><td><code>part</code></td><td>Part number for multi-part episodes (e.g. <code>1</code> for <code>-pt1</code>)</td></tr>
+            <tr><td><code>part</code></td><td>Part number for multi-part media (e.g. <code>1</code> for <code>-pt1</code>)</td></tr>
+            <tr><td><code>edition</code></td><td>Movie edition name, e.g. <code>Director's Cut</code>. Renders the <code>{edition-...</code>} tag in the filename (directory stays plain); ignored for TV</td></tr>
           </tbody>
         </table>
       </div>

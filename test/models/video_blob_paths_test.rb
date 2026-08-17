@@ -15,23 +15,8 @@ class VideoBlobPathsTest < ActiveSupport::TestCase
     Config::Video.delete_all
   end
 
-  def call(**)
-    build_blob(**)
-  end
-
-  def build_blob(media_type:, tmdb_id:, title:, year:, extension:, season_number: nil, episode_number: nil,
-                 episode_title: nil)
-    blob = VideoBlob.new(
-      media_type:,
-      tmdb_id:,
-      title:,
-      year:,
-      season_number:,
-      episode_number:
-    )
-    blob.path_extension = extension
-    blob.episode_title = episode_title
-    blob
+  def build_blob(...)
+    VideoBlob.new(...)
   end
 
   # ---------------------------------------------------------------------------
@@ -39,48 +24,66 @@ class VideoBlobPathsTest < ActiveSupport::TestCase
   # ---------------------------------------------------------------------------
 
   test 'movie: builds correct directory' do
-    result = call(media_type: 'movie', tmdb_id: 272, title: 'Batman Begins', year: 2005, extension: 'mkv')
+    result = build_blob(media_type: 'movie', tmdb_id: 272, title: 'Batman Begins', year: 2005, path_extension: 'mkv')
     assert_equal File.join(@movie_dir, 'Batman Begins (2005)'), result.directory
   end
 
   test 'movie: builds correct filename' do
-    result = call(media_type: 'movie', tmdb_id: 272, title: 'Batman Begins', year: 2005, extension: 'mkv')
+    result = build_blob(media_type: 'movie', tmdb_id: 272, title: 'Batman Begins', year: 2005, path_extension: 'mkv')
     assert_equal 'Batman Begins (2005).mkv', result.generated_filename
   end
 
   test 'movie: media_path joins directory and filename' do
-    result = call(media_type: 'movie', tmdb_id: 272, title: 'Batman Begins', year: 2005, extension: 'mkv')
+    result = build_blob(media_type: 'movie', tmdb_id: 272, title: 'Batman Begins', year: 2005, path_extension: 'mkv')
     assert_equal File.join(@movie_dir, 'Batman Begins (2005)', 'Batman Begins (2005).mkv'),
                  result.media_path
   end
 
   test 'movie: strips leading dot from extension' do
-    result = call(media_type: 'movie', tmdb_id: 272, title: 'Batman Begins', year: 2005, extension: '.mp4')
+    result = build_blob(media_type: 'movie', tmdb_id: 272, title: 'Batman Begins', year: 2005, path_extension: '.mp4')
     assert_equal 'Batman Begins (2005).mp4', result.generated_filename
   end
 
   test 'movie: extension is lowercased' do
-    result = call(media_type: 'movie', tmdb_id: 272, title: 'Batman Begins', year: 2005, extension: 'MKV')
+    result = build_blob(media_type: 'movie', tmdb_id: 272, title: 'Batman Begins', year: 2005, path_extension: 'MKV')
     assert result.generated_filename.end_with?('.mkv')
   end
 
   test 'movie: omits year when nil' do
-    result = call(media_type: 'movie', tmdb_id: 272, title: 'Batman Begins', year: nil, extension: 'mkv')
+    result = build_blob(media_type: 'movie', tmdb_id: 272, title: 'Batman Begins', year: nil, path_extension: 'mkv')
     assert_equal 'Batman Begins', File.basename(result.directory.to_s)
     assert_equal 'Batman Begins.mkv', result.generated_filename
   end
 
   test 'movie: sanitizes unsafe characters in title' do
-    result = call(
+    result = build_blob(
       media_type: 'movie',
       tmdb_id: 272,
       title: "  Batman/Begins\\.. \x00  ",
       year: 2005,
-      extension: 'mkv'
+      path_extension: 'mkv'
     )
 
     assert_equal File.join(@movie_dir, 'Batman-Begins-. (2005)'), result.directory
     assert_equal 'Batman-Begins-. (2005).mkv', result.generated_filename
+  end
+
+  test 'movie: includes edition tag in filename but not directory' do
+    result = build_blob(media_type: 'movie', tmdb_id: 313, title: 'Blade Runner', year: 1982,
+                        path_extension: 'mkv',
+                        edition: "Director's Cut")
+    assert_equal File.join(@movie_dir, 'Blade Runner (1982)'), result.directory
+    assert_equal "Blade Runner (1982) {edition-Director's Cut}.mkv", result.generated_filename
+    assert_equal File.join(@movie_dir, 'Blade Runner (1982)', "Blade Runner (1982) {edition-Director's Cut}.mkv"),
+                 result.media_path
+  end
+
+  test 'movie: edition and part both render, edition first' do
+    result = build_blob(media_type: 'movie', tmdb_id: 281, title: 'Kill Bill', year: 2003,
+                        path_extension: 'mkv',
+                        edition: 'Uncut',
+                        part: 2)
+    assert_equal 'Kill Bill (2003) {edition-Uncut}-pt2.mkv', result.generated_filename
   end
 
   # ---------------------------------------------------------------------------
@@ -88,40 +91,40 @@ class VideoBlobPathsTest < ActiveSupport::TestCase
   # ---------------------------------------------------------------------------
 
   test 'tv: builds correct directory with season' do
-    result = call(
-      media_type: 'tv', tmdb_id: 1396, title: 'Breaking Bad', year: 2008, extension: 'mkv',
+    result = build_blob(
+      media_type: 'tv', tmdb_id: 1396, title: 'Breaking Bad', year: 2008, path_extension: 'mkv',
       season_number: 1, episode_number: 1
     )
     assert_equal File.join(@tv_dir, 'Breaking Bad (2008)', 'Season 01'), result.directory
   end
 
   test 'tv: builds filename with episode title' do
-    result = call(
-      media_type: 'tv', tmdb_id: 1396, title: 'Breaking Bad', year: 2008, extension: 'mkv',
+    result = build_blob(
+      media_type: 'tv', tmdb_id: 1396, title: 'Breaking Bad', year: 2008, path_extension: 'mkv',
       season_number: 1, episode_number: 1, episode_title: 'Pilot'
     )
     assert_equal 'Breaking Bad (2008) - s01e01 - Pilot.mkv', result.generated_filename
   end
 
   test 'tv: omits episode title segment when episode_title is nil' do
-    result = call(
-      media_type: 'tv', tmdb_id: 1396, title: 'Breaking Bad', year: 2008, extension: 'mkv',
+    result = build_blob(
+      media_type: 'tv', tmdb_id: 1396, title: 'Breaking Bad', year: 2008, path_extension: 'mkv',
       season_number: 1, episode_number: 1, episode_title: nil
     )
     assert_equal 'Breaking Bad (2008) - s01e01.mkv', result.generated_filename
   end
 
   test 'tv: omits episode title segment when episode_title is blank' do
-    result = call(
-      media_type: 'tv', tmdb_id: 1396, title: 'Breaking Bad', year: 2008, extension: 'mkv',
+    result = build_blob(
+      media_type: 'tv', tmdb_id: 1396, title: 'Breaking Bad', year: 2008, path_extension: 'mkv',
       season_number: 1, episode_number: 1, episode_title: ''
     )
     assert_equal 'Breaking Bad (2008) - s01e01.mkv', result.generated_filename
   end
 
   test 'tv: omits year when nil' do
-    result = call(
-      media_type: 'tv', tmdb_id: 1396, title: 'Breaking Bad', year: nil, extension: 'mkv',
+    result = build_blob(
+      media_type: 'tv', tmdb_id: 1396, title: 'Breaking Bad', year: nil, path_extension: 'mkv',
       season_number: 1, episode_number: 1, episode_title: 'Pilot'
     )
 
@@ -130,12 +133,12 @@ class VideoBlobPathsTest < ActiveSupport::TestCase
   end
 
   test 'tv: sanitizes unsafe characters in title and episode title' do
-    result = call(
+    result = build_blob(
       media_type: 'tv',
       tmdb_id: 1396,
       title: '  Law/Order\\..  ',
       year: 2008,
-      extension: 'mkv',
+      path_extension: 'mkv',
       season_number: 1,
       episode_number: 1,
       episode_title: "  Pilot/Part\\.. \x00 "
@@ -146,8 +149,8 @@ class VideoBlobPathsTest < ActiveSupport::TestCase
   end
 
   test 'tv: pads single-digit season number' do
-    result = call(
-      media_type: 'tv', tmdb_id: 1396, title: 'Breaking Bad', year: 2008, extension: 'mkv',
+    result = build_blob(
+      media_type: 'tv', tmdb_id: 1396, title: 'Breaking Bad', year: 2008, path_extension: 'mkv',
       season_number: 3, episode_number: 7
     )
     assert_includes result.directory.to_s, 'Season 03'
@@ -155,8 +158,8 @@ class VideoBlobPathsTest < ActiveSupport::TestCase
   end
 
   test 'tv: pads double-digit season and episode numbers' do
-    result = call(
-      media_type: 'tv', tmdb_id: 1396, title: 'Breaking Bad', year: 2008, extension: 'mkv',
+    result = build_blob(
+      media_type: 'tv', tmdb_id: 1396, title: 'Breaking Bad', year: 2008, path_extension: 'mkv',
       season_number: 10, episode_number: 12
     )
     assert_includes result.directory.to_s, 'Season 10'
@@ -164,8 +167,8 @@ class VideoBlobPathsTest < ActiveSupport::TestCase
   end
 
   test 'tv: media_path includes show dir, season dir, and filename' do
-    result = call(
-      media_type: 'tv', tmdb_id: 1396, title: 'Breaking Bad', year: 2008, extension: 'mkv',
+    result = build_blob(
+      media_type: 'tv', tmdb_id: 1396, title: 'Breaking Bad', year: 2008, path_extension: 'mkv',
       season_number: 1, episode_number: 1, episode_title: 'Pilot'
     )
     expected = File.join(@tv_dir, 'Breaking Bad (2008)', 'Season 01',

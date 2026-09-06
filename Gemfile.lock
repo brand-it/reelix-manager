@@ -423,7 +423,7 @@ GEM
       net-sftp (>= 2.1.2)
       net-ssh (>= 2.8.0)
       ostruct
-    steep (2.0.0)
+    steep (2.1.0)
       concurrent-ruby (>= 1.1.10)
       csv (>= 3.0.9)
       fileutils (>= 1.1.0)
@@ -434,7 +434,7 @@ GEM
       parser (>= 3.2)
       prism (>= 0.25.0)
       rainbow (>= 2.2.2, < 4.0)
-      rbs (~> 4.0)
+      rbs (~> 4.2)
       securerandom (>= 0.1)
       strscan (>= 1.0.0)
       terminal-table (>= 2, < 5)

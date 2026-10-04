@@ -119,7 +119,7 @@ GEM
       railties (>= 7.0)
       responders
       warden (~> 1.2.3)
-    doorkeeper (5.9.7)
+    doorkeeper (5.9.9)
       railties (>= 5)
     doorkeeper-device_authorization_grant (1.0.3)
       doorkeeper (~> 5.5)
@@ -180,7 +180,7 @@ GEM
     jbuilder (2.15.1)
       actionview (>= 7.0.0)
       activesupport (>= 7.0.0)
-    json (2.21.2)
+    json (3.0.2)
     kamal (2.12.0)
       activesupport (>= 7.0)
       base64 (~> 0.2)
@@ -333,7 +333,7 @@ GEM
       parser
       prism
       rbs (>= 1)
-    rdoc (8.0.0)
+    rdoc (8.1.0)
       erb
       prism (>= 1.6.0)
       rbs (>= 4.0.0)
@@ -347,8 +347,8 @@ GEM
     rexml (3.4.4)
     roda (3.107.0)
       rack
-    rubocop (1.89.0)
-      json (~> 2.3)
+    rubocop (1.91.0)
+      json (>= 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
       parallel (>= 1.10)

@@ -10,8 +10,8 @@ class PromoteUploadJob < ApplicationJob
   #     media_type: String,
   #     season_number: Integer?,
   #     episode_number: Integer?,
-  #     ?part: Integer?,
-  #     ?edition: String?,
+  #     part: Integer?,
+  #     edition: String?,
   #     client_digest: String
   #   ) -> void
   def perform: (upload_id: String, tmdb_id: Integer, filename: String?, media_type: String, season_number: Integer?, episode_number: Integer?, part: Integer?, edition: String?, client_digest: String) -> void

@@ -167,6 +167,79 @@
     </div>
   </div>
 
+  <%# ── GraphQL queries ── %>
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">GraphQL queries</h5>
+      <p>
+        All operations go through <code>POST /graphql</code>. The queries below are the
+        entry points a client app is expected to use.
+      </p>
+      <div class="table-responsive">
+        <table class="table table-sm mb-0">
+          <thead>
+            <tr>
+              <th>Query</th>
+              <th>Arguments</th>
+              <th>Returns</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>searchMulti</code></td>
+              <td><code>query</code>, <code>page</code>, <code>language</code></td>
+              <td>Merged movie and TV show search results from TMDB, each with matched local <code>videoBlobs</code></td>
+            </tr>
+            <tr>
+              <td><code>movie</code></td>
+              <td><code>id</code> (TMDB movie ID)</td>
+              <td>Full movie details from TMDB</td>
+            </tr>
+            <tr>
+              <td><code>tv</code></td>
+              <td><code>id</code> (TMDB TV ID)</td>
+              <td>Full TV show details from TMDB</td>
+            </tr>
+            <tr>
+              <td><code>season</code></td>
+              <td><code>tvId</code> (TMDB TV ID), <code>seasonNumber</code>, <code>language</code></td>
+              <td>Season details with episodes</td>
+            </tr>
+            <tr>
+              <td><code>videoBlobs</code></td>
+              <td><code>mediaType</code>, <code>tmdbId</code></td>
+              <td>Locally-indexed video files</td>
+            </tr>
+            <tr>
+              <td><code>uploadSessions</code></td>
+              <td>—</td>
+              <td>Active tus uploads with byte progress</td>
+            </tr>
+            <tr>
+              <td><code>uploadSession</code></td>
+              <td><code>id</code></td>
+              <td>A specific tus upload session</td>
+            </tr>
+            <tr>
+              <td><code>titleSuggestions</code></td>
+              <td><code>query</code>, <code>mediaType</code>, <code>limit</code></td>
+              <td>Title candidates from a local IMDb-based index for autocomplete — local metadata only (no TMDB IDs; resolve those after the user picks a result), refreshed weekly</td>
+            </tr>
+            <tr>
+              <td><code>node</code> / <code>nodes</code></td>
+              <td><code>id</code> / <code>ids</code></td>
+              <td>Global ID lookup</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="mb-0">
+        <code>uploadSessions</code> and <code>uploadSession</code> require the <code>upload</code> (or <code>all</code>)
+        scope; every other query requires <code>search</code> (or <code>all</code>).
+      </p>
+    </div>
+  </div>
+
   <%# ── Resumable uploads ── %>
   <div class="card mb-4">
     <div class="card-body">

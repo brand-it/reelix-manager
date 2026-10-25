@@ -1,0 +1,8 @@
+# Generated from app/jobs/title_suggestions_refresh_job.rb with RBS::Inline
+
+# Weekly refresh of the FTS5 title index from IMDb's title.basics dataset.
+# Scheduled in config/recurring.yml.
+class TitleSuggestionsRefreshJob < ApplicationJob
+  # : () -> void
+  def perform: () -> void
+end

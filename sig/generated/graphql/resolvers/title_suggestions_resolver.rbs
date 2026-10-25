@@ -1,0 +1,11 @@
+# Generated from app/graphql/resolvers/title_suggestions_resolver.rb with RBS::Inline
+
+module Resolvers
+  # Returns candidate titles from the local FTS5 index for client-side
+  # autocomplete. Results carry local metadata only; the client resolves
+  # TMDB IDs itself on selection.
+  class TitleSuggestionsResolver < Resolvers::BaseResolver
+    # : (query: String, ?media_type: String?, ?limit: Integer) -> ::Array[TitleSuggestion]
+    def resolve: (query: String, ?media_type: String?, ?limit: Integer) -> ::Array[TitleSuggestion]
+  end
+end

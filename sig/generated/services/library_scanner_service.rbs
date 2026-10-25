@@ -10,8 +10,8 @@
 #   result[:updated] # => 3
 #   result[:removed] # => 1
 #   result[:skipped] # => 0
-# steep:ignore MethodDefinitionMissing
 class LibraryScannerService < ApplicationService
+  # steep:ignore MethodDefinitionMissing
   attr_reader config: Config::Video?
 
   # : () -> void

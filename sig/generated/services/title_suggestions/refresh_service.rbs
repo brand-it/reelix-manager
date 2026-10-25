@@ -1,0 +1,21 @@
+# Generated from app/services/title_suggestions/refresh_service.rb with RBS::Inline
+
+module TitleSuggestions
+  # Shared FTS5 table definition for the title suggestion index.
+  # Used by both the migration (initial creation) and the refresh service
+  # (weekly drop-and-recreate) so the column list cannot drift.
+  TABLE_DEFS: untyped
+
+  # Rebuilds the FTS5 title index from a fresh IMDb download.
+  #
+  # Download and parsing run outside the transaction so a network failure
+  # leaves the existing index untouched. The drop, recreate, and batched
+  # inserts happen in one transaction: readers see either the old complete
+  # table or the new one, never a partial rebuild. Returns { kept: N }.
+  class RefreshService < ApplicationService
+    BATCH_SIZE: ::Integer
+
+    # : () -> ::Hash[Symbol, Integer]
+    def call: () -> ::Hash[Symbol, Integer]
+  end
+end

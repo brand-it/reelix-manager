@@ -14,6 +14,10 @@ default: &default
     class: LibraryScanJob
     queue: default
     schedule: every 20 minutes
+  title_suggestions_refresh:
+    class: TitleSuggestionsRefreshJob
+    queue: default
+    schedule: every week
 
 development:
   <<: *default

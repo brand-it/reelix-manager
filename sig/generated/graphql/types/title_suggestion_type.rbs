@@ -1,0 +1,9 @@
+# Generated from app/graphql/types/title_suggestion_type.rb with RBS::Inline
+
+module Types
+  # A local title candidate from the FTS5 index. Carries IMDb-derived
+  # metadata only — no TMDB IDs; clients resolve those after the user
+  # picks a suggestion.
+  class TitleSuggestionType < Types::BaseObject
+  end
+end

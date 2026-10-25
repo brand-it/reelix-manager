@@ -49,5 +49,9 @@ module Types
 
     field :upload_session, resolver: Resolvers::UploadSessionResolver,
                            description: 'Fetch a specific tus upload session by ID.'
+
+    field :title_suggestions, resolver: Resolvers::TitleSuggestionsResolver,
+                              description: 'Suggest titles from the local IMDb-based index. Returns local '
+    'metadata only — the client resolves TMDB itself on selection.'
   end
 end

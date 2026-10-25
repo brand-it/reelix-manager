@@ -1,0 +1,35 @@
+# Generated from app/clients/imdb/base.rb with RBS::Inline
+
+module Imdb
+  # Streams IMDb's title.basics dataset (https://datasets.imdb.com) for the
+  # title suggestion index.
+  #
+  # No auth, no API key: the dataset is a public weekly TSV gzipped download.
+  # Rows are filtered down to movies and TV series-like entries; everything
+  # else (shorts, video, episodes, video games, adult, blank titles) is
+  # dropped.
+  class Base
+    HOST: ::String
+
+    BASE: ::String
+
+    KEPT_TYPES: untyped
+
+    # Yields [tconst, media_type, title, original_title, start_year, end_year];
+    # start_year/end_year are nil when the dataset says \\N.
+    #
+    # Downloads the gzipped dataset into a temp file, then streams decompressed
+    # lines — the full 3.6 GB dataset is never held in memory.
+    # : () -> ::Enumerator[::Array[::String?]]
+    def self.rows: () -> ::Enumerator[::Array[::String?]]
+
+    # Downloads the gzipped dataset and writes it to +dest+ (a Tempfile opened
+    # for writing). Raises on any non-2xx response.
+    # : (Tempfile) -> void
+    def self.download: (untyped dest) -> untyped
+
+    # The dataset marks missing values with \\N; map them to nil.
+    # : (String) -> String?
+    def self.na: (String) -> String?
+  end
+end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_29_160951) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_19_000001) do
   create_table "configs", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "settings"
@@ -320,4 +320,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_29_160951) do
   add_foreign_key "solid_queue_ready_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_recurring_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_scheduled_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
+
+  # Virtual tables defined in this database.
+  # Note that virtual tables may not work with other database engines. Be careful if changing database.
+  create_virtual_table "title_suggestions", "fts5", ["title", "original_title", "tconst UNINDEXED", "media_type UNINDEXED", "start_year UNINDEXED", "end_year UNINDEXED", "prefix='3 6'"]
 end
